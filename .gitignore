@@ -4,28 +4,35 @@
 .RData
 .Ruserdata
 .DS_Store
+__pycache__/
+*.pyc
 
-# ── Scripts de recolección (local only) ───────────────────────────
+# ── Scrapers (NO compartir — recolección local) ───────────────────
 scrapers/**/*.py
+!scrapers/**/.gitkeep
+!scrapers/**/INSTRUCCIONES.md
 config/settings.py
-analysis/*.R
-neogremialismo-data/.env
-neogremialismo-data/.env.*
+.env
+.env.*
 
-# ── Datos crudos y procesados intermedios ─────────────────────────
-data/**/*
-!data/**/.gitkeep
-
-# ── Solo publicar outputs derivados ───────────────────────────────
-# (volatilidad e imágenes sí van al repo)
-outputs/**/*
-!outputs/**/.gitkeep
-!outputs/volatilidad/
-!outputs/volatilidad/**
-!outputs/imagenes/
-!outputs/imagenes/**
-
-# SQLite / CSV crudos en cualquier ruta
+# ── Base de datos y crudos (no van al repo; se generan localmente) ─
+data/raw/**
+!data/raw/.gitkeep
 *.db
 *.sqlite
 *.sqlite3
+
+# ── CSV intermedios / dumps (fuente = congreso.db) ────────────────
+outputs/volatilidad/**
+!outputs/volatilidad/.gitkeep
+data/processed/**
+!data/processed/.gitkeep
+!data/processed/piloto/.gitkeep
+
+# ── Figuras de análisis SÍ se pueden versionar ────────────────────
+# (descomentar la línea de exclusión si no quieres PNGs en git)
+# outputs/imagenes/**
+!outputs/imagenes/.gitkeep
+!outputs/imagenes/**
+
+# Análisis y data/scripts SÍ se comparten (no ignorar analysis/*.R)
