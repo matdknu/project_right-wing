@@ -1,0 +1,31 @@
+# ── R / sistema ───────────────────────────────────────────────────
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.DS_Store
+
+# ── Scripts de recolección (local only) ───────────────────────────
+scrapers/**/*.py
+config/settings.py
+analysis/*.R
+neogremialismo-data/.env
+neogremialismo-data/.env.*
+
+# ── Datos crudos y procesados intermedios ─────────────────────────
+data/**/*
+!data/**/.gitkeep
+
+# ── Solo publicar outputs derivados ───────────────────────────────
+# (volatilidad e imágenes sí van al repo)
+outputs/**/*
+!outputs/**/.gitkeep
+!outputs/volatilidad/
+!outputs/volatilidad/**
+!outputs/imagenes/
+!outputs/imagenes/**
+
+# SQLite / CSV crudos en cualquier ruta
+*.db
+*.sqlite
+*.sqlite3
