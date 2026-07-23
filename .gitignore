@@ -11,6 +11,7 @@ __pycache__/
 scrapers/**/*.py
 !scrapers/**/.gitkeep
 !scrapers/**/INSTRUCCIONES.md
+scrapers/**/.cache/
 config/settings.py
 .env
 .env.*
