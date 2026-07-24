@@ -1,0 +1,332 @@
+---
+title: "Neogremialismo — funcionamiento del proyecto"
+subtitle: "Fondecyt · estructura, datos, scrapers, análisis e hipótesis"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+  gfm: default
+execute:
+  echo: false
+---
+
+# Visión general
+
+Proyecto de investigación sobre la derecha chilena en el gobierno de Kast (2026+):
+cómo votan **REP, UDI, RN y PNL**, y qué repertorios circulan en **prensa** y **discursos**.
+
+Flujo de datos (una sola dirección):
+
+```
+scrapers/  →  data/raw/  →  data/scripts/  →  data/processed/  →  analysis/  →  outputs/
+```
+
+| Capa | Rol | Qué hay |
+|------|-----|---------|
+| `scrapers/` | Recolección local (no compartir `.py`) | `prensa/`, `congreso/`, `discursos/` |
+| `data/raw/` | Fuente de verdad cruda | `congreso.db`, `prensa/<fuente>/`, `discursos/` |
+| `data/scripts/` | ETL offline | `unify_prensa.py`, `build_derived.py` |
+| `data/processed/` | **Una** tabla grande de prensa | `prensa/prensa_unificada.parquet` |
+| `analysis/` | Scripts R por dominio | `prensa/`, `parlamento/`, `discursos_presidenciales/` |
+| `outputs/imagenes/` | Figuras (producto) | PNG / HTML |
+| `docs/` | Este documento | Única documentación del proyecto |
+
+Regla de limpieza:
+
+- **Sí:** figuras en `outputs/imagenes/`
+- **No:** CSV descriptivos intermedios en `data/processed/`
+- Si un objeto se reutiliza entre scripts → tabla en `congreso.db` vía `data/scripts/`
+
+---
+
+# Estructura del repositorio
+
+```
+neo_gremialismo/
+├── README.md
+├── docs/PROYECTO.qmd
+├── analysis/
+│   ├── _helpers.R
+│   ├── prensa/
+│   ├── parlamento/
+│   └── discursos_presidenciales/
+├── data/
+│   ├── raw/
+│   │   ├── congreso.db
+│   │   ├── prensa/<fuente>/
+│   │   └── discursos/presidencia/
+│   ├── processed/prensa/prensa_unificada.parquet
+│   └── scripts/
+├── scrapers/
+│   ├── prensa/
+│   │   ├── run.py
+│   │   ├── core/          # framework
+│   │   └── fuentes/       # emol, biobio, t13, mega, gnews, theclinic, exante, elmercurio, emol_by_id
+│   ├── congreso/
+│   ├── discursos/
+│   │   ├── run.py
+│   │   └── presidencia.py
+│   └── diario_oficial/    # pendiente
+└── outputs/imagenes/
+```
+---
+
+# Datos
+
+## Parlamento — `data/raw/congreso.db`
+
+SQLite poblado por scrapers de Cámara / Senado / BCN.
+
+Tablas principales: `votaciones`, `votos`, `diputados`, `proyectos_ley`, `normas`, …
+Tablas derivadas (offline): `votacion_solicitantes`, `analisis_agencia`.
+
+```bash
+python3 data/scripts/build_derived.py
+```
+
+## Prensa — raw → un parquet
+
+Cada medio deja archivos en `data/raw/prensa/<fuente>/` (parquet/csv/json).
+**Un solo artefacto procesado** los concentra:
+
+```bash
+python3 data/scripts/unify_prensa.py
+# → data/processed/prensa/prensa_unificada.parquet
+```
+
+Esquema (columnas string):
+
+`titulo`, `cuerpo`, `bajada`, `fecha`, `fuente`, `url`, `fecha_scraping`, `query`
+
+Fuentes típicas tras unificar: `emol` (corpus por ID), `biobio`, `google_news`,
+`theclinic`, `t13`, `elmercurio_gnews`, `meganoticias`, `exante`, `emol_query`.
+
+Discursos de Presidencia viven en `data/raw/discursos/presidencia/` y se analizan
+desde raw en `analysis/discursos_presidenciales/` (no se mezclan en el parquet de noticias).
+
+En R:
+
+```r
+df <- arrow::read_parquet("data/processed/prensa/prensa_unificada.parquet")
+```
+
+---
+
+# Scrapers (local)
+
+Los `.py` están en `.gitignore`. Quien analiza usa un snapshot de `congreso.db` + parquet.
+
+## Congreso
+
+```bash
+python3 scrapers/congreso/camara_votaciones.py --year 2026 --skip-existing --limit 0
+python3 scrapers/congreso/camara_votaciones.py --watchlist --skip-existing
+python3 scrapers/congreso/bcn_leychile.py --from-congreso --skip-existing --limit 0
+```
+
+## Prensa
+
+Todas las fuentes en `scrapers/prensa/fuentes/` (sin `legacy` ni `outlets`).
+Framework compartido en `scrapers/prensa/core/`.
+
+```bash
+pip install -r scrapers/prensa/requirements.txt
+playwright install chromium   # T13
+
+python3 scrapers/prensa/run.py -s emol,biobio,t13 -q Kast --since 2026-03-03
+python3 scrapers/prensa/fuentes/emol_by_id.py --from-id 1187400 --since 2026-01-01 --resume
+python3 scrapers/prensa/fuentes/theclinic.py
+python3 scrapers/prensa/fuentes/elmercurio.py
+python3 scrapers/prensa/fuentes/exante.py
+```
+
+Luego: `python3 data/scripts/unify_prensa.py`
+
+## Discursos
+
+```bash
+python3 scrapers/discursos/run.py --pages 1-30
+# → data/raw/discursos/presidencia/
+```
+
+## Watchlist mensajes ejecutivo (`-05`)
+
+Los boletines con sufijo **`-05`** son mensajes del Presidente (agenda formal del gobierno).
+
+| Categoría | Criterio |
+|-----------|----------|
+| `prioritario` | Lista en config (`18216-05` PDL, `18296-05` endeudamiento, …) |
+| `mensaje_ejecutivo` | Termina en `-05` |
+| `macro_fiscal` | Keywords: endeudamiento, presupuesto, reajuste, reconstrucción… |
+
+```bash
+python3 scrapers/congreso/camara_votaciones.py --watchlist --skip-existing
+python3 scrapers/congreso/camara_votaciones.py --indicaciones --boletin 18216-05
+```
+
+---
+
+# Análisis (`analysis/`)
+
+Todos los scripts R usan `analysis/_helpers.R` para encontrar la raíz del repo
+(funciona si se ejecuta desde la raíz o desde la subcarpeta).
+
+```bash
+Rscript analysis/prensa/prensa_tendencias.R
+Rscript analysis/parlamento/agencia_cohesion.R
+Rscript analysis/discursos_presidenciales/descriptivo.R
+```
+
+## `analysis/prensa/`
+
+| Script | Entrada | Salida | Para qué |
+|--------|---------|--------|----------|
+| `prensa_tendencias.R` | `prensa_unificada.parquet` | `outputs/imagenes/prensa_*.png` | Volumen, top palabras, menciones |
+| `neogremialismo_prensa_votos.R` | `congreso.db` + parquet | Rice, heatmap, PCA, repertorios | Puente votos ↔ prensa (H3 + H2) |
+
+## `analysis/discursos_presidenciales/`
+
+| Script | Entrada | Salida | Para qué |
+|--------|---------|--------|----------|
+| `descriptivo.R` | `data/raw/discursos/presidencia/` | `discursos_kast_top_palabras.png` | Léxico discursos Kast |
+
+## `analysis/parlamento/`
+
+| Script | Entrada | Salida | Para qué |
+|--------|---------|--------|----------|
+| `agencia_cohesion.R` | `analisis_agencia` | `agencia_vs_cohesion.png` | H3/H4 agencia vs cohesión |
+| `red_votaciones.R` | `congreso.db` | red convergencia / volatilidad | H3 redes entre partidos |
+| `red_ecos_partidos.R` | `congreso.db` | ecos por boletín + heatmap | Eco de cámaras / acuerdos |
+| `indicaciones_parlamento.R` | `congreso.db` | figuras + catálogos volatilidad | Indicaciones vs voto general |
+| `mensajes_18216_18296.R` | `congreso.db` | paneles PDL / endeudamiento | Casos `-05` prioritarios |
+| `hemiciclo_18216_18296.R` | `congreso.db` | hemiciclos + polarización | Visualización espacial |
+| `piloto_votantes.R` | `congreso.db` | red a nivel diputado | Exploratorio |
+
+### Indicaciones (nota operativa)
+
+Las indicaciones se identifican en el campo `articulo` / objeto de votación.
+Tipos frecuentes: `indicacion_renovada`, `admisibilidad`, `indicacion_parlamentaria`,
+`indicacion_ejecutivo`.
+
+---
+
+# Hipótesis y contrastación
+
+## H1. Racionalidad normativa del neogremialismo
+
+El neogremialismo articula políticas de mercado con una concepción conservadora del
+orden social, la autoridad y los valores (no solo eficiencia).
+
+**Refutación:** Si el discurso republicano es indistinguible de LyD (técnico) o del PNL (libertario).
+
+## H2. Repertorios de derechas radicales
+
+Núcleo gremialista + securitización, migración politizada, guerra cultural, anti-élite.
+
+**Refutación:** Si lo radical reemplaza al gremialista, o solo aparece en redes y nunca en discurso oficial.
+
+## H3. Republicanos vs. PNL
+
+La distinción doctrinaria debería verse en votos (Rice, convergencia por materia).
+
+**Refutación:** Si votan siempre igual.
+
+## H4. Selección liberal-individual
+
+El gobierno privilegia subsidiariedad-como-abstención y deja de lado cuerpos intermedios.
+
+**Refutación:** Si aparecen iniciativas comunitaristas sistemáticas.
+
+---
+
+# Diccionario de indicadores discursivos
+
+Uso: (1) búsqueda automatizada; (2) codificación cualitativa.
+**Regla clave:** el indicador de neogremialismo no es la frecuencia aislada, sino la
+**co-ocurrencia** en la misma unidad (párrafo, intervención, artículo).
+
+## A. Gremialista clásico
+
+- **A1 Subsidiariedad / cuerpos intermedios:** subsidiariedad, cuerpos intermedios, gremios, bien común, juntas de vecinos
+- **A2 Orden institucional:** orden, estabilidad, seguridad jurídica, Estado de derecho
+- **A3 Familia / moral:** familia, matrimonio, valores, tradición cristiana, dignidad humana
+- **A4 Antimarxismo / antiestatismo:** asistencialismo, dependencia estatal, populismo
+- **A5 Economía libre:** libre mercado, propiedad privada, emprendimiento, inversión
+
+## B. Articulación neogremialista (H1) — indicadores centrales
+
+- Mercado como principio moral (libertad económica + familia / responsabilidad)
+- Sociedad civil moral-conservadora (tejido social + valores)
+- Orden político como condición de la economía (“sin orden no hay inversión”)
+
+## C. Derecha radical contemporánea (H2)
+
+- **C1 Securitización:** crisis, narcotráfico, mano dura, tolerancia cero
+- **C2 Migración:** migración ilegal, frontera, crisis migratoria
+- **C3 Guerra cultural:** ideología de género, woke, adoctrinamiento
+- **C4 Anti-élite:** élite globalista, academia desconectada
+- **C5 Civilización:** valores occidentales, Chile primero
+
+## D. Libertario puro (contraste PNL)
+
+Individualismo radical, Estado mínimo, **sin** cuerpos intermedios ni subsidiariedad.
+
+## Co-ocurrencias guía
+
+| Combinación | Indica |
+|-------------|--------|
+| A5 + A3 | Articulación neogremialista (H1) |
+| A5 + A2 | Legitimación cruzada (H1) |
+| A5 + C* | Hibridación (H2) |
+| C sin A | Derecha radical pura |
+| D sin A1 | Límite PNL (H3) |
+| A5 sin A1 | Selección liberal (H4) |
+
+---
+
+# Ficha de codificación (análisis cualitativo)
+
+Unidad: mensaje, intervención, columna, tuit. Seis preguntas + perfil.
+
+1. **Sujeto del mercado:** individuo / familia / empresa / comunidad / ausente  
+2. **Vínculo social:** cohesivo / liberador / neutro  
+3. **Antagonista:** ineficiencia / opresión / degradación / ideología / ausente  
+4. **Papel del orden:** condición / paralelo / ausente / civilizatorio  
+5. **Jerarquías:** mérito / familia_trad / contribuyente / neutro  
+6. **Lo colectivo:** activo / mencionado / vacío / amenazado  
+
+Perfiles: *neogremialista pleno*, *selectivo*, *liberal-técnico*, *libertario*,
+*derecha radical*, *híbrido (H2)*.
+
+Confiabilidad: doble codificación del 20%; Kappa > 0.70.
+
+---
+
+# Pipeline recomendado (de cero a figuras)
+
+```bash
+# 0. Scrapers (local)
+python3 scrapers/congreso/camara_votaciones.py --year 2026 --skip-existing --limit 0
+python3 scrapers/prensa/fuentes/emol_by_id.py --from-id 1187400 --since 2026-01-01 --resume
+python3 scrapers/discursos/run.py --pages 1-30
+# … otras fuentes en scrapers/prensa/fuentes/ …
+
+# 1. ETL
+python3 data/scripts/build_derived.py
+python3 data/scripts/unify_prensa.py
+
+# 2. Análisis R
+Rscript analysis/parlamento/agencia_cohesion.R
+Rscript analysis/parlamento/mensajes_18216_18296.R
+Rscript analysis/parlamento/hemiciclo_18216_18296.R
+Rscript analysis/prensa/prensa_tendencias.R
+Rscript analysis/discursos_presidenciales/descriptivo.R
+Rscript analysis/prensa/neogremialismo_prensa_votos.R
+```
+Renderizar este documento:
+
+```bash
+quarto render docs/PROYECTO.qmd
+# o leerlo como Markdown en el editor
+```

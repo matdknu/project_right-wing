@@ -6,34 +6,33 @@
 .DS_Store
 __pycache__/
 *.pyc
-
-# ── Scrapers (NO compartir — recolección local) ───────────────────
-scrapers/**/*.py
-!scrapers/**/.gitkeep
-!scrapers/**/INSTRUCCIONES.md
-scrapers/**/.cache/
-config/settings.py
+.venv/
+venv/
 .env
 .env.*
 
-# ── Base de datos y crudos (no van al repo; se generan localmente) ─
-data/raw/**
-!data/raw/.gitkeep
+# ── Scrapers (local — no van a GitHub) ────────────────────────────
+scrapers/
+
+# ── Datos (raw + processed + scripts de build) ────────────────────
+data/
+neogremialismo-data/
 *.db
 *.sqlite
 *.sqlite3
+config/settings.py
 
-# ── CSV intermedios / dumps (fuente = congreso.db) ────────────────
+# ── Outputs: CSV/dumps no; imágenes de análisis sí ────────────────
 outputs/volatilidad/**
 !outputs/volatilidad/.gitkeep
-data/processed/**
-!data/processed/.gitkeep
-!data/processed/piloto/.gitkeep
 
-# ── Figuras de análisis SÍ se pueden versionar ────────────────────
-# (descomentar la línea de exclusión si no quieres PNGs en git)
-# outputs/imagenes/**
-!outputs/imagenes/.gitkeep
-!outputs/imagenes/**
+# Dependencias de htmlwidgets (plotly/crosstalk) — no versionar
+outputs/imagenes/**/*_files/
 
-# Análisis y data/scripts SÍ se comparten (no ignorar analysis/*.R)
+# Figuras PNG/SVG/PDF de análisis SÍ se versionan
+# (todo lo demás bajo outputs/imagenes/ queda trackeable)
+
+# ── Generados / ruido ─────────────────────────────────────────────
+README.html
+*.html
+!docs/**/*.html
