@@ -301,6 +301,9 @@ Perfiles: *neogremialista pleno*, *selectivo*, *liberal-técnico*, *libertario*,
 
 Confiabilidad: doble codificación del 20%; Kappa > 0.70.
 
+Protocolo completo (muestreo, libro de códigos, CSV, hipótesis):
+[`docs/qualmer_propuesta.qmd`](qualmer_propuesta.qmd).
+
 ---
 
 # Bases canónicas (análisis replicable)
