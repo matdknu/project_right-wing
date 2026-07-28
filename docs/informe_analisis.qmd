@@ -1,0 +1,126 @@
+---
+title: "Informe de análisis — Neogremialismo"
+subtitle: "Prensa · Discursos · Cámara · Proyectos de ley"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: true
+execute:
+  echo: false
+  warning: false
+---
+
+```{r}
+#| label: setup
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(arrow)
+  library(knitr)
+})
+root <- if (dir.exists("data/raw")) normalizePath(".") else {
+  # desde docs/
+  normalizePath("..")
+}
+canon <- file.path(root, "data/processed/canon")
+figs <- file.path(root, "outputs/imagenes")
+manifest <- read_csv(file.path(canon, "manifest.csv"), show_col_types = FALSE)
+hip <- if (file.exists(file.path(canon, "resultados_hipotesis.csv"))) {
+  read_csv(file.path(canon, "resultados_hipotesis.csv"), show_col_types = FALSE)
+} else {
+  tibble()
+}
+```
+
+# Datos canónicos
+
+Pipeline: `scrapers → raw → build_canonicos.py → analysis/run_todo.R → este informe`.
+
+Periodo primario: gobierno Kast (`fecha >= 2026-03-11`). Prensa 2026 = **corpus total** (sin filtro derecha).
+
+```{r}
+#| label: manifest
+kable(manifest, caption = "Tablas en data/processed/canon/")
+```
+
+# Prensa
+
+Corpus canónico sin filtro keyword. Repertorios A–D del diccionario compartido.
+
+![Volumen mensual](`r file.path(figs, "canon_prensa_volumen.png")`){width=100%}
+
+![Repertorios](`r file.path(figs, "canon_prensa_repertorios.png")`){width=100%}
+
+![Familias A/C en el tiempo](`r file.path(figs, "canon_prensa_serie_familias.png")`){width=100%}
+
+# Discursos
+
+Discursos de Presidencia (Kast / 2025–26) y co-ocurrencias guía (H1, H2, H4).
+
+![Repertorios discursos](`r file.path(figs, "canon_discursos_repertorios.png")`){width=100%}
+
+![Co-ocurrencias](`r file.path(figs, "canon_discursos_coocurrencias.png")`){width=100%}
+
+![Serie A vs C](`r file.path(figs, "canon_discursos_serie.png")`){width=100%}
+
+# Cámara
+
+Cohesión Rice del bloque REP–UDI–RN–PNL y convergencia REP–PNL (H3).
+
+![Rice](`r file.path(figs, "canon_camara_rice.png")`){width=90%}
+
+![REP–PNL](`r file.path(figs, "canon_camara_rep_pnl.png")`){width=90%}
+
+![Rice REP mensual](`r file.path(figs, "canon_camara_rice_rep_mes.png")`){width=100%}
+
+# Proyectos de ley
+
+Mensajes del Ejecutivo (`-05`) y repertorios en la agenda legislativa.
+
+![Watchlist votaciones](`r file.path(figs, "canon_pdl_watchlist_votos.png")`){width=100%}
+
+![Repertorios PDL](`r file.path(figs, "canon_pdl_repertorios.png")`){width=100%}
+
+![Timeline prioritarios](`r file.path(figs, "canon_pdl_timeline.png")`){width=100%}
+
+# Puente agenda
+
+Eventos críticos ±7 días: eco mediático y legislativo.
+
+![Eco](`r file.path(figs, "canon_puente_eco.png")`){width=100%}
+
+![Prensa diaria](`r file.path(figs, "canon_puente_prensa_diaria.png")`){width=100%}
+
+```{r}
+#| label: puente-tabla
+#| eval: !expr file.exists(file.path(canon, "puente_eventos.csv"))
+puente <- read_csv(file.path(canon, "puente_eventos.csv"), show_col_types = FALSE)
+kable(puente |> select(label, fecha, boletin, n_prensa, n_discursos, n_votos_boletin, pct_C_prensa),
+      caption = "Ventana ±7 días por evento")
+```
+
+# Hipótesis (indicadores automáticos)
+
+```{r}
+#| label: hipotesis
+#| eval: !expr nrow(hip) > 0
+kable(hip |> arrange(hipotesis, indicador), caption = "resultados_hipotesis.csv")
+```
+
+| H | Lectura operativa |
+|---|-------------------|
+| H1 | Co-ocurrencia A5∩(A2\|A3) en discursos |
+| H2 | Presencia C1–C3 en prensa total y en ventanas de eventos |
+| H3 | Convergencia / divergencia REP–PNL (Rice) |
+| H4 | Escasez A1 en proyectos `-05` y co-ocurrencia A5 sin A1 |
+
+# Reproducción
+
+```bash
+make analisis          # ETL + módulos R
+make informe           # + quarto render docs/informe_analisis.qmd
+# o paso a paso:
+python3 data/scripts/build_canonicos.py
+Rscript analysis/run_todo.R
+quarto render docs/informe_analisis.qmd
+```

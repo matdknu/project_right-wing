@@ -46,3 +46,63 @@ out_imagenes <- function(root = project_root()) {
   dir.create(d, recursive = TRUE, showWarnings = FALSE)
   d
 }
+
+fondecyt_root <- function() {
+  p <- Sys.getenv("FONDECYT_ROOT", unset = "")
+  if (nzchar(p) && dir.exists(p)) return(normalizePath(p))
+  candidates <- c(
+    "/Users/matdknu/Dropbox/Proyectos/derechas-fondecyt",
+    file.path(dirname(project_root()), "derechas-fondecyt")
+  )
+  for (c in candidates) {
+    if (dir.exists(c)) return(normalizePath(c))
+  }
+  NA_character_
+}
+
+canon_dir <- function(root = project_root()) {
+  d <- file.path(root, "data", "processed", "canon")
+  dir.create(d, recursive = TRUE, showWarnings = FALSE)
+  d
+}
+
+canon_path <- function(name, root = project_root()) {
+  file.path(canon_dir(root), name)
+}
+
+source_helpers_and_dict <- function() {
+  for (p in c("analysis/_helpers.R", "../_helpers.R", "../../analysis/_helpers.R")) {
+    if (file.exists(p)) {
+      source(p, local = FALSE)
+      break
+    }
+  }
+  for (p in c("analysis/_diccionario.R", "../_diccionario.R", "../../analysis/_diccionario.R")) {
+    if (file.exists(p)) {
+      source(p, local = FALSE)
+      return(invisible(TRUE))
+    }
+  }
+  stop("No se encontró analysis/_diccionario.R")
+}
+
+append_hipotesis <- function(rows, root = project_root()) {
+  path <- canon_path("resultados_hipotesis.csv", root)
+  df <- as.data.frame(rows, stringsAsFactors = FALSE)
+  needed <- c("hipotesis", "indicador", "valor", "n", "fecha_corte")
+  for (col in needed) {
+    if (!col %in% names(df)) df[[col]] <- NA
+  }
+  df <- df[needed]
+  df$fecha_corte <- as.character(df$fecha_corte)
+  if (file.exists(path)) {
+    old <- utils::read.csv(path, stringsAsFactors = FALSE)
+    # reemplazar mismas hipotesis+indicador
+    key <- paste(df$hipotesis, df$indicador, sep = "|")
+    old_key <- paste(old$hipotesis, old$indicador, sep = "|")
+    old <- old[!old_key %in% key, , drop = FALSE]
+    df <- rbind(old, df)
+  }
+  utils::write.csv(df, path, row.names = FALSE)
+  invisible(path)
+}

@@ -303,30 +303,75 @@ Confiabilidad: doble codificación del 20%; Kappa > 0.70.
 
 ---
 
+# Bases canónicas (análisis replicable)
+
+Capa estable en `data/processed/canon/` — una tabla por dominio + menciones A–D.
+
+| Tabla | Origen | Clave |
+|-------|--------|-------|
+| `prensa.parquet` | `prensa_total` (2026, **sin filtro** derecha) | `unidad_id` / url |
+| `discursos.parquet` | Presidencia | `id_discurso` |
+| `votaciones.parquet` / `votos.parquet` / `diputados.parquet` | `congreso.db` | `votacion_id` |
+| `proyectos.parquet` | proyectos + BCN + watchlist `-05` | `boletin` |
+| `menciones_repertorio.parquet` | hits diccionario A–D | `unidad_id` × `codigo` |
+
+Diccionario compartido: [`analysis/_diccionario.R`](../analysis/_diccionario.R).  
+Informe: [`docs/informe_analisis.qmd`](informe_analisis.qmd).
+
+```bash
+# ETL canónico + módulos + informe
+make analisis
+make informe
+
+# equivalente:
+python3 data/scripts/build_canonicos.py
+Rscript analysis/run_todo.R
+quarto render docs/informe_analisis.qmd
+```
+
+Módulos (`analysis/run_todo.R`):
+
+1. `prensa/01_descriptivo.R` → `canon_prensa_*.png`
+2. `discursos_presidenciales/01_repertorios.R` → `canon_discursos_*.png`
+3. `parlamento/01_cohesion_bloque.R` → `canon_camara_*.png`
+4. `parlamento/02_proyectos_watchlist.R` → `canon_pdl_*.png`
+5. `03_puente_agenda.R` → `canon_puente_*.png` + `resultados_hipotesis.csv`
+
+---
+
 # Pipeline recomendado (de cero a figuras)
 
 ```bash
-# 0. Scrapers (local)
-python3 scrapers/congreso/camara_votaciones.py --year 2026 --skip-existing --limit 0
-python3 scrapers/prensa/fuentes/emol_by_id.py --from-id 1187400 --since 2026-01-01 --resume
-python3 scrapers/discursos/run.py --pages 1-30
-# … otras fuentes en scrapers/prensa/fuentes/ …
+# 0. Scrapers (local) — prensa SIN query Kast
+bash data/raw/congreso_logs/run_congreso.sh
+bash data/raw/prensa/logs/run_prensa.sh
+bash data/raw/prensa/logs/run_discursos.sh
 
 # 1. ETL
 python3 data/scripts/build_derived.py
 python3 data/scripts/unify_prensa.py
+python3 data/scripts/build_canonicos.py
 
-# 2. Análisis R
+# 2. Análisis R (orquestado)
+Rscript analysis/run_todo.R
+
+# 3. Informe
+quarto render docs/informe_analisis.qmd
+```
+
+Scripts exploratorios adicionales (no orquestados):
+
+```bash
 Rscript analysis/parlamento/agencia_cohesion.R
 Rscript analysis/parlamento/mensajes_18216_18296.R
 Rscript analysis/parlamento/hemiciclo_18216_18296.R
 Rscript analysis/prensa/prensa_tendencias.R
+Rscript analysis/prensa/comparar_periodos.R
 Rscript analysis/discursos_presidenciales/descriptivo.R
-Rscript analysis/prensa/neogremialismo_prensa_votos.R
 ```
+
 Renderizar este documento:
 
 ```bash
 quarto render docs/PROYECTO.qmd
-# o leerlo como Markdown en el editor
 ```
