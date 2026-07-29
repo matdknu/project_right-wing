@@ -16,13 +16,22 @@ Scrapers, `data/raw/` y `data/processed/` son **locales** (gitignore).
 
 ```
 analysis/
-  prensa/ · parlamento/ · discursos_presidenciales/
+  prensa/          01…06  (01 canónico)
+  parlamento/      01…09  (01–02 canónicos)
+  discursos_presidenciales/
+  puente/          01_agenda
+  qualmer/         sample codificación
+  run_todo.R       orquestador canónico
 outputs/imagenes/
-docs/PROYECTO.qmd
+docs/PROYECTO.qmd · informe_analisis.qmd · qualmer_propuesta.qmd
 
 # solo local
 scrapers/          → prensa · congreso · discursos
 data/raw/          → congreso.db · prensa/ · discursos/
-data/processed/
+data/processed/canon/
+```
+
+```bash
+make analisis   # ETL canónico + run_todo.R
 ```
 
