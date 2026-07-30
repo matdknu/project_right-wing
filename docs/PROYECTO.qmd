@@ -169,39 +169,50 @@ python3 scrapers/congreso/camara_votaciones.py --indicaciones --boletin 18216-05
 
 # Análisis (`analysis/`)
 
-Todos los scripts R usan `analysis/_helpers.R` para encontrar la raíz del repo
-(funciona si se ejecuta desde la raíz o desde la subcarpeta).
+Todos los scripts R usan `analysis/_helpers.R` (+ `_diccionario.R` para repertorios A–D).
+Índice: [`analysis/README.md`](../analysis/README.md).
 
 ```bash
-Rscript analysis/prensa/prensa_tendencias.R
-Rscript analysis/parlamento/agencia_cohesion.R
-Rscript analysis/discursos_presidenciales/descriptivo.R
+make analisis   # canónicos vía run_todo.R
 ```
 
-## `analysis/prensa/`
+## `analysis/prensa/` — ver [`README`](../analysis/prensa/README.md)
 
-| Script | Entrada | Salida | Para qué |
-|--------|---------|--------|----------|
-| `prensa_tendencias.R` | `prensa_unificada.parquet` | `outputs/imagenes/prensa_*.png` | Volumen, top palabras, menciones |
-| `neogremialismo_prensa_votos.R` | `congreso.db` + parquet | Rice, heatmap, PCA, repertorios | Puente votos ↔ prensa (H3 + H2) |
+| Script | Rol |
+|--------|-----|
+| `01_descriptivo.R` | **Canónico** — prensa Kast total, repertorios A–D |
+| `02_tendencias.R` | Volumen / top palabras / menciones |
+| `03_fondecyt_build.R` | Import Fondecyt → parquet |
+| `04_fondecyt_2020_2022.R` | Baseline 2020–22 |
+| `05_comparar_periodos.R` | 2020–22 vs 2026 |
+| `06_prensa_votos.R` | Puente prensa ↔ votos |
 
 ## `analysis/discursos_presidenciales/`
 
-| Script | Entrada | Salida | Para qué |
-|--------|---------|--------|----------|
-| `descriptivo.R` | `data/raw/discursos/presidencia/` | `discursos_kast_top_palabras.png` | Léxico discursos Kast |
+| Script | Rol |
+|--------|-----|
+| `01_repertorios.R` | **Canónico** — A–D + co-ocurrencias |
+| `02_descriptivo.R` | Top palabras (exploratorio) |
 
-## `analysis/parlamento/`
+## `analysis/parlamento/` — ver [`README`](../analysis/parlamento/README.md)
 
-| Script | Entrada | Salida | Para qué |
-|--------|---------|--------|----------|
-| `agencia_cohesion.R` | `analisis_agencia` | `agencia_vs_cohesion.png` | H3/H4 agencia vs cohesión |
-| `red_votaciones.R` | `congreso.db` | red convergencia / volatilidad | H3 redes entre partidos |
-| `red_ecos_partidos.R` | `congreso.db` | ecos por boletín + heatmap | Eco de cámaras / acuerdos |
-| `indicaciones_parlamento.R` | `congreso.db` | figuras + catálogos volatilidad | Indicaciones vs voto general |
-| `mensajes_18216_18296.R` | `congreso.db` | paneles PDL / endeudamiento | Casos `-05` prioritarios |
-| `hemiciclo_18216_18296.R` | `congreso.db` | hemiciclos + polarización | Visualización espacial |
-| `piloto_votantes.R` | `congreso.db` | red a nivel diputado | Exploratorio |
+| Script | Rol |
+|--------|-----|
+| `01_cohesion_bloque.R` | **Canónico** — Rice + REP–PNL |
+| `02_proyectos_watchlist.R` | **Canónico** — `-05` / repertorios |
+| `03_agencia_cohesion.R` | Agencia vs cohesión |
+| `04_red_votaciones.R` | Red convergencia |
+| `05_red_ecos.R` | Ecos por boletín |
+| `06_indicaciones.R` | Indicaciones |
+| `07_mensajes_pdl.R` | Casos PDL / endeudamiento |
+| `08_hemiciclo_pdl.R` | Hemiciclos |
+| `09_piloto_votantes.R` | Red diputados (exploratorio) |
+
+## `analysis/puente/`
+
+| Script | Rol |
+|--------|-----|
+| `01_agenda.R` | **Canónico** — eco mediático ↔ legislativo (±7 días) |
 
 ### Indicaciones (nota operativa)
 
@@ -338,7 +349,7 @@ Módulos (`analysis/run_todo.R`):
 2. `discursos_presidenciales/01_repertorios.R` → `canon_discursos_*.png`
 3. `parlamento/01_cohesion_bloque.R` → `canon_camara_*.png`
 4. `parlamento/02_proyectos_watchlist.R` → `canon_pdl_*.png`
-5. `03_puente_agenda.R` → `canon_puente_*.png` + `resultados_hipotesis.csv`
+5. `puente/01_agenda.R` → `canon_puente_*.png` + `resultados_hipotesis.csv`
 
 ---
 
@@ -365,12 +376,12 @@ quarto render docs/informe_analisis.qmd
 Scripts exploratorios adicionales (no orquestados):
 
 ```bash
-Rscript analysis/parlamento/agencia_cohesion.R
-Rscript analysis/parlamento/mensajes_18216_18296.R
-Rscript analysis/parlamento/hemiciclo_18216_18296.R
-Rscript analysis/prensa/prensa_tendencias.R
-Rscript analysis/prensa/comparar_periodos.R
-Rscript analysis/discursos_presidenciales/descriptivo.R
+Rscript analysis/parlamento/03_agencia_cohesion.R
+Rscript analysis/parlamento/07_mensajes_pdl.R
+Rscript analysis/parlamento/08_hemiciclo_pdl.R
+Rscript analysis/prensa/02_tendencias.R
+Rscript analysis/prensa/05_comparar_periodos.R
+Rscript analysis/discursos_presidenciales/02_descriptivo.R
 ```
 
 Renderizar este documento:
