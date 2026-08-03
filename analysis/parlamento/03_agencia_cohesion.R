@@ -5,7 +5,7 @@
 #
 # Uso:
 #   python3 data/scripts/build_derived.py   # actualizar tablas derivadas
-#   Rscript analysis/parlamento/agencia_cohesion.R
+#   Rscript analysis/parlamento/03_agencia_cohesion.R
 
 suppressPackageStartupMessages({
   library(tidyverse)

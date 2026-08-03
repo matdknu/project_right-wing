@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 # Red de convergencia y volatilidad partidaria — votaciones Cámara 2026
-# Uso: Rscript analysis/parlamento/red_votaciones.R
+# Uso: Rscript analysis/parlamento/04_red_votaciones.R
 
 suppressPackageStartupMessages({
   library(tidyverse)

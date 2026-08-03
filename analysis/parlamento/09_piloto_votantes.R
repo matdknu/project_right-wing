@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 # Piloto: votante identificado + red de desajuste / disciplina partidaria
-# Uso: Rscript analysis/parlamento/piloto_votantes.R
+# Uso: Rscript analysis/parlamento/09_piloto_votantes.R
 
 suppressPackageStartupMessages({
   library(tidyverse)

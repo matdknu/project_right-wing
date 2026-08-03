@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 # Hemiciclos + polarización — 18216-05 (PDL) y 18296-05 (endeudamiento)
 # Fuente: congreso.db → outputs/imagenes/ (+ HTML interactivo)
-# Uso: Rscript analysis/parlamento/hemiciclo_18216_18296.R
+# Uso: Rscript analysis/parlamento/08_hemiciclo_pdl.R
 
 suppressPackageStartupMessages({
   library(tidyverse)

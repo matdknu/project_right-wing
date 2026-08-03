@@ -3,7 +3,7 @@
 # Lee raw; escribe solo figura en outputs/imagenes/.
 #
 # Uso:
-#   Rscript analysis/discursos_presidenciales/descriptivo.R
+#   Rscript analysis/discursos_presidenciales/02_descriptivo.R
 
 suppressPackageStartupMessages({
   library(tidyverse)

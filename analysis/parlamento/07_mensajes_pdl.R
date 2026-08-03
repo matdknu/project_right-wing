@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 # Mensajes ejecutivo 18216-05 (PDL) y 18296-05 (endeudamiento)
 # Lee congreso.db → outputs/imagenes/
-# Uso: Rscript analysis/parlamento/mensajes_18216_18296.R
+# Uso: Rscript analysis/parlamento/07_mensajes_pdl.R
 
 suppressPackageStartupMessages({
   library(tidyverse)

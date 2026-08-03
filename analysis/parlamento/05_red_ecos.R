@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 # Redes / eco-cámaras partidarias — patrones de voto entre bancadas
-# Uso: Rscript analysis/parlamento/red_ecos_partidos.R
+# Uso: Rscript analysis/parlamento/05_red_ecos.R
 
 suppressPackageStartupMessages({
   library(tidyverse)

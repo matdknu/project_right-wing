@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 # Indicaciones parlamentarias: leyes, comparación general vs indicación, hemiciclo interactivo
-# Uso: Rscript analysis/parlamento/indicaciones_parlamento.R
+# Uso: Rscript analysis/parlamento/06_indicaciones.R
 
 suppressPackageStartupMessages({
   library(tidyverse)
