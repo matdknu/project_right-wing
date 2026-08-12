@@ -13,6 +13,8 @@ Numeración = orden sugerido. `01`–`02` entran en `run_todo.R`.
 | `07_mensajes_pdl.R` | Casos `18216-05` / `18296-05` | `mensajes_*.png`, heatmaps |
 | `08_hemiciclo_pdl.R` | Hemiciclos polarización PDL | `hemiciclo_*.png` / HTML |
 | `09_piloto_votantes.R` | Red a nivel diputado (exploratorio) | `red_votantes_piloto.png` |
+| `10_coalicion_disruptivos.R` | Disruptivos del bloque + Kaiser | `coalicion_*.png` |
+| `11_bcall.R` | B-Call: ideología (d1) × volatilidad (d2) | `bcall_*.png`, `canon/bcall_*.csv` |
 
 ```bash
 Rscript analysis/parlamento/01_cohesion_bloque.R

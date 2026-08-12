@@ -12,6 +12,7 @@ Numeración = orden sugerido. Prefijo `01`–`02` son canónicos / frecuentes.
 | `06_prensa_votos.R` | Puente prensa ↔ votaciones | `congreso.db` + unificada | `01_rice`…`08_*.png`, panel |
 | **`07_serie_2021_2026.R`** | Empalme Fondecyt+neo, filtro derecha uniforme | `fondecyt_total` + `prensa_total` | — → `prensa_serie_2021_2026.parquet` |
 | **`08_disputa_actores_repertorios.R`** | Disputa actores × A–D | serie 2021–2026 | `disputa_*.png` |
+| **`09_emol_tendencia.R`** | EMOL largo plazo 2015–2026 + descriptivos | Fondecyt + `emol_by_id` | `emol_*.png` |
 
 ```bash
 Rscript analysis/prensa/07_serie_2021_2026.R
