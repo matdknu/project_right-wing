@@ -8,7 +8,7 @@ Investigación Fondecyt sobre la derecha chilena en el gobierno de Kast: cómo v
 
 - `analysis/` — scripts R
 - `outputs/imagenes/` — figuras
-- `docs/` — documentación del proyecto
+- `docs/` — documentación del proyecto ([inventario carpetas y export](docs/ESTRUCTURA_EXPORT.md))
 
 Scrapers, `data/raw/` y `data/processed/` son **locales** (gitignore).
 
