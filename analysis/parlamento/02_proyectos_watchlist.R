@@ -118,3 +118,4 @@ ggsave(file.path(out_fig, "canon_pdl_timeline.png"), p_time, width = 9, height =
 cat("Proyectos:", nrow(proyectos), "| -05:", sum(proyectos$es_mensaje_ejecutivo, na.rm = TRUE), "\n")
 cat("A1 en -05:", round(a1_05$pct, 1), "%\n")
 cat("Figuras →", out_fig, "\n")
+

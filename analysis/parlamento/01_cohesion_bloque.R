@@ -129,3 +129,4 @@ cat("Rice por partido:\n")
 print(rice)
 cat(sprintf("Convergencia REP–PNL: %.1f%% (n=%d)\n", conv_pct, n_conv))
 cat("Figuras →", out_fig, "\n")
+
