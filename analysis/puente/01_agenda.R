@@ -120,3 +120,4 @@ print(eco |> select(label, n_prensa, n_discursos, n_votos_boletin, pct_C_prensa)
 cat("Figuras →", out_fig, "\n")
 cat("CSV →", canon_path("puente_eventos.csv", root), "\n")
 cat("Hipótesis →", canon_path("resultados_hipotesis.csv", root), "\n")
+
