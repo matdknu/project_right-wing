@@ -9,6 +9,10 @@
 .reveal table {
   font-size: 0.72em;
 }
+.reveal table.compact,
+.reveal .compact table {
+  font-size: 0.64em;
+}
 .reveal th {
   text-align: left;
 }

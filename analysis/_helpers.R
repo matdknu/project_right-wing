@@ -25,6 +25,14 @@ project_root <- function() {
   )
 }
 
+prensa_unida_path <- function(root = project_root()) {
+  p <- file.path(root, "data", "processed", "prensa", "prensa_unida.parquet")
+  if (!file.exists(p)) {
+    stop("No hay prensa_unida.parquet — corre: python3 data/scripts/merge_fondecyt_neo.py")
+  }
+  p
+}
+
 prensa_unificada_path <- function(root = project_root()) {
   p <- file.path(root, "data", "processed", "prensa", "prensa_unificada.parquet")
   if (file.exists(p)) return(p)

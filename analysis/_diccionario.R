@@ -24,17 +24,17 @@ DICCIONARIO <- data.frame(
     "Libertario puro"
   ),
   pat = c(
-    "subsidiariedad|cuerpos intermedios|gremios|bien comun|juntas? de vecinos|gremialismo|gremialista",
-    "orden publico|seguridad juridica|estado de derecho|estabilidad|autoridad|mano dura",
-    "familia|matrimonio|valores|tradicion cristiana|dignidad humana",
-    "asistencialismo|dependencia estatal|populismo|marxismo",
-    "libre mercado|propiedad privada|emprendimiento|inversion|subsidiariedad economica",
-    "narcotrafico|mano dura|tolerancia cero|delincuencia|crisis de seguridad|seguridad",
-    "migracion ilegal|crisis migratoria|frontera|migrantes|migracion",
-    "ideologia de genero|woke|adoctrinamiento",
-    "elite globalista|academia desconectada|casta politica",
-    "valores occidentales|chile primero",
-    "estado minimo|libertad individual|libertario|partido nacional libertario|\\bpnl\\b"
+    "subsidiariedad|cuerpos intermedios|gremios|bien comun|juntas? de vecinos|gremialismo|gremialista|sociedad civil|tejido social|organizaciones intermedias|asociatividad|principio de subsidiariedad",
+    "orden publico|seguridad juridica|estado de derecho|estabilidad|autoridad|mano dura|orden institucional|certeza juridica",
+    "familia|matrimonio|valores|tradicion cristiana|dignidad humana|familia tradicional|valores familiares",
+    "asistencialismo|dependencia estatal|populismo|marxismo|estatismo|estado interventor",
+    "libre mercado|propiedad privada|emprendimiento|inversion|subsidiariedad economica|libertad economica|economia libre",
+    "narcotrafico|mano dura|tolerancia cero|delincuencia|crisis de seguridad|seguridad|crimen organizado|terrorismo",
+    "migracion ilegal|crisis migratoria|frontera|migrantes|migracion|inmigracion|extranjeros ilegales|control fronterizo",
+    "ideologia de genero|woke|adoctrinamiento|identidad de genero|enfoque de genero|cultura woke|cancelacion|educacion sexual integral",
+    "elite globalista|academia desconectada|casta politica|\\bcasta\\b|globalismo|las elites|elite politica|pueblo versus elite",
+    "valores occidentales|chile primero|occidente cristiano|hispanidad|identidad nacional|nacion chilena",
+    "estado minimo|libertad individual|libertario|partido nacional libertario|\\bpnl\\b|anarcocapitalismo"
   ),
   stringsAsFactors = FALSE
 )
@@ -141,6 +141,54 @@ ACTORES <- data.frame(
   ),
   stringsAsFactors = FALSE
 )
+
+# Cómo se *nombra* a la derecha (filtro de prensa; no es repertorio A–D)
+NOMBRA_DERECHA <- data.frame(
+  slug = c(
+    "label_derecha", "oficialismo", "gobierno_kast", "bancada_gob",
+    "bloque_derecha"
+  ),
+  etiqueta = c(
+    "la derecha / derecha chilena",
+    "oficialismo",
+    "gobierno Kast",
+    "bancada de gobierno",
+    "bloque / coalición de derecha"
+  ),
+  pat = c(
+    "la derecha|derecha chilena|derecha republicana|nueva derecha|extrema derecha|ultraderecha",
+    "\\boficialismo\\b|oficialista",
+    "gobierno (de |del presidente )?kast|administracion kast",
+    "bancada de gobierno|bancada oficialista",
+    "coalicion de derecha|bloque de derecha|partidos de derecha"
+  ),
+  stringsAsFactors = FALSE
+)
+
+nombra_derecha_texto <- function(texto) {
+  txt <- fold_text(texto)
+  for (i in seq_len(nrow(ACTORES))) {
+    if (isTRUE(stringr::str_detect(txt, ACTORES$pat[i]))) return(TRUE)
+  }
+  for (i in seq_len(nrow(NOMBRA_DERECHA))) {
+    if (isTRUE(stringr::str_detect(txt, NOMBRA_DERECHA$pat[i]))) return(TRUE)
+  }
+  FALSE
+}
+
+annotate_nombra_derecha <- function(df, text_col = "texto") {
+  if (!text_col %in% names(df)) stop("Falta columna de texto: ", text_col)
+  txt <- fold_text(df[[text_col]])
+  hit <- rep(FALSE, length(txt))
+  for (i in seq_len(nrow(ACTORES))) {
+    hit <- hit | stringr::str_detect(txt, ACTORES$pat[i])
+  }
+  for (i in seq_len(nrow(NOMBRA_DERECHA))) {
+    hit <- hit | stringr::str_detect(txt, NOMBRA_DERECHA$pat[i])
+  }
+  df$nombra_derecha <- hit
+  df
+}
 
 annotate_actores <- function(df, text_col = "texto") {
   if (!text_col %in% names(df)) stop("Falta columna de texto: ", text_col)

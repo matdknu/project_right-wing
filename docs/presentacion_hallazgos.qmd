@@ -1,11 +1,11 @@
 ---
-title: "Neogremialismo en el gobierno Kast"
-subtitle: "Hipótesis · proyectos de ley · votos y fisuras · prensa"
-author: "Fondecyt · neo_gremialismo"
+title: "Informe de datos: Fondecyt Derechas"
+subtitle: "Proyecto: Neo-Gremialismo"
+author: "Gobierno Kast · hipótesis, votos, discursos y prensa"
 date: "2026-08-17"
 format:
   revealjs:
-    theme: simple
+    theme: [simple, presentacion_hallazgos.scss]
     slide-number: true
     chalkboard: false
     preview-links: auto
@@ -14,7 +14,11 @@ format:
     fig-align: center
     code-fold: true
     transition: fade
-    css: presentacion_hallazgos.css
+    progress: true
+    template-partials:
+      - title-slide.html
+    title-slide-attributes:
+      data-background-color: "#071428"
 execute:
   echo: false
   warning: false
@@ -31,26 +35,61 @@ suppressPackageStartupMessages({
 root <- if (dir.exists("data/raw")) normalizePath(".") else normalizePath("..")
 canon <- file.path(root, "data/processed/canon")
 figs <- file.path(root, "outputs/imagenes")
+source(file.path(root, "analysis/_helpers.R"), local = FALSE)
+source(file.path(root, "analysis/_diccionario.R"), local = FALSE)
+
 hip <- read_csv(file.path(canon, "resultados_hipotesis.csv"), show_col_types = FALSE)
 puente <- read_csv(file.path(canon, "puente_eventos.csv"), show_col_types = FALSE)
 proyectos <- read_parquet(file.path(canon, "proyectos.parquet"))
 votaciones <- read_parquet(file.path(canon, "votaciones.parquet")) |>
   mutate(fecha = as.Date(fecha))
+bcall <- read_csv(file.path(canon, "bcall_2026.csv"), show_col_types = FALSE) |>
+  mutate(partido = toupper(partido))
+bloque_bcall <- bcall |> filter(partido %in% BLOQUE_DERECHA)
+
+prensa <- read_parquet(file.path(canon, "prensa.parquet")) |>
+  mutate(fecha = as.Date(fecha))
+prensa <- annotate_nombra_derecha(prensa)
+prensa <- annotate_repertorios(prensa)
+prensa_der <- prensa |> filter(nombra_derecha)
+
+man <- read_csv(file.path(canon, "manifest.csv"), show_col_types = FALSE)
+al_kast <- read_csv(file.path(canon, "discursos_kast_alusiones.csv"), show_col_types = FALSE)
+prensa_kk <- read_csv(
+  file.path(root, "data/processed/prensa/prensa_kast_kaiser_anio.csv"),
+  show_col_types = FALSE
+)
+n_kast_disc <- unique(al_kast$n_discursos)[[1]]
+n_prensa_unida <- sum(prensa_kk$n)
+fmt_n <- function(x) format(as.integer(x), big.mark = ".", scientific = FALSE)
+
+pct_cod <- function(df) {
+  cols <- names(df)[grepl("^r_[ACD]", names(df))]
+  df |>
+    summarise(across(all_of(cols), ~ 100 * mean(.x, na.rm = TRUE))) |>
+    pivot_longer(everything(), names_to = "col", values_to = "pct") |>
+    mutate(codigo = sub("^r_", "", col))
+}
+rep_all <- pct_cod(prensa) |> mutate(subset = "corpus total")
+rep_nom <- pct_cod(prensa_der) |> mutate(subset = "cuando nombra a la derecha")
+rep_cmp <- bind_rows(rep_all, rep_nom) |>
+  left_join(DICCIONARIO |> select(codigo, etiqueta, familia), by = "codigo")
 ```
 
-# Pregunta
+# Pregunta {background-color="#0B3D91"}
 
 ## Qué se está contrastando
 
 El **neogremialismo** no es solo “votar a la derecha”. Es si el gobierno Kast articula **mercado + orden/valores** (H1), absorbe o no repertorios **radicales** (H2), se distingue del **PNL** en el hemiciclo (H3) y **omite cuerpos intermedios** en la agenda formal (H4).
 
-Tres pistas empíricas, siempre leídas contra las hipótesis:
+Cuatro pistas empíricas, siempre leídas contra las hipótesis:
 
 | Pista | Pregunta | Fuente |
 |-------|----------|--------|
-| **Proyectos** | ¿Qué manda el Ejecutivo (`-05`)? | Cámara + BCN |
-| **Votos / fisuras** | ¿El bloque vota unido? ¿Dónde se rompe? | `votaciones` / `votos` |
-| **Prensa** | ¿Qué repertorios circulan alrededor de esa agenda? | corpus Kast + diccionario A–D |
+| **B-Call** | ¿Dónde está cada diputado? ¿Quién es outlier *entre* y *dentro* de partidos? | roll-calls → d1 ideología, d2 volatilidad |
+| **Boletines** | ¿Qué presentó Kast (`-05`)? ¿Qué está **promulgado**? ¿Cuánto varía el voto? | Cámara + BCN |
+| **Discursos** | ¿Qué nombra Kast? ¿A quién alude? ¿Dice Kaiser? | Presidencia, cuerpo oral |
+| **Prensa** | ¿Qué se dice **cuando se nombra** a la derecha? | 2015–2026 + diccionario A–D |
 
 ## Cuatro hipótesis
 
@@ -63,69 +102,207 @@ Tres pistas empíricas, siempre leídas contra las hipótesis:
 
 ## Diccionario (regla: co-ocurrencia)
 
-El indicador no es una palabra suelta. Es **qué se junta en la misma unidad**.
+El indicador no es una palabra suelta. Es **qué se junta** en la misma nota, discurso o boletín.
 
-| Familia | Códigos | Tema |
-|---------|---------|------|
-| **A** gremialista | A1 subsidiariedad · A2 orden · A3 familia · A4 antiestatismo · A5 mercado | Núcleo clásico |
-| **C** radical | C1 seguridad · C2 migración · C3 cultura · C4 anti-élite · C5 civilización | Derecha contemporánea |
-| **D** libertario | D1 Estado mínimo / PNL | Contraste H3 |
+| Familia | Códigos | Ahora también captura… |
+|---------|---------|------------------------|
+| **A** gremialista | A1…A5 | A1: sociedad civil, tejido social, asociatividad |
+| **C** radical | C1…C5 | C3 enfoque de género / woke; C4 casta / globalismo; C5 hispanidad / identidad |
+| **D** libertario | D1 | Estado mínimo, PNL |
+| **Nombrar** | filtro, no código | “la derecha”, oficialismo, gobierno Kast, bancadas, partidos |
 
 Guía: **A5+A3 / A5+A2 → H1** · **A5+C → H2 híbrido** · **C sin A → radical puro** · **A5 sin A1 → H4**.
 
+# Datos {background-color="#0B3D91"}
+
+## Qué hay
+
+```{r}
+#| label: inventario
+tibble(
+  Pieza = c("Prensa", "Discursos Kast", "Votaciones", "Votos", "B-Call 2026", "Proyectos"),
+  N = c(
+    fmt_n(n_prensa_unida),
+    fmt_n(n_kast_disc),
+    fmt_n(man$n[man$tabla == "votaciones"]),
+    fmt_n(man$n[man$tabla == "votos"]),
+    fmt_n(nrow(bcall)),
+    fmt_n(man$n[man$tabla == "proyectos"])
+  ),
+  Ventana = c(
+    "2015–2026",
+    "11 mar – 30 jul 2026",
+    "hasta 22-jul-2026",
+    "las mismas",
+    "período 2026",
+    "ingreso"
+  )
+) |> kable()
+```
+
+Una prensa. 145 discursos de gobierno (el scrape tiene 248, con Boric). Sin redes; votos congelados el 22-jul.
+
+## Prensa, por año
+
+```{r}
+#| label: unida-anio
+izq <- prensa_kk |> filter(year <= 2020)
+der <- prensa_kk |> filter(year >= 2021)
+tibble(
+  Año = izq$year, Notas = fmt_n(izq$n),
+  `Año ` = der$year, `Notas ` = fmt_n(der$n)
+) |> kable()
+```
+
+**2024** 115 mil · **2025** 54 mil · **2026** 39 mil. La baja no es “menos política”: es cobertura.
+
+## Tendencia: volumen
+
+![Notas por año](../outputs/imagenes/prensa_unida_anio.png){width="88%"}
+
+Serie única, 2015–2026. Pico 2024; 2025–26 el recorte es más chico.
+
+## Tendencia: Kast vs Kaiser
+
+![% de titulares](../outputs/imagenes/prensa_kast_kaiser_anio.png){width="90%"}
+
+2021 y 2025 = ciclos. **2026: Kast es el 10 % de los titulares**; Kaiser se apaga (0,72 % → 0,23 %).
+
+# B-Call: mapa y outliers {background-color="#0B3D91"}
+
+## Cómo leer el gráfico (30 segundos)
+
+B-Call (Toro-Maureira et al. 2025) resume **todos los votos** de cada diputado en dos números. Pivot: **José Carlos Meza** (REP) → d1 positivo = más cerca de la derecha.
+
+| Eje | Nombre técnico | En cristiano |
+|-----|----------------|--------------|
+| **d1** (eje X) | posición ideológica | Izquierda ← 0 → derecha. El *dónde* se sienta en el hemiciclo virtual. |
+| **d2** (eje Y) | volatilidad | **Bajo** = vota coherente con su posición. **Alto** = a veces vota como si fuera otro. Es la fisura. |
+
+Outlier **entre partidos**: RN más al centro (d1 ~0.64) vs REP/PNL a la derecha (d1 ~0.74).  
+Outlier **dentro del partido**: misma d1, **d2 alta** (Hube, Lilayu, Karlezi).
+
+## Toda la Cámara, 2026
+
+![Mapa B-Call 2026 — dos nubes (izquierda / derecha); el bloque Kast está a la derecha](../outputs/imagenes/bcall_mapa_2026.png){width="88%"}
+
+La fisura de H3 **no** es una nube REP y otra PNL. Es una sola nube derecha, con **altura** (d2) distinta.
+
+## Zoom: solo REP · UDI · RN · PNL
+
+![El núcleo rojo (REP) es un punto denso; UDI/RN/PNL se estiran hacia arriba](../outputs/imagenes/bcall_bloque_2026.png){width="88%"}
+
+**Entre partidos:** REP casi no se mueve (d1 0.75 ± 0.01; d2 0.43). RN está más al centro (d1 0.64). PNL tan a la derecha como REP, pero **más volátil** (d2 0.64). UDI es el que más se abre en d2 (0.35–0.88).
+
+## Números: cohesión entre partidos
+
+```{r}
+#| label: bcall-entre
+bloque_bcall |>
+  group_by(Partido = partido) |>
+  summarise(
+    n = n(),
+    `d1 medio (ideología)` = round(mean(d1), 3),
+    `sd d1` = round(sd(d1), 3),
+    `d2 medio (volatilidad)` = round(mean(d2), 3),
+    `sd d2` = round(sd(d2), 3),
+    .groups = "drop"
+  ) |>
+  arrange(desc(`d1 medio (ideología)`)) |>
+  kable()
+```
+
+Lectura H3: **PNL no es un polo distinto de REP en d1**. La diferencia está en **d2** (PNL y UDI más volátiles) y en RN más moderado.
+
+## Dentro de cada partido: los tres más volátiles
+
+```{r}
+#| label: bcall-dentro
+bloque_bcall |>
+  group_by(partido) |>
+  slice_max(d2, n = 3) |>
+  transmute(
+    Partido = partido,
+    Diputado = legislator,
+    d1 = round(d1, 3),
+    d2 = round(d2, 3)
+  ) |>
+  kable()
+```
+
+- **UDI:** Hube, Lilayu, Martínez — la fisura más alta del bloque.  
+- **PNL:** Karlezi, Marowski, Muñoz — volatilidad de bancada, no de un solo “Kaiser”.  
+- **REP:** Ross (único que se sale del núcleo); el resto está pegado a Kast/Meza.  
+- **RN:** Ossandón, Chandía, Beltrán — más al *centro* (d1 baja) que volátiles extremos.
+
+## Ranking de volatilidad (d2)
+
+![Mayor d2 = votos menos coherentes con la posición ideológica](../outputs/imagenes/bcall_volatiles_2026.png){width="82%"}
+
+H3 se juega aquí: si REP y PNL fueran doctrinas distintas, veríamos **dos nubes en d1**. Vemos **una nube** y una cola de nombres en d2.
+
+## Densidades: ancho = disciplina
+
+![Cada curva es un diputado del bloque: media = d1, ancho = d2](../outputs/imagenes/bcall_densidades_2026.png){width="88%"}
+
+Curvas **angostas y superpuestas** (REP) = disciplina. Curvas **anchas** (UDI/PNL altos) = el mismo diputado a veces vota como si no estuviera en su sitio.
+
+## Cómo se llega a esa foto (GIF)
+
+Cada frame suma un mes de votaciones desde el **11-mar-2026**. Las rutas son la trayectoria acumulada. El núcleo rojo se compacta; los puntos que suben son los outliers de d2.
+
+![](../outputs/imagenes/bcall_evolucion_derecha.gif){width="78%"}
+
 ## Datos (corte)
 
-Corpus canónico (`data/processed/canon/`). Votaciones hasta **2026-07-22**. Gobierno Kast desde **2026-03-11**.
+Votaciones hasta **2026-07-22**. Gobierno Kast desde **2026-03-11**.
 
 ```{r}
 #| label: n-datos
 tibble(
-  dominio = c("Prensa (canon)", "Discursos Presidencia", "Votaciones Cámara",
-              "Votos individuales", "Proyectos / boletines", "Mensajes Ejecutivo (-05)"),
-  n = c(
-    35117L, 248L, 5837L, 779622L, 612L,
-    sum(proyectos$es_mensaje_ejecutivo %in% TRUE)
+  Pieza = c("Prensa 2026 (filtro Kast)", "Discursos Kast", "Votaciones",
+            "Votos", "Proyectos", "Mensajes `-05`"),
+  N = c(
+    fmt_n(nrow(prensa)), fmt_n(n_kast_disc), fmt_n(nrow(votaciones)),
+    fmt_n(man$n[man$tabla == "votos"]), fmt_n(nrow(proyectos)),
+    fmt_n(sum(proyectos$es_mensaje_ejecutivo %in% TRUE))
   )
 ) |> kable()
 ```
 
 Bloque analizado: **REP 28 · UDI 13 · RN 11 · PNL 8** diputados.
 
-# Proyectos de ley
+# Boletines: presentado vs promulgado {background-color="#0B3D91"}
 
 ## Agenda formal: mensajes `-05`
 
-Los boletines **`-05`** son mensajes del Presidente: la agenda que el gobierno *elige* presentar. Hay **42** en el canon; casi todos son **macro-fiscal / reconstrucción / reajuste**, no “cuerpos intermedios”.
+Los boletines **`-05`** son mensajes del Presidente: lo que el gobierno *elige* presentar. En el canon hay **42** (varios de Boric). Bajo Kast (**desde 11-mar-2026**) solo **tres**.
 
-**H4 en una frase:** A1 (subsidiariedad / gremios / juntas de vecinos) aparece en **0 %** de esos 42 mensajes.
+**H4:** A1 (subsidiariedad / gremios / sociedad civil) = **0 %** de esos mensajes.
 
-## Watchlist: dónde se vota
+## Qué presentó Kast (y cuánto se votó)
 
-![Mensajes del Ejecutivo y número de votaciones en Cámara](../outputs/imagenes/canon_pdl_watchlist_votos.png){width="92%"}
+| Boletín | Proyecto | Ingreso | Votos Cámara | Estado BCN |
+|---------|----------|---------|--------------|------------|
+| **18137-05** | Contener precio del **kerosene** (emergencia energética) | 24-mar | 9 | `candidato_bajo` (no hay ley matcheada) |
+| **18216-05** | **PDL** — reconstrucción y desarrollo económico y social | 22-abr | **117** | `candidato_bajo` |
+| **18296-05** | Mayor **endeudamiento** 2026 | 3-jun | **3** | **`norma_publicada`** (Ley Chile 1225909) |
 
-## Casos ancla 2026
+**Variación:** el PDL concentra casi toda la energía legislativa (117 votaciones, cohesión plena). El endeudamiento son 3 votaciones y se **estrella en la sala**. El kerosene es un mensaje corto de precios. Nada de A1.
 
-Identificar proyectos = identificar *dónde* se juega cada hipótesis.
+## ¿Qué hay promulgado?
 
-| Boletín | Proyecto | Votaciones | Ventana | Hipótesis |
-|---------|----------|------------|---------|-----------|
-| **18216-05** | Reconstrucción nacional y desarrollo económico y social (**PDL**) | **117** (may–jul 2026) | ±7d: 2 589 notas | H1/H4 (mercado-Estado) · H2 (eco C en prensa) |
-| **18296-05** | Autoriza mayor **endeudamiento** 2026 | **3** (17-jun) | ±7d: 3 146 notas | H1 (orden fiscal) · fisura de sala |
-| **18036-05** | Reajuste remuneraciones sector público | 74 (ene 2026) | pre-Kast | Agenda salarial, no A1 |
-| **18137-05** | Contención precio **kerosene** (emergencia energética) | 9 (24–25 mar) | primer mes Kast | Intervención de precios |
-| **17933-05** | Beneficios personas mayores / reavalúo | 5 (ene 2026) | pre-Kast | Tributario municipal |
+BCN / Ley Chile, con match fuerte (`norma_publicada`): **8** normas en toda la base — **no** son “las leyes de Kast”. Solo **una** es mensaje `-05` de este gobierno: **18296-05**.
 
-## 18216-05 — PDL (el proyecto más votado del gobierno)
+Las otras siete son boletines más viejos o de otras comisiones (armas, inclusión laboral, IMM, tarifa eléctrica, seguridad escolar, permisos…). El PDL (**18216-05**), el más votado, **aún no es ley** en el cruce BCN.
 
-117 votaciones en Cámara; cohesión del bloque **casi plena** (Rice REP 0.999 · PNL 0.988 · UDI 0.993 · RN 0.979).
+Lectura: “promulgado Kast” ≠ “votado Kast”. Lo que sale en el Diario Oficial es un **subconjunto chico** y sesgado a fiscalidad/seguridad, no a subsidiariedad.
 
-Lectura H3: **no hay fisura doctrinaria REP–PNL** en el PDL. Si hay diferencia, no está en el voto general de este mensaje.
+## Watchlist: volumen de votaciones
 
-Lectura H4: es un mensaje de **reconstrucción / desarrollo**, no de cuerpos intermedios.
+![Mensajes del Ejecutivo y número de votaciones](../outputs/imagenes/canon_pdl_watchlist_votos.png){width="88%"}
 
-![Timeline de prioritarios](../outputs/imagenes/canon_pdl_timeline.png){width="88%"}
-
-## 18296-05 — Endeudamiento: la fisura está en la *sala*, no en el bloque
+## 18296-05 — lo único `-05` promulgado (y la fisura de sala)
 
 Tres votaciones el **17-jun-2026**:
 
@@ -135,17 +312,19 @@ Tres votaciones el **17-jun-2026**:
 | 89179 | Empate 73–73 | 73 | 73 |
 | 89180 | Rechazado 72–74 | 72 | 74 |
 
-El bloque derecha entra cohesionado; el proyecto **se estrella en el hemiciclo**. Hipótesis: la fisura relevante aquí es **gobierno vs. oposición**, no REP vs. PNL.
+El bloque derecha entra cohesionado (B-Call: misma nube). El proyecto **varía en el hemiciclo completo**, no entre REP y PNL. Es la fisura gobierno–oposición.
 
-Norma publicada en Ley Chile (`1225909`) — de la watchlist `-05`, el único con match BCN fuerte.
+## 18216-05 — PDL: mucho voto, cero promulgación (aún)
 
-## Repertorios *en* los proyectos
+117 votaciones; Rice del bloque ~1. **H3:** no hay grieta REP–PNL. **H4:** reconstrucción/desarrollo, no cuerpos intermedios. **H2:** la prensa de la ventana carga ~22 % de C, no A1.
 
-![Códigos A–D en títulos/textos de proyectos vs. mensajes `-05`](../outputs/imagenes/canon_pdl_repertorios.png){width="90%"}
+![Timeline de prioritarios](../outputs/imagenes/canon_pdl_timeline.png){width="86%"}
 
-**H4:** en mensajes `-05`, **A1 = 0**. La agenda formal selecciona mercado/Estado/fiscalidad y deja fuera subsidiariedad comunitaria.
+## Repertorios *en* los textos de proyecto
 
-# Votos y fisuras
+![A–D en proyectos vs mensajes `-05`](../outputs/imagenes/canon_pdl_repertorios.png){width="88%"}
+
+# Votos y fisuras {background-color="#0B3D91"}
 
 ## H3 — cohesión Rice del bloque
 
@@ -176,65 +355,136 @@ La fisura no es REP vs. PNL. Es **diputados vs. moda del bloque**.
 
 Kaiser (PNL, id 1135) es el caso de **disenso personal**, no de bancada. Encaja más con **D** (límite libertario) que con un cisma partidario.
 
-## Mapa de disciplina
-
-![Disciplina del bloque y casos disruptivos](../outputs/imagenes/coalicion_mapa_disciplina.png){width="90%"}
-
-Patrón: **REP y PNL más disciplinados**; RN/UDI un poco más heterogéneos (Rice 0.94–0.96). Las fisuras son **personas**, no familias doctrinarias.
-
-## Ideología × volatilidad (B-Call, 2026)
-
-![B-Call 2026 — d1 ideología, d2 volatilidad](../outputs/imagenes/bcall_mapa_2026.png){width="82%"}
-
-El bloque se compacta en ideología; la **volatilidad** (cambiar de lado entre votaciones) es el eje que identifica a los mismos disruptivos. Complementa H3: no hay dos polos REP/PNL, hay un **núcleo denso** y unos pocos *swingers*.
+La fisura observable es **individual** (B-Call d2) y, en el endeudamiento, **de sala**. Rice confirma la disciplina de bancada; B-Call dice *quién* se sale.
 
 ## Rice mensual REP
 
-![Rice mensual — Republicanos](../outputs/imagenes/canon_camara_rice_rep_mes.png){width="90%"}
+![Rice mensual — Republicanos](../outputs/imagenes/canon_camara_rice_rep_mes.png){width="88%"}
 
-REP permanece **casi unánime** a lo largo de 2026. No hay mes en que el partido “se parta” con el PDL o el endeudamiento.
+# Discursos de Kast {background-color="#0B3D91"}
 
-# Prensa
+## El recorte
 
-## Qué circula en el corpus Kast
+**145** discursos, **11 mar – 30 jul 2026**. Se mide el **cuerpo oral**, no el titular de Presidencia (“S.E. … José Antonio Kast”), que haría “Kast” = 100 %.
 
-Prensa canónica = **total 2026**, sin filtro “Kast”. Repertorios A–D sobre ~28 mil notas con texto.
+Tipo: gira territorial y gestión (regiones, alcaldes, emergencias). No es un corpus de cadena nacional doctrinaria.
 
-![Volumen mensual](../outputs/imagenes/canon_prensa_volumen.png){width="90%"}
+## Qué palabras nombra
 
-## Familias A vs C en el tiempo
+![Top palabras en el cuerpo](../outputs/imagenes/discursos_kast_top_palabras.png){width="78%"}
 
-![Serie familias gremialista (A) vs radical (C)](../outputs/imagenes/canon_prensa_serie_familias.png){width="90%"}
+**Personas, trabajo, Estado, región, seguridad.** Léxico de gira, no de guerra cultural.
 
-**H2:** C1–C3 (seguridad, migración, cultura) está en **~22 %** de la prensa canónica. No es marginal. La pregunta es si *reemplaza* a A o convive.
+## A qué hace alusión
 
-## Códigos en prensa (detalle)
+![Alusiones en el cuerpo](../outputs/imagenes/discursos_kast_alusiones.png){width="80%"}
 
-![Repertorios A–D en prensa Kast](../outputs/imagenes/canon_prensa_repertorios.png){width="88%"}
+Seguridad 64 % · familia 59 % · inversión 51 %. **Subsidiariedad, Pinochet, Guzmán = 0 %.** Kaiser = 1 discurso.
 
-Seguridad (C1) y mercado/orden (A2/A5) dominan. **A1 (cuerpos intermedios) es escaso** — eco mediático de H4: tampoco la prensa habla de gremios/subsidiariedad cuando cubre al gobierno.
+## Repertorios en la boca
 
-## H1 y H2: prensa vs discursos
+![A–D en discursos Kast](../outputs/imagenes/discursos_kast_repertorios.png){width="86%"}
 
-Los mismos códigos, dos géneros.
+H1 en la presidencia: C1 + A3 + A2 + A5. C3/C4/D1 casi no existen. A1 (22 %) entra por *sociedad civil / gremios*, no por la palabra subsidiariedad.
 
-| Indicador | Prensa | Discursos Presidencia | Lectura |
-|-----------|--------|------------------------|---------|
-| H1 A5∩A3 (mercado+familia) | **3,5 %** (serie derecha 2021–26) | **33,6 %** (n=110) | H1 vive en **discurso oficial**, no en la nota |
-| H1 A5∩A2 (mercado+orden) | — | **31,8 %** | Articulación normativa en Presidencia |
-| H2 C1–C3 | **21,9 %** (canon) / 36,8 % (derecha 21–26) | C sin A: **9,1 %** | Radicalidad **más prensa que discurso** |
-| H2 híbrido A5∩C | **2,2 %** | bajo | Poca hibridación explícita en la misma unidad |
-| H4 A5 sin A1 | **8,4 %** prensa / **41,8 %** discursos | Mercado **sin** subsidiariedad, sobre todo en discursos |
+## ¿Se nombra? ¿Nombra a Kaiser?
 
-## Disputa de repertorios (2021–2026)
+![Kast vs Kaiser por mes](../outputs/imagenes/discursos_kast_kaiser_mes.png){width="88%"}
 
-![Indicadores de hipótesis en serie anual](../outputs/imagenes/disputa_hipotesis_anual.png){width="90%"}
+Autonombrarse: 15 % en marzo → **0 % en julio**. Kaiser: **una vez** (Enela, jun-2026), recuerdo de 2021 con Mulet — no es alianza ni ataque.
 
-La era Kast no “inventa” C: la securitización ya estaba. Lo distintivo 2026 es el **desacople**: discursos con H1 (A5+A2/A3), prensa con C, proyectos sin A1.
+# Prensa: qué se dice cuando se nombra a la derecha {background-color="#0B3D91"}
 
-## Puente: eco mediático de los proyectos
+## El recorte (diccionario reforzado)
 
-Ventana **±7 días** alrededor del evento legislativo.
+No usamos el corpus entero (deportes, “seguridad” genérica).  
+**Nombra derecha** = Kast, Republicanos, UDI, RN, PNL, Kaiser, LyD, FJG **o** “la derecha”, oficialismo, gobierno Kast, bancada/coalición de derecha.
+
+```{r}
+#| label: nombra-n
+tibble(
+  Universo = c("Prensa 2026", "Cuando nombra a la derecha"),
+  Notas = c(fmt_n(nrow(prensa)), fmt_n(nrow(prensa_der))),
+  `%` = c(100, round(100 * nrow(prensa_der) / max(nrow(prensa), 1), 1))
+) |> kable()
+```
+
+Ahí se contrastan H1/H2/H4: *qué repertorio acompaña al nombre*. Misma prensa; el recorte es temático, no de fuente.
+
+## "Libertad" en titulares (2018–26)
+
+En el título es **raro** (~0,3 % cada año). No es el vehículo principal del repertorio A5; A5 se dispara más con *inversión / emprendimiento / propiedad*.
+
+![% de titulares con libertad](../outputs/imagenes/prensa_libertad_emol.png){width="88%"}
+
+## Libertad junto a la derecha
+
+![Titulares con libertad vs. los que además nombran Kast/REP/UDI/RN](../outputs/imagenes/prensa_libertad_con_derecha.png){width="88%"}
+
+## Entrevistas (titular)
+
+![Titulares que anuncian entrevista](../outputs/imagenes/prensa_entrevistas_emol.png){width="88%"}
+
+Pocas en el título. En 2026 el texto completo (abajo) muestra más: el género vive en el cuerpo.
+
+## 2026: libertad y entrevistas en el texto
+
+![Cruce libertad / entrevista / nombra derecha](../outputs/imagenes/prensa_libertad_entrevistas_cruce.png){width="90%"}
+
+## Por medio, 2026
+
+![% libertad en el texto, por fuente](../outputs/imagenes/prensa_libertad_fuentes_2026.png){width="85%"}
+
+## Códigos: total vs. cuando se nombra
+
+```{r}
+#| label: fig-nombra
+#| fig-width: 11
+#| fig-height: 5.2
+rep_cmp |>
+  filter(pct > 0.05) |>
+  ggplot(aes(codigo, pct, fill = subset)) +
+  geom_col(position = "dodge", width = 0.75) +
+  facet_wrap(~familia, scales = "free_x", nrow = 1) +
+  labs(
+    title = "Repertorios A–D: corpus total vs. notas que nombran a la derecha",
+    x = NULL, y = "% de notas", fill = NULL,
+    caption = "Diccionario reforzado (A1 sociedad civil; C3–C5 guerra cultural / casta / identidad)."
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "bottom", panel.grid.minor = element_blank())
+```
+
+## Hipótesis en ese recorte
+
+```{r}
+#| label: nombra-h
+co <- function(df) {
+  tibble(
+    `H1 A5+A3` = 100 * mean(df$co_H1_mercado_familia),
+    `H1 A5+A2` = 100 * mean(df$co_H1_mercado_orden),
+    `H2 familia C` = 100 * mean(df$r_C1 | df$r_C2 | df$r_C3 | df$r_C4 | df$r_C5),
+    `H2 híbrido A5+C` = 100 * mean(df$co_H2_mercado_radical),
+    `H4 A5 sin A1` = 100 * mean(df$co_H4_mercado_sin_A1),
+    A1 = 100 * mean(df$r_A1)
+  )
+}
+bind_rows(
+  co(prensa) |> mutate(subset = "total"),
+  co(prensa_der) |> mutate(subset = "nombra derecha")
+) |>
+  relocate(subset) |>
+  mutate(across(where(is.numeric), ~ round(.x, 1))) |>
+  kable()
+```
+
+Si H1 fuera mediático, A5+A3 debería **subir** al nombrar a la derecha. Si sube C y no A1, H2/H4 ganan en prensa y H1 se queda en discursos.
+
+## Familias A vs C (serie)
+
+![Serie A vs C](../outputs/imagenes/canon_prensa_serie_familias.png){width="88%"}
+
+## Eco de los boletines Kast (±7 días)
 
 ```{r}
 #| label: puente
@@ -243,29 +493,23 @@ puente |>
     Evento = label,
     Fecha = fecha,
     Boletín = boletin,
-    `Notas prensa` = n_prensa,
+    `Notas` = n_prensa,
     Discursos = n_discursos,
-    `Votos en boletín` = n_votos_boletin,
-    `% C en prensa` = round(pct_C_prensa, 1)
+    Votos = n_votos_boletin,
+    `% C` = round(pct_C_prensa, 1)
   ) |>
   kable()
 ```
 
-![Eco mediático ↔ legislativo](../outputs/imagenes/canon_puente_eco.png){width="85%"}
+![Eco mediático ↔ legislativo](../outputs/imagenes/canon_puente_eco.png){width="82%"}
 
-## Prensa diaria en las ventanas
-
-![Prensa diaria en ventanas PDL y endeudamiento](../outputs/imagenes/canon_puente_prensa_diaria.png){width="90%"}
-
-En ambas ventanas, **~22–23 %** de las notas cargan C. El PDL (117 votos, 0 discursos en la ventana) es un **hecho legislativo cubierto en clave de seguridad/coyuntura**, no de subsidiariedad. El endeudamiento sí arrastra **14 discursos**.
-
-# Lectura por hipótesis
+# Lectura por hipótesis {background-color="#0B3D91"}
 
 ## H1 — Articulación normativa {background-color="#f7f3ee"}
 
 **Se sostiene en discursos; se adelgaza en prensa y proyectos.**
 
-- Discursos: un tercio junta mercado con familia (A5+A3) u orden (A5+A2).
+- Discursos: seguridad 64 %, familia 59 %, inversión 51 %; **no dice** subsidiariedad ni Guzmán. Un tercio junta mercado con familia/orden (A5+A3 / A5+A2).
 - Prensa: esa co-ocurrencia cae a ~3,5 %.
 - Proyectos `-05`: el texto de la agenda es fiscal/reconstrucción, no “mercado como moral”.
 
@@ -283,23 +527,18 @@ No se refuta del todo (C no es solo “redes”), pero **tampoco** se confirma e
 
 ## H3 — REP vs PNL {background-color="#f7f3ee"}
 
-**Por ahora, refutada en el voto de bancada.**
+**Refutada en d1 (ideología); matizada en d2 (volatilidad).**
 
-- Acuerdo de moda **91,8 %**.
-- Rice 2026: REP 0.997 · PNL 0.988 (ambos más cohesivos que UDI/RN).
-- En el PDL (117 votaciones) la cohesión es aún más alta.
-
-La fisura observable es **individual** (disruptivos / Kaiser / B-Call d2), no una grieta doctrinaria entre partidos. Siguiente test: indicaciones y materias (seguridad vs. impuestos), no el voto general.
+- Acuerdo de moda **91,8 %**. Rice REP 0.997 · PNL 0.988.
+- B-Call: REP y PNL **misma longitud de d1** (~0.74). RN más al centro (0.64).
+- Outliers **dentro**: UDI (Hube, Lilayu), PNL (Karlezi), REP (Ross). No hay dos polos partidarios.
 
 ## H4 — Selección liberal-individual {background-color="#f7f3ee"}
 
-**La evidencia más limpia.**
+**La evidencia más limpia, también en lo promulgado.**
 
-- **0 / 42** mensajes `-05` con A1.
-- Discursos: **41,8 %** A5 sin A1.
-- Prensa: A1 casi ausente; el eco del PDL no es comunitarista.
-
-La agenda que el gobierno *presenta* selecciona mercado, reconstrucción y caja fiscal. Los cuerpos intermedios no están en el boletín.
+- Kast presentó **3** mensajes `-05`; **1** promulgado (endeudamiento). El PDL (117 votos) **no** es ley en BCN.
+- A1 = 0 en esos mensajes. Al nombrar a la derecha en prensa, A1 sigue bajo.
 
 ## Mapa de hallazgos
 
@@ -313,21 +552,20 @@ H4  sin A1              fuerte (42%)      A1 escaso              0% en 42 mensaj
 
 **Tesis empírica corta:** el neogremialismo 2026 es **discursivo y selectivo**. La ley y el voto unifican al bloque; la prensa radicaliza el entorno; los boletines `-05` no reconstruyen subsidiariedad.
 
-## Tres pistas, una frase cada una
+## Cuatro pistas, una frase cada una
 
 ::: incremental
-- **Proyectos.** Identificar `18216-05` (PDL, 117 votos) y `18296-05` (endeudamiento, 3 votos y empate/rechazo). El resto de `-05` es reajuste, kerosene, presupuesto. Ninguno es A1.
-- **Votos / fisuras.** El bloque no se parte por partido. Se parte por **personas** (disruptivos) y, en endeudamiento, por **la sala**.
-- **Prensa.** Cubre esos proyectos con ~22 % de repertorio C. No traduce H1. El puente ±7 días muestra volumen, no conversión doctrinaria.
+- **B-Call.** Una nube derecha. La fisura es **altura** (d2), no dos partidos. GIF: el núcleo REP se compacta; UDI/PNL suben.
+- **Boletines.** Presentó kerosene, PDL y deuda. Promulgó la deuda. El PDL se vota mucho y no sale. Nada de A1.
+- **Discursos.** Trabajo, seguridad, familia, inversión. No nombra a Kaiser (1 vez, 2021). No dice subsidiariedad.
+- **Prensa.** Cuando *nombra* a la derecha, sube C, no la co-ocurrencia H1. En 2026 Kast es el 10 % de los titulares; Kaiser se apaga.
 :::
 
 ## Límites (para no sobreinterpretar)
 
 - Votaciones **congeladas en 22-jul-2026** (API Cámara inestable).
-- Diccionario = regex; Qualmer (codificación humana) sigue pendiente.
-- H3 puede revivir en **indicaciones** o en Senado (hoy 0 votaciones Senado).
-- BCN: 612 boletines indexados, **8** normas publicadas confiables — el cruce ley-texto es todavía flaco.
-- Prensa “total” incluye notas no políticas; los % de C son techo/piso según el filtro.
+- Diccionario = regex (ahora más A1/C3–C5 y filtro “nombra derecha”); Qualmer humano sigue pendiente.
+- BCN: 8 normas publicadas; **1** mensaje `-05` Kast. El PDL no está en ese cruce.
 
 ## Reproducir
 
@@ -336,6 +574,6 @@ make analisis                         # ETL + run_todo.R
 quarto render docs/presentacion_hallazgos.qmd
 ```
 
-Figuras: `outputs/imagenes/canon_*.png`, `coalicion_*.png`, `bcall_*.png`.  
+Figuras: `outputs/imagenes/bcall_*.png` + `bcall_evolucion_derecha.gif`.  
 Indicadores: `data/processed/canon/resultados_hipotesis.csv`.  
 Método: `docs/PROYECTO.qmd`.

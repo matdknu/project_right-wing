@@ -13,6 +13,9 @@ Numeración = orden sugerido. Prefijo `01`–`02` son canónicos / frecuentes.
 | **`07_serie_2021_2026.R`** | Empalme Fondecyt+neo, filtro derecha uniforme | `fondecyt_total` + `prensa_total` | — → `prensa_serie_2021_2026.parquet` |
 | **`08_disputa_actores_repertorios.R`** | Disputa actores × A–D | serie 2021–2026 | `disputa_*.png` |
 | **`09_emol_tendencia.R`** | EMOL largo plazo 2015–2026 + descriptivos | Fondecyt + `emol_by_id` | `emol_*.png` |
+| **`10_cobertura_lexico.R`** | Notas por año (Fondecyt vs neo) + “libertad” / entrevistas | EMOL hist + 2026 + canon | `prensa_cobertura_*.png`, `prensa_libertad_*.png` |
+
+Unión de corpus: `python3 data/scripts/merge_fondecyt_neo.py` → `prensa_unida.parquet`.
 
 ```bash
 Rscript analysis/prensa/07_serie_2021_2026.R

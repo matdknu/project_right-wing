@@ -1,0 +1,197 @@
+/*-- scss:defaults --*/
+$blue: #0B3D91;
+$blue-deep: #071428;
+$blue-mid: #1246a8;
+$red: #C41E3A;
+$cream: #F6F3EE;
+$ink: #1C1C1C;
+
+$body-bg: $cream;
+$body-color: $ink;
+$link-color: $red;
+$presentation-heading-color: $blue;
+$presentation-heading-font-weight: 700;
+$presentation-heading-letter-spacing: -0.02em;
+$presentation-h1-font-size: 2.15em;
+$presentation-h2-font-size: 1.45em;
+$presentation-font-size-root: 32px;
+$presentation-title-slide-text-align: left;
+$font-family-sans-serif: "Source Sans 3", "Source Sans Pro", Helvetica, sans-serif;
+$presentation-heading-font: "Fraunces", "Source Serif Pro", Georgia, serif;
+
+/*-- scss:rules --*/
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap");
+
+.reveal {
+  font-weight: 400;
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3 {
+  color: $blue;
+  font-weight: 700;
+}
+
+.reveal .has-dark-background h1,
+.reveal .has-dark-background h2,
+.reveal .has-dark-background h3 {
+  color: #fff;
+}
+
+.reveal .has-dark-background h2 {
+  border-bottom-color: $red;
+}
+
+.reveal h2 {
+  border-bottom: 3px solid $red;
+  padding-bottom: 0.18em;
+  margin-bottom: 0.55em;
+}
+
+.reveal strong,
+.reveal b,
+.reveal em {
+  color: $red;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.reveal a {
+  color: $red;
+}
+
+.reveal .slide-number {
+  color: $blue;
+  font-size: 13px;
+  background: transparent;
+}
+
+.reveal .progress span {
+  background: $red;
+}
+
+.reveal table {
+  font-size: 0.7em;
+  border-collapse: collapse;
+}
+
+.reveal th {
+  text-align: left;
+  color: #fff;
+  background: $blue;
+  font-weight: 600;
+}
+
+.reveal td {
+  border-bottom: 1px solid rgba(11, 61, 145, 0.12);
+}
+
+.reveal section img {
+  border: none;
+  box-shadow: none;
+}
+
+.reveal pre code {
+  font-size: 0.68em;
+}
+
+/* Portada */
+#title-slide {
+  text-align: left !important;
+  padding-left: 3.2rem !important;
+  padding-right: 3.2rem !important;
+}
+
+#title-slide.center {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+}
+
+#title-slide .cover-grid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.2rem;
+  height: 100%;
+  min-height: 560px;
+}
+
+#title-slide .cover-copy {
+  flex: 1 1 56%;
+  max-width: 640px;
+  padding-left: 0.2rem;
+}
+
+#title-slide .cover-kicker {
+  font-family: $font-family-sans-serif;
+  font-size: 0.72em;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: $red;
+  font-weight: 700;
+  margin: 0 0 0.7em;
+}
+
+#title-slide h1.title {
+  color: #fff;
+  font-size: 2.05em;
+  line-height: 1.12;
+  margin: 0 0 0.28em;
+  border: none;
+}
+
+#title-slide .subtitle {
+  color: $red;
+  font-family: $presentation-heading-font;
+  font-size: 1.15em;
+  font-weight: 700;
+  margin: 0 0 1.1em;
+}
+
+#title-slide .author,
+#title-slide .date {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.72em;
+  margin: 0.15em 0;
+}
+
+#title-slide .cover-photo {
+  flex: 0 0 34%;
+  max-width: 360px;
+}
+
+#title-slide .cover-photo img {
+  display: block;
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  object-position: 40% 12%;
+  border-radius: 2px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  border-bottom: 5px solid $red;
+}
+
+/* Separadores de sección (h1 solo) */
+.reveal .slides > section.center > h1,
+.reveal .slides > section > h1:only-child {
+  color: #fff;
+  border: none;
+}
+
+.reveal .slides > section.center > h1::after,
+.reveal .slides > section > h1:only-child::after {
+  content: "";
+  display: block;
+  width: 4.2rem;
+  height: 4px;
+  background: $red;
+  margin-top: 0.55em;
+}
+
+/* Slides de lectura */
+.reveal .slide[data-background-color="#f7f3ee"] h2,
+.reveal .slide[data-background-color="#F7F3EE"] h2 {
+  color: $blue;
+}
