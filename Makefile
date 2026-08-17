@@ -3,7 +3,7 @@
 #   make canonicos   # ETL data/processed/canon/
 #   make analisis    # ETL + R módulos + (opcional) Quarto
 
-.PHONY: canonicos analisis informe all
+.PHONY: canonicos analisis informe presentacion all
 
 canonicos:
 	python3 data/scripts/build_canonicos.py
@@ -14,4 +14,7 @@ analisis: canonicos
 informe: analisis
 	quarto render docs/informe_analisis.qmd
 
-all: informe
+presentacion:
+	cd docs && quarto render presentacion_hallazgos.qmd
+
+all: informe presentacion

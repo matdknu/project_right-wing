@@ -4,34 +4,44 @@ Investigación Fondecyt sobre la derecha chilena en el gobierno de Kast: cómo v
 
 ![Kast](kast-flag.jpg)
 
+## Documentación
+
+- **[`docs/REPOSITORIO.md`](docs/REPOSITORIO.md)** — inventario completo: qué hay, qué hace, hipótesis H1–H4
+- [`docs/PROYECTO.qmd`](docs/PROYECTO.qmd) — método, diccionario A–D, contrastación
+- [`docs/ESTRUCTURA_EXPORT.md`](docs/ESTRUCTURA_EXPORT.md) — qué va a GitHub vs local
+
 ## En GitHub
 
 - `analysis/` — scripts R
 - `outputs/imagenes/` — figuras
-- `docs/` — documentación del proyecto ([inventario carpetas y export](docs/ESTRUCTURA_EXPORT.md))
+- `docs/` — documentación e informes
 
 Scrapers, `data/raw/` y `data/processed/` son **locales** (gitignore).
+
+## Paquete para analizar (sin scrapers)
+
+```
+exports/neo_gremialismo_analisis_hipotesis.zip   # ~370 MB; WinRAR/Explorer lo abren
+```
+
+Incluye `analysis/`, `data` canónico + `congreso.db` + discursos, `docs/`, figuras.  
+Ver `LEEME_PAQUETE.md` dentro del ZIP.
 
 ## Estructura
 
 ```
-analysis/
-  prensa/          01…06  (01 canónico)
-  parlamento/      01…09  (01–02 canónicos)
-  discursos_presidenciales/
-  puente/          01_agenda
-  qualmer/         sample codificación
-  run_todo.R       orquestador canónico
+analysis/          prensa · parlamento · discursos · puente · qualmer
 outputs/imagenes/
-docs/PROYECTO.qmd · informe_analisis.qmd · qualmer_propuesta.qmd
+docs/              REPOSITORIO · PROYECTO · informe · Qualmer
 
 # solo local
-scrapers/          → prensa · congreso · discursos
-data/raw/          → congreso.db · prensa/ · discursos/
+scrapers/          prensa · congreso · discursos
+data/raw/          congreso.db · prensa/ · discursos/
 data/processed/canon/
 ```
 
 ```bash
-make analisis   # ETL canónico + run_todo.R
+make analisis        # ETL canónico + run_todo.R
+make presentacion    # slides hallazgos + hipótesis
 ```
 

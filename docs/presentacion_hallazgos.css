@@ -1,0 +1,24 @@
+/* presentacion_hallazgos — tipografía y ritmo, sin adornos */
+.reveal {
+  font-size: 28px;
+}
+.reveal h1, .reveal h2 {
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+.reveal table {
+  font-size: 0.72em;
+}
+.reveal th {
+  text-align: left;
+}
+.reveal .slide-number {
+  font-size: 14px;
+}
+.reveal section img {
+  border: none;
+  box-shadow: none;
+}
+.reveal pre code {
+  font-size: 0.7em;
+}

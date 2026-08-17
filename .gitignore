@@ -17,6 +17,7 @@ scrapers/
 # ── Datos (raw + processed + scripts de build) ────────────────────
 data/
 neogremialismo-data/
+exports/
 *.db
 *.sqlite
 *.sqlite3
