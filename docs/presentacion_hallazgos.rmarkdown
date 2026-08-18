@@ -77,6 +77,8 @@ rep_cmp <- bind_rows(rep_all, rep_nom) |>
   left_join(DICCIONARIO |> select(codigo, etiqueta, familia), by = "codigo")
 ```
 
+
+
 # Pregunta {background-color="#0B3D91"}
 
 ## Qué se está contrastando
@@ -131,6 +133,8 @@ Con ese alfabeto:
 
 ## Qué hay
 
+
+
 ```{r}
 #| label: inventario
 #| echo: false
@@ -155,9 +159,13 @@ tibble(
 ) |> kable()
 ```
 
+
+
 Una prensa. 145 discursos de gobierno (el scrape tiene 248, con Boric). Sin redes; votos hasta el 17-ago-2026.
 
 ## Prensa, por año
+
+
 
 ```{r}
 #| label: unida-anio
@@ -169,6 +177,8 @@ tibble(
   `Año ` = der$year, `Notas ` = fmt_n(der$n)
 ) |> kable()
 ```
+
+
 
 **2024** 115 mil · **2025** 54 mil · **2026** 39 mil. La baja no es “menos política”: es cobertura.
 
@@ -221,6 +231,8 @@ Misma lectura: a la derecha = votan con el oficialismo; hacia arriba = se salen 
 
 ## Números: ¿se parecen los partidos?
 
+
+
 ```{r}
 #| label: bcall-entre
 #| echo: false
@@ -236,9 +248,13 @@ bloque_bcall |>
   kable()
 ```
 
+
+
 Más a la derecha no distingue a libertarios de Republicanos. Los distingue **quién se sale** (libertarios y UDI) y RN, más al centro.
 
 ## Dentro de cada partido: los tres que más se salen
+
+
 
 ```{r}
 #| label: bcall-dentro
@@ -254,6 +270,8 @@ bloque_bcall |>
   ) |>
   kable()
 ```
+
+
 
 Estos nombres **no** los elegimos: son, en cada partido, los tres que más rompen su propio patrón de voto.
 
@@ -288,6 +306,8 @@ No es un ranking que dibujemos a mano cada mes. Cada fotograma **rehace el mapa*
 
 Votaciones hasta **2026-08-17**. Gobierno Kast desde **2026-03-11**.
 
+
+
 ```{r}
 #| label: n-datos
 #| echo: false
@@ -301,6 +321,8 @@ tibble(
   )
 ) |> kable()
 ```
+
+
 
 Bloque analizado: **REP 28 · UDI 13 · RN 11 · PNL 8** diputados.
 
@@ -434,6 +456,8 @@ Dominan **securitización (C1)**, **familia (A3)**, **orden (A2)** y **economía
 No usamos el corpus entero (deportes, “seguridad” genérica).  
 **Nombra derecha** = Kast, Republicanos, UDI, RN, PNL, Kaiser, LyD, FJG **o** “la derecha”, oficialismo, gobierno Kast, bancada/coalición de derecha.
 
+
+
 ```{r}
 #| label: nombra-n
 #| echo: false
@@ -443,6 +467,8 @@ tibble(
   `%` = c(100, round(100 * nrow(prensa_der) / max(nrow(prensa), 1), 1))
 ) |> kable()
 ```
+
+
 
 Ahí se contrastan H1/H2/H4: *qué repertorio acompaña al nombre*. Misma prensa; el recorte es temático, no de fuente.
 
@@ -471,6 +497,8 @@ Pocas en el título. En 2026 el texto completo (abajo) muestra más: el género 
 ![% libertad en el texto, por fuente](imagenes/prensa_libertad_fuentes_2026.png){width="85%"}
 
 ## Códigos: total vs. cuando se nombra
+
+
 
 ```{r}
 #| label: fig-nombra
@@ -502,7 +530,11 @@ rep_cmp |>
   )
 ```
 
+
+
 ## Hipótesis en ese recorte
+
+
 
 ```{r}
 #| label: nombra-h
@@ -526,9 +558,13 @@ bind_rows(
   kable()
 ```
 
+
+
 Si H1 fuera mediático, A5+A3 debería **subir** al nombrar a la derecha. Si sube C y no A1, H2/H4 ganan en prensa y H1 se queda en discursos.
 
 ## Eco de los boletines Kast (±7 días)
+
+
 
 ```{r}
 #| label: puente
@@ -545,6 +581,8 @@ puente |>
   ) |>
   kable()
 ```
+
+
 
 ![Eco mediático ↔ legislativo](imagenes/canon_puente_eco.png){width="82%"}
 
@@ -615,3 +653,4 @@ El neogremialismo es **discursivo y performativo**: se dice y se escenifica **po
 - La prensa, al nombrar a la derecha, carga **C** (radical), no la articulación neogremialista.
 
 La Cámara **unifica**; el discurso **distingue**. El neogremialismo 2026 todavía no es una regla de voto ni de ley: es una *performance* presidencial.
+

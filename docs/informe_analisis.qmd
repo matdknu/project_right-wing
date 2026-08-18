@@ -24,6 +24,7 @@ root <- if (dir.exists("data/raw")) normalizePath(".") else {
 }
 canon <- file.path(root, "data/processed/canon")
 figs <- file.path(root, "outputs/imagenes")
+figs_web <- "imagenes"
 manifest <- read_csv(file.path(canon, "manifest.csv"), show_col_types = FALSE)
 hip <- if (file.exists(file.path(canon, "resultados_hipotesis.csv"))) {
   read_csv(file.path(canon, "resultados_hipotesis.csv"), show_col_types = FALSE)
@@ -47,49 +48,49 @@ kable(manifest, caption = "Tablas en data/processed/canon/")
 
 Corpus canónico sin filtro keyword. Repertorios A–D del diccionario compartido.
 
-![Volumen mensual](`r file.path(figs, "canon_prensa_volumen.png")`){width=100%}
+![Volumen mensual](`r file.path(figs_web, "canon_prensa_volumen.png")`){width=100%}
 
-![Repertorios](`r file.path(figs, "canon_prensa_repertorios.png")`){width=100%}
+![Repertorios](`r file.path(figs_web, "canon_prensa_repertorios.png")`){width=100%}
 
-![Familias A/C en el tiempo](`r file.path(figs, "canon_prensa_serie_familias.png")`){width=100%}
+![Familias A/C en el tiempo](`r file.path(figs_web, "canon_prensa_serie_familias.png")`){width=100%}
 
 # Discursos
 
 Discursos de Presidencia (Kast / 2025–26) y co-ocurrencias guía (H1, H2, H4).
 
-![Repertorios discursos](`r file.path(figs, "canon_discursos_repertorios.png")`){width=100%}
+![Repertorios discursos](`r file.path(figs_web, "canon_discursos_repertorios.png")`){width=100%}
 
-![Co-ocurrencias](`r file.path(figs, "canon_discursos_coocurrencias.png")`){width=100%}
+![Co-ocurrencias](`r file.path(figs_web, "canon_discursos_coocurrencias.png")`){width=100%}
 
-![Serie A vs C](`r file.path(figs, "canon_discursos_serie.png")`){width=100%}
+![Serie A vs C](`r file.path(figs_web, "canon_discursos_serie.png")`){width=100%}
 
 # Cámara
 
 Cohesión Rice del bloque REP–UDI–RN–PNL y convergencia REP–PNL (H3).
 
-![Rice](`r file.path(figs, "canon_camara_rice.png")`){width=90%}
+![Rice](`r file.path(figs_web, "canon_camara_rice.png")`){width=90%}
 
-![REP–PNL](`r file.path(figs, "canon_camara_rep_pnl.png")`){width=90%}
+![REP–PNL](`r file.path(figs_web, "canon_camara_rep_pnl.png")`){width=90%}
 
-![Rice REP mensual](`r file.path(figs, "canon_camara_rice_rep_mes.png")`){width=100%}
+![Rice REP mensual](`r file.path(figs_web, "canon_camara_rice_rep_mes.png")`){width=100%}
 
 # Proyectos de ley
 
 Mensajes del Ejecutivo (`-05`) y repertorios en la agenda legislativa.
 
-![Watchlist votaciones](`r file.path(figs, "canon_pdl_watchlist_votos.png")`){width=100%}
+![Watchlist votaciones](`r file.path(figs_web, "canon_pdl_watchlist_votos.png")`){width=100%}
 
-![Repertorios PDL](`r file.path(figs, "canon_pdl_repertorios.png")`){width=100%}
+![Repertorios PDL](`r file.path(figs_web, "canon_pdl_repertorios.png")`){width=100%}
 
-![Timeline prioritarios](`r file.path(figs, "canon_pdl_timeline.png")`){width=100%}
+![Timeline prioritarios](`r file.path(figs_web, "canon_pdl_timeline.png")`){width=100%}
 
 # Puente agenda
 
 Eventos críticos ±7 días: eco mediático y legislativo.
 
-![Eco](`r file.path(figs, "canon_puente_eco.png")`){width=100%}
+![Eco](`r file.path(figs_web, "canon_puente_eco.png")`){width=100%}
 
-![Prensa diaria](`r file.path(figs, "canon_puente_prensa_diaria.png")`){width=100%}
+![Prensa diaria](`r file.path(figs_web, "canon_puente_prensa_diaria.png")`){width=100%}
 
 ```{r}
 #| label: puente-tabla
