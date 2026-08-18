@@ -601,7 +601,7 @@ H4  sin A1              fuerte (42%)      A1 escaso              0% en 42 mensaj
 
 ::: incremental
 - **Mapa de votos.** Los votos (no nosotros) dejan **una** nube derecha. La fisura es quién **se sale**, no Republicanos vs libertarios.
-- **Boletines.** Presentó kerosene, PDL y deuda. Promulgó la deuda. El PDL se vota mucho y no sale. Nada de A1.
+- **Boletines.** Presentó kerosene, PDL y deuda. Promulgó la deuda. El PDL se vota mucho y no sale.
 - **Discursos.** Trabajo, seguridad, familia, inversión. No nombra a Kaiser (1 vez, 2021). No dice subsidiariedad.
 - **Prensa.** Si la nota nombra a Kast/la derecha, sube el repertorio **radical** (C), no el cruce mercado+familia (H1). En 2026 Kast está en **1 de cada 10** titulares; Kaiser, después del pico 2025, casi no aparece.
 :::
@@ -615,9 +615,3 @@ El neogremialismo es **discursivo y performativo**: se dice y se escenifica **po
 - La prensa, al nombrar a la derecha, carga **C** (radical), no la articulación neogremialista.
 
 La Cámara **unifica**; el discurso **distingue**. El neogremialismo 2026 todavía no es una regla de voto ni de ley: es una *performance* presidencial.
-
-## Límites (para no sobreinterpretar)
-
-- Votaciones hasta **17-ago-2026**.
-- Diccionario = regex (ahora más A1/C3–C5 y filtro “nombra derecha”); Qualmer humano sigue pendiente.
-- BCN: 8 normas publicadas; **1** mensaje `-05` Kast. El PDL no está en ese cruce.
