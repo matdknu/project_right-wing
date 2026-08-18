@@ -77,6 +77,31 @@ rep_cmp <- bind_rows(rep_all, rep_nom) |>
   left_join(DICCIONARIO |> select(codigo, etiqueta, familia), by = "codigo")
 ```
 
+## Etapas
+
+::: {.pipeline}
+
+::: {.step .step-done}
+<div class="step-num">1</div>
+<div class="step-title">Recolección de datos</div>
+<div class="step-when">Julio – agosto</div>
+<div class="step-who">Matías Deneken</div>
+:::
+
+<div class="pipe">
+  <div class="pipe-label">análisis</div>
+  <div class="pipe-arrow">→</div>
+</div>
+
+::: {.step .step-next}
+<div class="step-num">2</div>
+<div class="step-title">Análisis</div>
+<div class="step-when">Fecha a definir</div>
+<div class="step-who">Matías Díaz</div>
+:::
+
+:::
+
 # Pregunta {background-color="#0B3D91"}
 
 ## Qué se está contrastando

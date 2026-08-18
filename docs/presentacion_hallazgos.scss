@@ -206,3 +206,94 @@ $presentation-heading-font: "Fraunces", "Source Serif Pro", Georgia, serif;
 .reveal .slide[data-background-color="#F7F3EE"] h2 {
   color: $blue;
 }
+
+/* Pipeline de etapas */
+.pipeline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+  margin-top: 2.2rem;
+}
+
+.pipeline .step {
+  flex: 0 0 340px;
+  min-height: 280px;
+  padding: 1.5rem 1.4rem 1.35rem;
+  border: 3px solid $blue;
+  background: #fff;
+  box-shadow: 8px 8px 0 $blue;
+  text-align: left;
+}
+
+.pipeline .step-done {
+  background: $blue;
+  color: #fff;
+  box-shadow: 8px 8px 0 $red;
+}
+
+.pipeline .step-next {
+  background: #fff;
+  color: $ink;
+  border-style: dashed;
+  box-shadow: 8px 8px 0 rgba(11, 61, 145, 0.18);
+}
+
+.pipeline .step-num {
+  font-family: $presentation-heading-font;
+  font-size: 1.7em;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 0.55em;
+  color: $red;
+}
+
+.pipeline .step-done .step-num {
+  color: #fff;
+}
+
+.pipeline .step-title {
+  font-family: $presentation-heading-font;
+  font-size: 1.05em;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0.85em;
+  color: inherit;
+}
+
+.pipeline .step-when {
+  font-size: 0.72em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 0.35em;
+  opacity: 0.85;
+}
+
+.pipeline .step-who {
+  font-size: 0.92em;
+  font-weight: 600;
+}
+
+.pipeline .pipe {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+  color: $red;
+}
+
+.pipeline .pipe-label {
+  font-size: 0.62em;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 0.1em;
+}
+
+.pipeline .pipe-arrow {
+  font-size: 2.4em;
+  line-height: 1;
+  font-weight: 700;
+}
