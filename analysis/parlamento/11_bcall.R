@@ -43,7 +43,7 @@ FAMILIA <- c(
 )
 
 col_partido <- c(
-  REP = "#C53030", UDI = "#2B6CB0", RN = "#3182CE", PNL = "#D69E2E",
+  REP = "#C53030", UDI = "#E2B100", RN = "#2563EB", PNL = "#111111",
   EVOP = "#805AD5", PSC = "#DD6B20",
   FA = "#38A169", PC = "#9B2C2C", PS = "#E53E3E", PPD = "#D53F8C",
   FRVS = "#2F855A", PL = "#ED8936", DC = "#4299E1",
@@ -358,19 +358,30 @@ periodos <- list(
   list(label = "2023_2025", anio_min = 2023L, anio_max = 2025L,
        fecha_min = NULL, fecha_max = NULL)
 )
+period_keep <- Sys.getenv("BCALL_PERIOD")
+if (nzchar(period_keep)) {
+  periodos <- Filter(function(p) p$label == period_keep, periodos)
+}
 
 all_res <- list()
+# BCALL_REPLOT=1 → rehacer PNG/GIF desde CSV (sin reajustar el modelo)
+replot_only <- identical(Sys.getenv("BCALL_REPLOT"), "1")
 
 for (p in periodos) {
-  out <- run_bcall_periodo(
-    con, p$label, p$anio_min, p$anio_max,
-    fecha_min = p$fecha_min, fecha_max = p$fecha_max
-  )
-  all_res[[p$label]] <- out
-
   csv_path <- canon_path(paste0("bcall_", p$label, ".csv"), root)
-  write_csv(out$results, csv_path)
-  message("  CSV → ", csv_path)
+  if (replot_only && file.exists(csv_path)) {
+    message("  replot desde ", csv_path)
+    res <- read_csv(csv_path, show_col_types = FALSE)
+    out <- list(results = res, pivot = PIVOT, fit = list(metadata = list(pivot = PIVOT)))
+  } else {
+    out <- run_bcall_periodo(
+      con, p$label, p$anio_min, p$anio_max,
+      fecha_min = p$fecha_min, fecha_max = p$fecha_max
+    )
+    write_csv(out$results, csv_path)
+    message("  CSV → ", csv_path)
+  }
+  all_res[[p$label]] <- out
 
   n_ok <- nrow(out$results)
   pivot_lab <- out$pivot %||% out$fit$metadata$pivot %||% "?"
@@ -443,18 +454,24 @@ for (p in periodos) {
 }
 
 # GIF evolución 2026 (cortes mensuales acumulados — más liviano)
-cortes_2026 <- as.character(seq(
-  as.Date("2026-03-31"),
-  as.Date("2026-07-31"),
-  by = "month"
-))
-
-message("\n=== B-Call GIF 2026 (bloque derecha) ===")
-frames_2026 <- build_bcall_frames(con, cortes_2026, fecha_inicio = "2026-03-11")
-if (nrow(frames_2026)) {
-  frames_2026 <- frames_2026 |> filter(bloque)
-  write_csv(frames_2026, canon_path("bcall_frames_2026.csv", root))
-
+frames_csv <- canon_path("bcall_frames_2026.csv", root)
+if (replot_only && file.exists(frames_csv)) {
+  message("\n=== B-Call GIF 2026 (replot desde frames CSV) ===")
+  frames_2026 <- read_csv(frames_csv, show_col_types = FALSE) |>
+    mutate(corte = as.Date(corte))
+} else {
+  cortes_2026 <- c(
+    "2026-03-31", "2026-04-30", "2026-05-31",
+    "2026-06-30", "2026-07-31", "2026-08-17"
+  )
+  message("\n=== B-Call GIF 2026 (bloque derecha) ===")
+  frames_2026 <- build_bcall_frames(con, cortes_2026, fecha_inicio = "2026-03-11")
+  if (nrow(frames_2026)) {
+    frames_2026 <- frames_2026 |> filter(bloque)
+    write_csv(frames_2026, frames_csv)
+  }
+}
+if (exists("frames_2026") && nrow(frames_2026)) {
   gif_der <- file.path(out_fig, "bcall_evolucion_derecha.gif")
   save_bcall_gif(
     frames_2026,

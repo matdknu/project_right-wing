@@ -57,9 +57,12 @@ mes <- read_csv(file.path(canon, "discursos_kast_kaiser_mes.csv"), show_col_type
 anio <- read_csv(file.path(prensa_dir, "prensa_kast_kaiser_anio.csv"), show_col_types = FALSE)
 n_disc <- unique(al$n_discursos)[[1]]
 
-ruido <- c("haber", "habia", "quien", "otro", "otros", "solamente", "haciendo", "adelante")
+ruido <- c(
+  "haber", "habia", "quien", "otro", "otros", "solamente", "haciendo",
+  "adelante", "queremos", "necesitamos", "necesito", "necesario", "nuevo"
+)
 p_top <- top |>
-  filter(!palabra %in% ruido) |>
+  filter(!palabra %in% ruido, !str_detect(palabra, "^(necesit|querem|haciend|haber|habia|adelant|solament|quien|otro)")) |>
   slice_head(n = 22) |>
   mutate(palabra = fct_reorder(palabra, n)) |>
   ggplot(aes(n, palabra)) +
@@ -114,14 +117,21 @@ ggsave(file.path(out_fig, "discursos_kast_kaiser_mes.png"), p_mes,
        width = 10, height = 5.2, dpi = 140)
 
 p_rep <- rep |>
-  mutate(lab = paste(codigo, etiqueta), lab = fct_reorder(lab, pct)) |>
+  mutate(lab = fct_reorder(etiqueta, pct)) |>
   ggplot(aes(lab, pct, fill = familia)) +
   geom_col(width = 0.72) +
   coord_flip() +
-  scale_fill_manual(values = fam_col) +
+  scale_fill_manual(
+    values = fam_col,
+    labels = c(
+      A = "A · gremialista",
+      C = "C · radical",
+      D = "D · libertario"
+    )
+  ) +
   labs(
-    title = "Repertorios A–D en la boca de Kast",
-    subtitle = sprintf("n = %d  ·  cuerpo oral", n_disc),
+    title = "Repertorios en la boca de Kast",
+    subtitle = sprintf("n = %d  ·  cuerpo oral  ·  A gremialista · C radical · D libertario", n_disc),
     x = NULL, y = "% discursos", fill = "Familia"
   ) +
   theme_ng

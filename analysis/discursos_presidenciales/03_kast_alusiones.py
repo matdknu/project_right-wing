@@ -48,7 +48,20 @@ STOP = {
     "esos", "esas", "ese", "esa", "tanto", "distintas", "distintos", "nuestra",
     "nuestro", "nuestros", "nuestras", "tener", "podemos", "importante",
     "aqui", "alli", "ahi", "hacia", "traves", "mediante", "durante",
+    "queremos", "querer", "queria", "querian",
+    "necesitamos", "necesito", "necesita", "necesitan", "necesario",
+    "haciendo", "haber", "habia", "habian", "habra",
+    "quien", "quienes", "otro", "otros", "otra", "otras",
+    "adelante", "solamente", "tambien",
+    "nuevo", "nueva", "nuevos", "nuevas",
+    "vida", "hacerlo", "podamos", "debemos", "tenemos",
 }
+
+# Prefijos: “necesita*”, “querem*”, etc. (ruido oral, no léxico de política)
+STOP_PREFIX = (
+    "necesit", "querem", "haciend", "haber", "habia", "adelant",
+    "solament", "quien", "otro", "otra", "nuevo", "nueva",
+)
 
 # Cuerpo oral — no el titular de sala de prensa.
 ALUSIONES = [
@@ -134,7 +147,7 @@ def top_palabras(kast: pd.DataFrame, n: int = 30) -> pd.DataFrame:
     cnt: dict[str, int] = {}
     for t in kast["txt"]:
         for w in tok_re.findall(t):
-            if w in STOP:
+            if w in STOP or w.startswith(STOP_PREFIX):
                 continue
             cnt[w] = cnt.get(w, 0) + 1
     rows = sorted(cnt.items(), key=lambda x: -x[1])[:n]

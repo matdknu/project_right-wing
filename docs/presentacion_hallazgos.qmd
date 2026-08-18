@@ -12,7 +12,7 @@ format:
     width: 1280
     height: 720
     fig-align: center
-    code-fold: true
+    code-fold: false
     transition: fade
     progress: true
     template-partials:
@@ -20,13 +20,14 @@ format:
     title-slide-attributes:
       data-background-color: "#071428"
 execute:
-  echo: false
+  echo: false      # ningún chunk muestra código. Para mostrar uno: #| echo: true
   warning: false
   message: false
 ---
 
 ```{r}
 #| label: setup
+#| echo: false
 suppressPackageStartupMessages({
   library(tidyverse)
   library(arrow)
@@ -80,38 +81,51 @@ rep_cmp <- bind_rows(rep_all, rep_nom) |>
 
 ## Qué se está contrastando
 
-El **neogremialismo** no es solo “votar a la derecha”. Es si el gobierno Kast articula **mercado + orden/valores** (H1), absorbe o no repertorios **radicales** (H2), se distingue del **PNL** en el hemiciclo (H3) y **omite cuerpos intermedios** en la agenda formal (H4).
+El **neogremialismo** no es solo “votar a la derecha”. Es si el gobierno Kast articula **mercado + orden/valores**, absorbe o no repertorios **radicales**, se distingue del **PNL** en el hemiciclo y **omite cuerpos intermedios** en la agenda formal.
 
-Cuatro pistas empíricas, siempre leídas contra las hipótesis:
+Eso se mide con un diccionario de **repertorios A–D** (siguiente lámina) y cuatro hipótesis.
 
 | Pista | Pregunta | Fuente |
 |-------|----------|--------|
-| **B-Call** | ¿Dónde está cada diputado? ¿Quién es outlier *entre* y *dentro* de partidos? | roll-calls → d1 ideología, d2 volatilidad |
+| **Mapa de votos** | ¿Con quién votan? ¿Se mantienen o se salen? | Solo sí/no de la Cámara; **sin** etiquetas ni IA |
 | **Boletines** | ¿Qué presentó Kast (`-05`)? ¿Qué está **promulgado**? ¿Cuánto varía el voto? | Cámara + BCN |
-| **Discursos** | ¿Qué nombra Kast? ¿A quién alude? ¿Dice Kaiser? | Presidencia, cuerpo oral |
-| **Prensa** | ¿Qué se dice **cuando se nombra** a la derecha? | 2015–2026 + diccionario A–D |
+| **Discursos** | ¿Qué nombra Kast? ¿A quién alude? | Presidencia, cuerpo oral |
+| **Prensa** | ¿Qué se dice **cuando se nombra** a la derecha? | 2015–2026 + repertorios A–D |
+
+## Repertorios A–D (antes de las hipótesis)
+
+Cuatro familias. **A, C y D** son sacos de vocabulario. **B no**: es la *articulación* (qué se junta en la misma pieza). No son partidos.
+
+| | Nombre | En una frase |
+|--|--------|----------------|
+| **A** | Gremialista clásico | Mercado *con* orden, familia y cuerpos intermedios |
+| **B** | Articulación neogremialista | A *junto*: economía libre + familia/orden → eso es H1 |
+| **C** | Derecha radical | Seguridad permanente, migración, guerra cultural, anti-élite |
+| **D** | Libertario puro | Individuo vs. Estado, *sin* gremios ni subsidiariedad |
+
+Desde acá: **A** = gremialista · **B** = A articulado · **C** = radical · **D** = libertario.
+
+## Códigos (el saco de cada letra)
+
+| Familia | Código | Nombre |
+|---------|--------|--------|
+| **A** gremialista | A1 · A2 · A3 · A4 · A5 | cuerpos intermedios · orden · familia/moral · antiestatismo · economía libre |
+| **B** articulación | no hay B1… | se *mide* como co-ocurrencia: **A5+A3**, **A5+A2** |
+| **C** radical | C1 · C2 · C3 · C4 · C5 | securitización · migración · guerra cultural · anti-élite · civilización |
+| **D** libertario | D1 | Estado mínimo, PNL |
+
+Regla: no cuenta la palabra suelta; cuenta **qué se junta**. Guía: **A5+A3/A2 → H1 (B)** · **A5+C → H2 híbrido** · **C sin A → radical puro** · **A5 sin A1 → H4**.
 
 ## Cuatro hipótesis
 
+Con ese alfabeto:
+
 | | Hipótesis | Se sostiene si… | Se refuta si… |
 |---|-----------|-----------------|---------------|
-| **H1** | Racionalidad normativa: mercado *con* orden/familia | Co-ocurren A5 + A2/A3 | El discurso es solo técnico (LyD) o solo libertario (PNL) |
-| **H2** | Radicalización: núcleo gremialista + C (seguridad, migración, cultura) | C aparece *junto* a A, no en su lugar | C reemplaza a A, o solo vive en redes |
+| **H1** | Racionalidad normativa: mercado *con* orden/familia (**B**) | Co-ocurren A5 + A2/A3 | El discurso es solo técnico (LyD) o solo libertario (D) |
+| **H2** | Radicalización: núcleo gremialista (**A**) + radical (**C**) | C aparece *junto* a A, no en su lugar | C reemplaza a A, o solo vive en redes |
 | **H3** | REP ≠ PNL en votos | Divergencia por materia (Rice, acuerdo) | Votan siempre igual |
 | **H4** | Selección liberal-individual | Agenda `-05` sin A1 (cuerpos intermedios) | Hay iniciativas comunitaristas sistemáticas |
-
-## Diccionario (regla: co-ocurrencia)
-
-El indicador no es una palabra suelta. Es **qué se junta** en la misma nota, discurso o boletín.
-
-| Familia | Códigos | Ahora también captura… |
-|---------|---------|------------------------|
-| **A** gremialista | A1…A5 | A1: sociedad civil, tejido social, asociatividad |
-| **C** radical | C1…C5 | C3 enfoque de género / woke; C4 casta / globalismo; C5 hispanidad / identidad |
-| **D** libertario | D1 | Estado mínimo, PNL |
-| **Nombrar** | filtro, no código | “la derecha”, oficialismo, gobierno Kast, bancadas, partidos |
-
-Guía: **A5+A3 / A5+A2 → H1** · **A5+C → H2 híbrido** · **C sin A → radical puro** · **A5 sin A1 → H4**.
 
 # Datos {background-color="#0B3D91"}
 
@@ -119,8 +133,9 @@ Guía: **A5+A3 / A5+A2 → H1** · **A5+C → H2 híbrido** · **C sin A → rad
 
 ```{r}
 #| label: inventario
+#| echo: false
 tibble(
-  Pieza = c("Prensa", "Discursos Kast", "Votaciones", "Votos", "B-Call 2026", "Proyectos"),
+  Pieza = c("Prensa", "Discursos Kast", "Votaciones", "Votos", "Mapa de votos 2026", "Proyectos"),
   N = c(
     fmt_n(n_prensa_unida),
     fmt_n(n_kast_disc),
@@ -132,7 +147,7 @@ tibble(
   Ventana = c(
     "2015–2026",
     "11 mar – 30 jul 2026",
-    "hasta 22-jul-2026",
+    "hasta 17-ago-2026",
     "las mismas",
     "período 2026",
     "ingreso"
@@ -140,12 +155,13 @@ tibble(
 ) |> kable()
 ```
 
-Una prensa. 145 discursos de gobierno (el scrape tiene 248, con Boric). Sin redes; votos congelados el 22-jul.
+Una prensa. 145 discursos de gobierno (el scrape tiene 248, con Boric). Sin redes; votos hasta el 17-ago-2026.
 
 ## Prensa, por año
 
 ```{r}
 #| label: unida-anio
+#| echo: false
 izq <- prensa_kk |> filter(year <= 2020)
 der <- prensa_kk |> filter(year >= 2021)
 tibble(
@@ -166,99 +182,115 @@ Serie única, 2015–2026. Pico 2024; 2025–26 el recorte es más chico.
 
 ![% de titulares](../outputs/imagenes/prensa_kast_kaiser_anio.png){width="90%"}
 
-2021 y 2025 = ciclos. **2026: Kast es el 10 % de los titulares**; Kaiser se apaga (0,72 % → 0,23 %).
+2021 y 2025 son años de campaña. En **2026** Kast está en **1 de cada 10** titulares; Kaiser, que había picado en 2025 (0,72 %), baja a 0,23 %.
 
-# B-Call: mapa y outliers {background-color="#0B3D91"}
+# El mapa de los votos {background-color="#0B3D91"}
 
-## Cómo leer el gráfico (30 segundos)
+## ¿Cómo se captura la tendencia de derecha?
 
-B-Call (Toro-Maureira et al. 2025) resume **todos los votos** de cada diputado en dos números. Pivot: **José Carlos Meza** (REP) → d1 positivo = más cerca de la derecha.
+**No está en los datos.** Nadie etiqueta “este diputado es de derecha”. Entra solo la planilla: **a favor / en contra / abstención**. (B-Call, Toro-Maureira et al. 2025.)
 
-| Eje | Nombre técnico | En cristiano |
-|-----|----------------|--------------|
-| **d1** (eje X) | posición ideológica | Izquierda ← 0 → derecha. El *dónde* se sienta en el hemiciclo virtual. |
-| **d2** (eje Y) | volatilidad | **Bajo** = vota coherente con su posición. **Alto** = a veces vota como si fuera otro. Es la fisura. |
+1. En **cada** votación mira quién votó con quién. La sala se parte en dos bandos.
+2. A cada diputado, voto a voto: ¿cayó del mismo lado que *ese* bando, o del otro?
+3. Con cientos de cortes aparece un eje (quienes coinciden vs. quienes se oponen). **Todavía no tiene izquierda ni derecha.**
+4. José Carlos Meza (Republicanos) **solo gira el mapa**, como poner el norte arriba: el polo donde suele caer Meza queda a la **derecha**. No lo usa de juez ni de ranking.
+5. **El promedio** de esas caídas → izquierda a derecha. **Cuánto varía** ese promedio → abajo hacia arriba (se mantiene o se sale).
 
-Outlier **entre partidos**: RN más al centro (d1 ~0.64) vs REP/PNL a la derecha (d1 ~0.74).  
-Outlier **dentro del partido**: misma d1, **d2 alta** (Hube, Lilayu, Karlezi).
+| En el gráfico | Qué está viendo |
+|---------------|-----------------|
+| **← →** | Con quién suele votar (tendencia). |
+| **↓ ↑** | Si ese patrón es estable o a veces se rompe. |
 
 ## Toda la Cámara, 2026
 
-![Mapa B-Call 2026 — dos nubes (izquierda / derecha); el bloque Kast está a la derecha](../outputs/imagenes/bcall_mapa_2026.png){width="88%"}
+Cada punto es un diputado. El lugar lo ganó **votando**, no por etiqueta de partido.
 
-La fisura de H3 **no** es una nube REP y otra PNL. Es una sola nube derecha, con **altura** (d2) distinta.
+![Mapa 2026: dos nubes (izquierda / derecha); el bloque de Kast está a la derecha](../outputs/imagenes/bcall_mapa_2026.png){width="88%"}
 
-## Zoom: solo REP · UDI · RN · PNL
+La pregunta era si Republicanos y el Partido Nacional Libertario son **dos derechas**. En el mapa **no**: es **una** nube. Lo que cambia es quién se **estira hacia arriba** (vota menos parejo).
 
-![El núcleo rojo (REP) es un punto denso; UDI/RN/PNL se estiran hacia arriba](../outputs/imagenes/bcall_bloque_2026.png){width="88%"}
+## Zoom: solo el bloque de Kast
 
-**Entre partidos:** REP casi no se mueve (d1 0.75 ± 0.01; d2 0.43). RN está más al centro (d1 0.64). PNL tan a la derecha como REP, pero **más volátil** (d2 0.64). UDI es el que más se abre en d2 (0.35–0.88).
+Misma lectura: a la derecha = votan con el oficialismo; hacia arriba = se salen de su propio patrón.
 
-## Números: cohesión entre partidos
+**Colores:** Republicanos **rojo** · UDI **amarillo** · RN **azul** · PNL **negro**.
+
+![El núcleo rojo (Republicanos) es un punto denso; UDI, RN y libertarios se estiran hacia arriba](../outputs/imagenes/bcall_bloque_2026.png){width="88%"}
+
+**Entre partidos:** Republicanos casi no se mueven. Renovación Nacional queda más al **centro**. Los libertarios tan a la derecha como Republicanos, pero **más inconstantes**. La UDI es la que más se abre hacia arriba.
+
+## Números: ¿se parecen los partidos?
 
 ```{r}
 #| label: bcall-entre
+#| echo: false
 bloque_bcall |>
   group_by(Partido = partido) |>
   summarise(
-    n = n(),
-    `d1 medio (ideología)` = round(mean(d1), 3),
-    `sd d1` = round(sd(d1), 3),
-    `d2 medio (volatilidad)` = round(mean(d2), 3),
-    `sd d2` = round(sd(d2), 3),
+    Diputados = n(),
+    `Qué tan a la derecha` = round(mean(d1), 2),
+    `Qué tan inconstantes` = round(mean(d2), 2),
     .groups = "drop"
   ) |>
-  arrange(desc(`d1 medio (ideología)`)) |>
+  arrange(desc(`Qué tan a la derecha`)) |>
   kable()
 ```
 
-Lectura H3: **PNL no es un polo distinto de REP en d1**. La diferencia está en **d2** (PNL y UDI más volátiles) y en RN más moderado.
+Más a la derecha no distingue a libertarios de Republicanos. Los distingue **quién se sale** (libertarios y UDI) y RN, más al centro.
 
-## Dentro de cada partido: los tres más volátiles
+## Dentro de cada partido: los tres que más se salen
 
 ```{r}
 #| label: bcall-dentro
+#| echo: false
 bloque_bcall |>
   group_by(partido) |>
   slice_max(d2, n = 3) |>
   transmute(
     Partido = partido,
     Diputado = legislator,
-    d1 = round(d1, 3),
-    d2 = round(d2, 3)
+    `A la derecha` = round(d1, 2),
+    `Se sale` = round(d2, 2)
   ) |>
   kable()
 ```
 
-- **UDI:** Hube, Lilayu, Martínez — la fisura más alta del bloque.  
-- **PNL:** Karlezi, Marowski, Muñoz — volatilidad de bancada, no de un solo “Kaiser”.  
-- **REP:** Ross (único que se sale del núcleo); el resto está pegado a Kast/Meza.  
-- **RN:** Ossandón, Chandía, Beltrán — más al *centro* (d1 baja) que volátiles extremos.
+Estos nombres **no** los elegimos: son, en cada partido, los tres que más rompen su propio patrón de voto.
 
-## Ranking de volatilidad (d2)
+- **UDI:** Hube, Lilayu, Martínez — los que más se salen de todo el bloque.  
+- **Libertarios:** Karlezi, Marowski, Muñoz — se sale la bancada, no solo Kaiser.  
+- **Republicanos:** Ross (el único que se despega); el resto vota pegado a Kast/Meza.  
+- **RN:** Ossandón, Chandía, Beltrán — más al *centro* que inconstantes.
 
-![Mayor d2 = votos menos coherentes con la posición ideológica](../outputs/imagenes/bcall_volatiles_2026.png){width="82%"}
+## Quién se sale más
 
-H3 se juega aquí: si REP y PNL fueran doctrinas distintas, veríamos **dos nubes en d1**. Vemos **una nube** y una cola de nombres en d2.
+Más alto = a veces vota **en contra** de lo que el resto de su zona votaría.
 
-## Densidades: ancho = disciplina
+![Quién se sale más de su propio patrón de voto](../outputs/imagenes/bcall_volatiles_2026.png){width="82%"}
 
-![Cada curva es un diputado del bloque: media = d1, ancho = d2](../outputs/imagenes/bcall_densidades_2026.png){width="88%"}
+Si Republicanos y libertarios fueran doctrinas distintas, habría **dos nubes** de izquierda a derecha. Hay **una** nube y una cola de nombres hacia arriba.
 
-Curvas **angostas y superpuestas** (REP) = disciplina. Curvas **anchas** (UDI/PNL altos) = el mismo diputado a veces vota como si no estuviera en su sitio.
+## El ancho de cada diputado
 
-## Cómo se llega a esa foto (GIF)
+Cada curva es una persona. El **centro** dice con quién vota; el **ancho** dice si se mantiene o se mueve.
 
-Cada frame suma un mes de votaciones desde el **11-mar-2026**. Las rutas son la trayectoria acumulada. El núcleo rojo se compacta; los puntos que suben son los outliers de d2.
+![Centro = con quién vota; ancho = cuánto se sale](../outputs/imagenes/bcall_densidades_2026.png){width="88%"}
+
+Curvas **angostas y pegadas** (Republicanos) = votan juntos y siempre igual. Curvas **anchas** (UDI y libertarios) = el mismo diputado a veces vota como si no estuviera en su sitio.
+
+## Cómo se arma el mapa (GIF)
+
+No es un ranking que dibujemos a mano cada mes. Cada fotograma **rehace el mapa** con los votos acumulados desde el **11 de marzo de 2026**. El punto se mueve porque **cambió cómo ha votado**.
 
 ![](../outputs/imagenes/bcall_evolucion_derecha.gif){width="78%"}
 
 ## Datos (corte)
 
-Votaciones hasta **2026-07-22**. Gobierno Kast desde **2026-03-11**.
+Votaciones hasta **2026-08-17**. Gobierno Kast desde **2026-03-11**.
 
 ```{r}
 #| label: n-datos
+#| echo: false
 tibble(
   Pieza = c("Prensa 2026 (filtro Kast)", "Discursos Kast", "Votaciones",
             "Votos", "Proyectos", "Mensajes `-05`"),
@@ -282,17 +314,19 @@ Los boletines **`-05`** son mensajes del Presidente: lo que el gobierno *elige* 
 
 ## Qué presentó Kast (y cuánto se votó)
 
-| Boletín | Proyecto | Ingreso | Votos Cámara | Estado BCN |
-|---------|----------|---------|--------------|------------|
-| **18137-05** | Contener precio del **kerosene** (emergencia energética) | 24-mar | 9 | `candidato_bajo` (no hay ley matcheada) |
-| **18216-05** | **PDL** — reconstrucción y desarrollo económico y social | 22-abr | **117** | `candidato_bajo` |
-| **18296-05** | Mayor **endeudamiento** 2026 | 3-jun | **3** | **`norma_publicada`** (Ley Chile 1225909) |
+| Boletín | Proyecto | Ingreso | Votos Cámara | ¿Ya es ley? |
+|---------|----------|---------|--------------|-------------|
+| **18137-05** | Contener precio del **kerosene** (emergencia energética) | 24-mar | 9 | **No** — sigue en trámite |
+| **18216-05** | **PDL** — reconstrucción y desarrollo económico y social | 22-abr | **120** | **No** — sigue en trámite |
+| **18296-05** | Mayor **endeudamiento** 2026 | 3-jun | **3** | **Sí** — publicada en Ley Chile |
 
-**Variación:** el PDL concentra casi toda la energía legislativa (117 votaciones, cohesión plena). El endeudamiento son 3 votaciones y se **estrella en la sala**. El kerosene es un mensaje corto de precios. Nada de A1.
+El cruce con la BCN busca si el boletín ya tiene una **norma promulgada**. “Sigue en trámite” = no hay ley publicada (no es un ranking de calidad). Solo el endeudamiento cruzó ese umbral.
+
+**Variación:** el PDL concentra casi toda la energía legislativa (120 votaciones, cohesión plena). El endeudamiento son 3 votaciones y se **estrella en la sala**. El kerosene es un mensaje corto de precios. Nada de subsidiariedad / cuerpos intermedios.
 
 ## ¿Qué hay promulgado?
 
-BCN / Ley Chile, con match fuerte (`norma_publicada`): **8** normas en toda la base — **no** son “las leyes de Kast”. Solo **una** es mensaje `-05` de este gobierno: **18296-05**.
+BCN / Ley Chile, con match fuerte (norma ya publicada): **8** normas en toda la base — **no** son “las leyes de Kast”. Solo **una** es mensaje `-05` de este gobierno: **18296-05**.
 
 Las otras siete son boletines más viejos o de otras comisiones (armas, inclusión laboral, IMM, tarifa eléctrica, seguridad escolar, permisos…). El PDL (**18216-05**), el más votado, **aún no es ley** en el cruce BCN.
 
@@ -312,40 +346,42 @@ Tres votaciones el **17-jun-2026**:
 | 89179 | Empate 73–73 | 73 | 73 |
 | 89180 | Rechazado 72–74 | 72 | 74 |
 
-El bloque derecha entra cohesionado (B-Call: misma nube). El proyecto **varía en el hemiciclo completo**, no entre REP y PNL. Es la fisura gobierno–oposición.
+En el mapa de votos el bloque ya estaba **junto** (votan parecido). Acá el proyecto **se parte en toda la sala**, no entre Republicanos y libertarios. Es gobierno vs oposición, no una grieta interna.
 
 ## 18216-05 — PDL: mucho voto, cero promulgación (aún)
 
-117 votaciones; Rice del bloque ~1. **H3:** no hay grieta REP–PNL. **H4:** reconstrucción/desarrollo, no cuerpos intermedios. **H2:** la prensa de la ventana carga ~22 % de C, no A1.
+120 votaciones; Rice del bloque ~1. **H3:** no hay grieta REP–PNL. **H4:** reconstrucción/desarrollo, no cuerpos intermedios. **H2:** la prensa de la ventana carga ~22 % de C, no A1.
 
 ![Timeline de prioritarios](../outputs/imagenes/canon_pdl_timeline.png){width="86%"}
 
-## Repertorios *en* los textos de proyecto
+## Repertorios en los textos de proyecto
 
-![A–D en proyectos vs mensajes `-05`](../outputs/imagenes/canon_pdl_repertorios.png){width="88%"}
+Cada barra es un **repertorio** (no una sigla): *economía libre*, *orden institucional*, *familia*, *securitización*, etc. Compara **todos** los proyectos vs. los **mensajes del Presidente**.
+
+![Nombre del repertorio, no código A1/C1](../outputs/imagenes/canon_pdl_repertorios.png){width="88%"}
 
 # Votos y fisuras {background-color="#0B3D91"}
 
-## H3 — cohesión Rice del bloque
+## ¿La bancada vota junta?
 
-Rice = 1 unanimidad, 0 división 50/50. En 2026 (votos a favor/en contra):
+1 = todos del partido votaron igual. 0 = el partido se partió por la mitad. En 2026:
 
-| Partido | Rice medio | Votaciones |
-|---------|------------|------------|
-| **REP** | 0.997 | 768 |
-| **PNL** | 0.988 | 735 |
+| Partido | Qué tan juntos | Votaciones |
+|---------|----------------|------------|
+| **Republicanos** | 0.997 | 768 |
+| **Libertarios** | 0.988 | 735 |
 | **UDI** | 0.955 | 790 |
 | **RN** | 0.942 | 786 |
 
-![Cohesión Rice — bloque derecha](../outputs/imagenes/canon_camara_rice.png){width="78%"}
+![Qué tan juntos votan en el bloque de Kast](../outputs/imagenes/canon_camara_rice.png){width="78%"}
 
-## H3 — ¿REP se distingue del PNL?
+## ¿Republicanos y libertarios votan distinto?
 
-**Acuerdo de moda REP–PNL: 91,8 %** (n = 4 702 votaciones en el canon).
+**En el 91,8 % de las votaciones eligieron el mismo lado** (4 702 votaciones).
 
-![Convergencia REP–PNL](../outputs/imagenes/canon_camara_rep_pnl.png){width="72%"}
+![Mismo lado: Republicanos y libertarios](../outputs/imagenes/canon_camara_rep_pnl.png){width="72%"}
 
-**Lectura:** H3 queda **débil**. La distinción doctrinaria (gremialismo vs. libertarismo) **casi no se traduce en votos**. Si existe, hay que buscarla en *indicaciones*, materias específicas o disenso individual — no en el voto de bancada.
+La idea de “dos derechas” **casi no se ve en el voto**. Si hay diferencia, está en indicaciones o en diputados sueltos, no en la bancada.
 
 ## Dónde sí hay fisura: disruptivos (no el partido)
 
@@ -355,11 +391,11 @@ La fisura no es REP vs. PNL. Es **diputados vs. moda del bloque**.
 
 Kaiser (PNL, id 1135) es el caso de **disenso personal**, no de bancada. Encaja más con **D** (límite libertario) que con un cisma partidario.
 
-La fisura observable es **individual** (B-Call d2) y, en el endeudamiento, **de sala**. Rice confirma la disciplina de bancada; B-Call dice *quién* se sale.
+La fisura no es de partido: es de **personas** (quién se sale en el mapa) y, en la deuda, de **toda la sala**. El voto de bancada cierra filas; el mapa dice **quién**, a veces, no.
 
-## Rice mensual REP
+## Republicanos, mes a mes
 
-![Rice mensual — Republicanos](../outputs/imagenes/canon_camara_rice_rep_mes.png){width="88%"}
+![Qué tan juntos votan Republicanos cada mes](../outputs/imagenes/canon_camara_rice_rep_mes.png){width="88%"}
 
 # Discursos de Kast {background-color="#0B3D91"}
 
@@ -370,6 +406,8 @@ La fisura observable es **individual** (B-Call d2) y, en el endeudamiento, **de 
 Tipo: gira territorial y gestión (regiones, alcaldes, emergencias). No es un corpus de cadena nacional doctrinaria.
 
 ## Qué palabras nombra
+
+Stopwords extra (p. ej. *necesita\**, *querem\**, *haciendo*, *haber*): queda el léxico de **tema**, no el de la oralidad.
 
 ![Top palabras en el cuerpo](../outputs/imagenes/discursos_kast_top_palabras.png){width="78%"}
 
@@ -383,15 +421,11 @@ Seguridad 64 % · familia 59 % · inversión 51 %. **Subsidiariedad, Pinochet, G
 
 ## Repertorios en la boca
 
-![A–D en discursos Kast](../outputs/imagenes/discursos_kast_repertorios.png){width="86%"}
+Mismo alfabeto: **A** gremialista · **B** = A *junto* (no hay barra B) · **C** radical · **D** libertario.
 
-H1 en la presidencia: C1 + A3 + A2 + A5. C3/C4/D1 casi no existen. A1 (22 %) entra por *sociedad civil / gremios*, no por la palabra subsidiariedad.
+![Nombre del repertorio en discursos de Kast](../outputs/imagenes/discursos_kast_repertorios.png){width="88%"}
 
-## ¿Se nombra? ¿Nombra a Kaiser?
-
-![Kast vs Kaiser por mes](../outputs/imagenes/discursos_kast_kaiser_mes.png){width="88%"}
-
-Autonombrarse: 15 % en marzo → **0 % en julio**. Kaiser: **una vez** (Enela, jun-2026), recuerdo de 2021 con Mulet — no es alianza ni ataque.
+Dominan **securitización (C1)**, **familia (A3)**, **orden (A2)** y **economía libre (A5)**. Guerra cultural / anti-élite / libertario casi no aparecen. “Cuerpos intermedios” entra por *sociedad civil / gremios*, no por la palabra subsidiariedad.
 
 # Prensa: qué se dice cuando se nombra a la derecha {background-color="#0B3D91"}
 
@@ -402,6 +436,7 @@ No usamos el corpus entero (deportes, “seguridad” genérica).
 
 ```{r}
 #| label: nombra-n
+#| echo: false
 tibble(
   Universo = c("Prensa 2026", "Cuando nombra a la derecha"),
   Notas = c(fmt_n(nrow(prensa)), fmt_n(nrow(prensa_der))),
@@ -439,26 +474,39 @@ Pocas en el título. En 2026 el texto completo (abajo) muestra más: el género 
 
 ```{r}
 #| label: fig-nombra
+#| echo: false
 #| fig-width: 11
 #| fig-height: 5.2
 rep_cmp |>
   filter(pct > 0.05) |>
-  ggplot(aes(codigo, pct, fill = subset)) +
+  mutate(
+    familia = recode(familia,
+      A = "A · gremialista",
+      C = "C · radical",
+      D = "D · libertario"
+    )
+  ) |>
+  ggplot(aes(etiqueta, pct, fill = subset)) +
   geom_col(position = "dodge", width = 0.75) +
   facet_wrap(~familia, scales = "free_x", nrow = 1) +
   labs(
-    title = "Repertorios A–D: corpus total vs. notas que nombran a la derecha",
+    title = "Repertorios: corpus total vs. notas que nombran a la derecha",
     x = NULL, y = "% de notas", fill = NULL,
-    caption = "Diccionario reforzado (A1 sociedad civil; C3–C5 guerra cultural / casta / identidad)."
+    caption = "Eje: nombre del repertorio (no A1/C1)."
   ) +
-  theme_minimal(base_size = 13) +
-  theme(legend.position = "bottom", panel.grid.minor = element_blank())
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = "bottom",
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_text(angle = 35, hjust = 1, size = 9)
+  )
 ```
 
 ## Hipótesis en ese recorte
 
 ```{r}
 #| label: nombra-h
+#| echo: false
 co <- function(df) {
   tibble(
     `H1 A5+A3` = 100 * mean(df$co_H1_mercado_familia),
@@ -480,14 +528,11 @@ bind_rows(
 
 Si H1 fuera mediático, A5+A3 debería **subir** al nombrar a la derecha. Si sube C y no A1, H2/H4 ganan en prensa y H1 se queda en discursos.
 
-## Familias A vs C (serie)
-
-![Serie A vs C](../outputs/imagenes/canon_prensa_serie_familias.png){width="88%"}
-
 ## Eco de los boletines Kast (±7 días)
 
 ```{r}
 #| label: puente
+#| echo: false
 puente |>
   transmute(
     Evento = label,
@@ -517,27 +562,27 @@ El neogremialismo aparece como **gramática presidencial**, no como gramática d
 
 ## H2 — Radicalización {background-color="#f7f3ee"}
 
-**C circula; no coloniza el discurso oficial.**
+**El repertorio radical (C: seguridad, migración, cultura) vive en la noticia; casi no en la boca de Kast.**
 
-- Prensa: C1–C3 en ~22 % (canon) y más en corpus “derecha”.
-- Discursos: C *sin* A solo 9 %.
-- Híbrido A5+C: ~2 % — poca fusión explícita.
+- En la **prensa 2026**, ~22 % de las notas traen C. Si la nota **nombra** a Kast o a la derecha, esa cifra **sube**.
+- En los **discursos de Kast**, el radicalismo *sin* familia/orden/mercado (C sin A) es solo **9 %**.
+- Textos que juntan **mercado y C** en la misma pieza: **~2 %**. Casi no hay fusión explícita.
 
-No se refuta del todo (C no es solo “redes”), pero **tampoco** se confirma el reemplazo del núcleo gremialista. Es **convivencia asimétrica**: radical en medios, gremialista-selectivo en Presidencia.
+C no es “solo Twitter”. Pero **tampoco** reemplaza al núcleo gremialista en Presidencia. Medios radicalizan; Kast no.
 
 ## H3 — REP vs PNL {background-color="#f7f3ee"}
 
-**Refutada en d1 (ideología); matizada en d2 (volatilidad).**
+**Los votos no arman dos derechas. El mapa no los sentó: salen de cómo votaron.**
 
-- Acuerdo de moda **91,8 %**. Rice REP 0.997 · PNL 0.988.
-- B-Call: REP y PNL **misma longitud de d1** (~0.74). RN más al centro (0.64).
-- Outliers **dentro**: UDI (Hube, Lilayu), PNL (Karlezi), REP (Ross). No hay dos polos partidarios.
+- Republicanos y libertarios coinciden en el **91,8 %** de las votaciones. Casi nunca se parten.
+- En el mapa quedan **igual de a la derecha**. Renovación Nacional, más al centro.
+- Quienes se salen son **nombres**, no partidos: en la UDI Hube y Lilayu; en los libertarios Karlezi; en Republicanos, Ross.
 
 ## H4 — Selección liberal-individual {background-color="#f7f3ee"}
 
 **La evidencia más limpia, también en lo promulgado.**
 
-- Kast presentó **3** mensajes `-05`; **1** promulgado (endeudamiento). El PDL (117 votos) **no** es ley en BCN.
+- Kast presentó **3** mensajes `-05`; **1** promulgado (endeudamiento). El PDL (120 votos) **no** es ley en BCN.
 - A1 = 0 en esos mensajes. Al nombrar a la derecha en prensa, A1 sigue bajo.
 
 ## Mapa de hallazgos
@@ -555,25 +600,24 @@ H4  sin A1              fuerte (42%)      A1 escaso              0% en 42 mensaj
 ## Cuatro pistas, una frase cada una
 
 ::: incremental
-- **B-Call.** Una nube derecha. La fisura es **altura** (d2), no dos partidos. GIF: el núcleo REP se compacta; UDI/PNL suben.
+- **Mapa de votos.** Los votos (no nosotros) dejan **una** nube derecha. La fisura es quién **se sale**, no Republicanos vs libertarios.
 - **Boletines.** Presentó kerosene, PDL y deuda. Promulgó la deuda. El PDL se vota mucho y no sale. Nada de A1.
 - **Discursos.** Trabajo, seguridad, familia, inversión. No nombra a Kaiser (1 vez, 2021). No dice subsidiariedad.
-- **Prensa.** Cuando *nombra* a la derecha, sube C, no la co-ocurrencia H1. En 2026 Kast es el 10 % de los titulares; Kaiser se apaga.
+- **Prensa.** Si la nota nombra a Kast/la derecha, sube el repertorio **radical** (C), no el cruce mercado+familia (H1). En 2026 Kast está en **1 de cada 10** titulares; Kaiser, después del pico 2025, casi no aparece.
 :::
+
+## Bosquejo
+
+El neogremialismo es **discursivo y performativo**: se dice y se escenifica **por encima** de lo que decide la Cámara.
+
+- En Presidencia hay gramática **A/B** (familia, orden, mercado) y seguridad. En el hemiciclo el bloque **vota junto**; no hay dos derechas.
+- Lo que se presenta y lo que se promulga es **fiscal / reconstrucción**, no subsidiariedad ni cuerpos intermedios.
+- La prensa, al nombrar a la derecha, carga **C** (radical), no la articulación neogremialista.
+
+La Cámara **unifica**; el discurso **distingue**. El neogremialismo 2026 todavía no es una regla de voto ni de ley: es una *performance* presidencial.
 
 ## Límites (para no sobreinterpretar)
 
-- Votaciones **congeladas en 22-jul-2026** (API Cámara inestable).
+- Votaciones hasta **17-ago-2026**.
 - Diccionario = regex (ahora más A1/C3–C5 y filtro “nombra derecha”); Qualmer humano sigue pendiente.
 - BCN: 8 normas publicadas; **1** mensaje `-05` Kast. El PDL no está en ese cruce.
-
-## Reproducir
-
-```bash
-make analisis                         # ETL + run_todo.R
-quarto render docs/presentacion_hallazgos.qmd
-```
-
-Figuras: `outputs/imagenes/bcall_*.png` + `bcall_evolucion_derecha.gif`.  
-Indicadores: `data/processed/canon/resultados_hipotesis.csv`.  
-Método: `docs/PROYECTO.qmd`.

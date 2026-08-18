@@ -78,11 +78,16 @@ rep_cmp <- bind_rows(rep_all, rep_05) |>
 
 p_rep <- rep_cmp |>
   filter(pct > 0) |>
-  ggplot(aes(fct_reorder(codigo, pct), pct, fill = subset)) +
+  mutate(lab = fct_reorder(etiqueta, pct, .fun = max)) |>
+  ggplot(aes(lab, pct, fill = subset)) +
   geom_col(position = "dodge", width = 0.7) +
   coord_flip() +
-  labs(title = "Repertorios en proyectos de ley",
-       subtitle = "Códigos A–D en nombre/materia/ministerios",
+  scale_fill_manual(
+    values = c("todos" = "grey55", "mensajes_-05" = "#1B4F72"),
+    labels = c("todos" = "Todos los proyectos", "mensajes_-05" = "Mensajes del Presidente")
+  ) +
+  labs(title = "Repertorios en los textos de proyecto",
+       subtitle = "Nombre, no sigla · A gremialista · C radical · D libertario",
        x = NULL, y = "% proyectos", fill = NULL) +
   theme_df
 

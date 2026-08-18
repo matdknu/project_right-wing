@@ -49,6 +49,17 @@ $presentation-heading-font: "Fraunces", "Source Serif Pro", Georgia, serif;
   margin-bottom: 0.55em;
 }
 
+// Las slides ## no heredan el fondo azul del separador
+.reveal .slides section.slide.level2 {
+  background-color: $cream !important;
+  color: $ink;
+}
+
+.reveal .slides section.slide.level2 h2,
+.reveal .slides section.slide.level2 h3 {
+  color: $blue !important;
+}
+
 .reveal strong,
 .reveal b,
 .reveal em {
