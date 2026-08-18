@@ -6,6 +6,7 @@ Investigación Fondecyt sobre la derecha chilena en el gobierno de Kast: cómo v
 
 ## Documentación
 
+- **Presentación de datos** — [Link](https://matdknu.github.io/project_right-wing/presentacion_hallazgos.html)
 - **[`docs/REPOSITORIO.md`](docs/REPOSITORIO.md)** — inventario completo: qué hay, qué hace, hipótesis H1–H4
 - [`docs/PROYECTO.qmd`](docs/PROYECTO.qmd) — método, diccionario A–D, contrastación
 - [`docs/ESTRUCTURA_EXPORT.md`](docs/ESTRUCTURA_EXPORT.md) — qué va a GitHub vs local
