@@ -3576,7 +3576,7 @@ Estado del documento
 </div>
 <section id="sec-intro" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Introducción</h1>
-<p>En la Cámara de Diputados de Chile, la división entre izquierda y derecha es la que más ordena el voto. Desde el plebiscito de 1988, la competencia partidaria se organizó en dos bloques (Tironi y Agüero, 1999; Torcal y Mainwaring, 2003), y en las votaciones nominales la coalición pesó más que el partido (Alemán y Saiegh, 2007). Esa división sigue ahí: en la escala de B-Call de 2022 a 2026, los partidos de derecha quedan a unas dos desviaciones estándar de la mediana de la izquierda (<a href="#tbl-camara" class="quarto-xref">Tabla 1</a>).</p>
+<p>En la Cámara de Diputados de Chile, la división entre izquierda y derecha es la que más ordena el voto. Desde el plebiscito de 1988, la competencia partidaria se organizó en dos bloques (Tironi y Agüero, 1999; Torcal y Mainwaring, 2003), y en las votaciones nominales la coalición pesó más que el partido (Alemán y Saiegh, 2007). Esa división sigue ahí: en la escala de B-Call de 2022 a 2026, los partidos de derecha quedan a unas dos desviaciones estándar de la mediana de la izquierda (<a href="#tbl-camara" class="quarto-xref">Tabla 2</a>).</p>
 <p>Lo que cambió es la derecha. En la elección de consejeros constitucionales del 7 de mayo de 2023, el Partido Republicano (PLR) obtuvo 35,5% de los votos y Chile Vamos (ChV), la coalición de la derecha convencional, 21%. En diciembre de 2025, José Antonio Kast ganó la elección presidencial, y asumió el 11 de marzo de 2026, un día después del cierre de nuestros datos.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> El ascenso de la derecha radical obliga a preguntar cómo responde la derecha convencional: si converge con ella o se diferencia.</p>
 <p>Este artículo plantea la pregunta en dos niveles. El primero es conocido: la izquierda y la derecha se diferencian, y esa diferencia sirve de vara. El segundo es el que importa para entender a la derecha radical: cuánto se diferencian las derechas entre sí, medidas con esa vara, y en qué. Si la distancia entre el PLR y ChV es una fracción menor de la que separa a la derecha de la izquierda, el PLR es una variante dentro del bloque; si se le acerca, es una segunda división.</p>
 <p>La literatura sobre cómo responde la derecha convencional al ascenso de la radical mide sus estrategias con lo que los partidos dicen, sobre todo en sus programas (Meguid, 2008; Abou-Chadi y Krause, 2020; Krause et al., 2023). Los programas pueden moderarse mientras el comportamiento legislativo muestra otra cosa. Los estudios que miran el voto parlamentario miden cuánto coinciden o se enfrentan los partidos (Santos et al., 2025), pero no qué implicaba cada voto. Con eso no se puede distinguir si dos partidos votan juntos porque comparten el contenido o porque comparten una posición frente al gobierno, dos lógicas que el voto nominal mezcla (Hix y Noury, 2016). El caso chileno agrega un problema: la derecha radical no es un partido de nicho externo, sino una escisión de la derecha convencional, y se ha anticipado que esa cercanía facilita la cooperación (Díaz et al., 2023) sin que se haya examinado en el comportamiento legislativo.</p>
@@ -3647,8 +3647,78 @@ Estado del documento
 <h1 data-number="2"><span class="header-section-number">2</span> Datos y métodos</h1>
 <p><strong>Universo.</strong> Votaciones nominales sobre indicaciones en la Sala de la Cámara, del 11 de marzo de 2016 al 10 de marzo de 2026, tomadas de una base de 3.809 votaciones de indicaciones desde 2010. El voto se codifica Sí = 1, No = −1 y abstención = 0; la ausencia queda fuera.</p>
 <p><strong>Bloques.</strong> Derecha tradicional: UDI, RN y Evópoli. Nueva derecha: PLR (REP en los datos) y, desde 2025-26, PNL.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Un independiente cuenta como derecha si vota con la mayoría de la derecha en al menos el 75% de las votaciones en que derecha e izquierda se dividen.</p>
-<p><strong>Contenido.</strong> Un modelo de lenguaje (OpenAI, gpt-6-luna) lee solo el texto de la indicación, con los autores enmascarados. Codifica qué implica votar Sí en cinco ejes (económico, subsidiariedad, valórico, orden y nación), además del tema, la naturaleza del cambio, si es presupuestario y si el texto es evaluable. Cada eje se reduce a +1 (polo de derecha), −1 o 0.</p>
-<p><strong>Validación.</strong> Un segundo modelo (DeepSeek) codifica 300 textos de validación. Kappa en la escala reducida: económico 0,68, valórico 0,72, orden 0,71, nación 0,72 y subsidiariedad 0,42. Subsidiariedad queda como provisional hasta la codificación humana de sus 31 desacuerdos. La figura A1 compara ese kappa con el del código anterior.</p>
+<p><strong>Qué se codifica.</strong> Un modelo de lenguaje (OpenAI, gpt-6-luna) lee solo el texto sometido a votación. La autoría va enmascarada como «[autoría omitida]». No usa el proyecto, el gobierno, el partido ni cómo salió la votación. La pregunta es una: qué implica votar Sí.</p>
+<p>El libro de códigos es una lista cerrada de palabras. El modelo tiene que copiarlas al pie de la letra, y la codificación humana usa las mismas. Primero escribe un resumen de hasta 25 palabras. Después marca si el texto permite saber qué cambia. Si está cortado o es solo una referencia («1° y 4°, con indicaciones de la Comisión de Hacienda»), no es evaluable y los cinco ejes quedan en «No aplica».</p>
+<p>Sobre ese texto codifica seis cosas descriptivas, con estas palabras:</p>
+<ul>
+<li><strong>Objeto:</strong> Indicación, Artículo con indicación, Admisibilidad, Texto sin indicación u Otro.</li>
+<li><strong>Operación:</strong> Agregar, Intercalar, Reemplazar, Suprimir, Varias u Otra.</li>
+<li><strong>Naturaleza:</strong> Sustantiva, si cambia derechos, obligaciones, sanciones, montos o el alcance de la norma; Técnica, si solo corrige redacción; Procedimental, si solo cambia plazos o trámites.</li>
+<li><strong>Tema:</strong> el área de la indicación, no la del proyecto entero si difieren. Va de macroeconomía y tributación a migración, pueblos indígenas o relaciones internacionales, o «No determinable».</li>
+<li><strong>Presupuesto:</strong> No, Rebaja simbólica, Reasignación o Glosa.</li>
+<li><strong>Confianza:</strong> Alta, si el texto es claro; Media, si hubo que inferir; Baja, si es fragmentario. Copia además una frase literal de evidencia, de hasta 20 palabras.</li>
+</ul>
+<p>La dirección del Sí se codifica en cinco ejes. Cada uno tiene dos polos y tres salidas residuales. «Neutral» solo si el texto toca el eje y el cambio no mueve la balanza. «Mixta» solo si empuja de forma explícita en las dos direcciones. «No aplica» si el texto no toca esa materia. No se usa Neutral por duda: se elige la dirección más probable y se baja la confianza.</p>
+<div id="tbl-codigo" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-codigo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabla 1: Palabras del libro de códigos. La codificación humana tiene que usar estas mismas categorías, sin parafrasearlas.
+</figcaption>
+<div aria-describedby="tbl-codigo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Eje</th>
+<th>+1, polo de derecha</th>
+<th>−1</th>
+<th>Cuándo se usa el eje</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Económico</td>
+<td>Pro-mercado</td>
+<td>Pro-Estado</td>
+<td>Regulación, tributos, empresas y cargas a privados</td>
+</tr>
+<tr class="even">
+<td>Subsidiariedad</td>
+<td>Provisión privada</td>
+<td>Provisión estatal</td>
+<td>Solo si el texto regula quién provee un derecho social o la autonomía del prestador. No se infiere desde la macroeconomía</td>
+</tr>
+<tr class="odd">
+<td>Valórico</td>
+<td>Conservadora</td>
+<td>Progresista</td>
+<td>Solo lo moral: familia, vida, sexualidad, religión o derechos de los padres. Un subsidio familiar no va aquí</td>
+</tr>
+<tr class="even">
+<td>Orden</td>
+<td>Orden y castigo</td>
+<td>Garantías</td>
+<td>Delitos, penas, policías, Fuerzas Armadas o la protesta</td>
+</tr>
+<tr class="odd">
+<td>Nación</td>
+<td>Soberanista</td>
+<td>Pluralista</td>
+<td>Solo si el texto nombra migración, pueblos indígenas, plurinacionalidad, símbolos o soberanía</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Tres reglas cambian la palabra que se elige. Si se vota suprimir una norma, el Sí va en la dirección contraria a lo suprimido: suprimir una exención es Pro-Estado; suprimir una pena es Garantías. Si se vota la admisibilidad, se codifica el contenido de esa indicación. Una rebaja a un monto simbólico, como $1.000, es «Rebaja simbólica» y el eje económico queda en «No aplica», salvo que el texto diga una política.</p>
+<p>En el análisis, cada eje se reduce a un número. La palabra del polo de derecha vale +1 y la contraria −1. Neutral, Mixta y No aplica valen 0. Si la confianza es Baja, el eje también vale 0: solo entran Alta y Media.</p>
+<p><strong>Validación.</strong> DeepSeek codifica 300 textos con el mismo libro de códigos. El kappa se calcula en la escala reducida (+1 / −1 / 0): económico 0,68, valórico 0,72, orden 0,71, nación 0,72 y subsidiariedad 0,42. Subsidiariedad queda provisional hasta que una persona codifique, a ciegas y con las mismas palabras, sus 31 desacuerdos. La figura A1 compara ese kappa con el del código anterior.</p>
 <p><strong>Posiciones.</strong> B-Call (Toro-Maureira et al., 2025) por período y por año legislativo, en dos universos: toda la Cámara y solo la derecha. En el universo de la derecha, el pivote es un diputado republicano desde 2022, y d1 positivo significa cercanía a la nueva derecha. Se excluye a quien vota en menos del 15% de las votaciones (el paper usa 10%).</p>
 <p><strong>Modelos.</strong> Modelos lineales de probabilidad del voto Sí, con efectos fijos por diputado y errores agrupados por votación. Predictores: dirección del texto en cada eje, autoría × gobierno, tipo de votación y tema. En el presupuesto, efectos fijos por partida.</p>
 <p><strong>Cuánto se diferencian.</strong> Para responder cuánto, expresamos cada brecha entre las derechas como fracción de la brecha entre la derecha convencional y la izquierda en la misma medida:</p>
@@ -3684,11 +3754,11 @@ Figura 1: B-Call de la Cámara, 2022-2026, todas las indicaciones. Cada punto e
 </figcaption>
 </figure>
 </div>
-<p>En una escala comparable entre años (cero = mediana de la izquierda; unidad = desviación estándar de los diputados de ese año), UDI, RN y Evópoli quedan cerca de 2 toda la década, y el PLR también desde que tiene bancada (<a href="#tbl-camara" class="quarto-xref">Tabla 1</a> y <a href="#fig-posicion" class="quarto-xref">Figura 2</a>).</p>
+<p>En una escala comparable entre años (cero = mediana de la izquierda; unidad = desviación estándar de los diputados de ese año), UDI, RN y Evópoli quedan cerca de 2 toda la década, y el PLR también desde que tiene bancada (<a href="#tbl-camara" class="quarto-xref">Tabla 2</a> y <a href="#fig-posicion" class="quarto-xref">Figura 2</a>).</p>
 <div id="tbl-camara" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-camara-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabla 1: B-Call de toda la Cámara, eje de todas las indicaciones. Antes de 2022 el PLR tiene uno o dos diputados. Evópoli tiene dos diputados de 2022-23 a 2025-26; la <a href="#fig-posicion" class="quarto-xref">Figura 2</a> no los dibuja.
+Tabla 2: B-Call de toda la Cámara, eje de todas las indicaciones. Antes de 2022 el PLR tiene uno o dos diputados. Evópoli tiene dos diputados de 2022-23 a 2025-26; la <a href="#fig-posicion" class="quarto-xref">Figura 2</a> no los dibuja.
 </figcaption>
 <div aria-describedby="tbl-camara-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -3750,11 +3820,11 @@ Figura 2: Posición de los partidos de derecha en la escala de la Cámara, por 
 </figcaption>
 </figure>
 </div>
-<p>El contenido muestra en qué consiste esa división (<a href="#tbl-si" class="quarto-xref">Tabla 2</a> y <a href="#fig-efecto" class="quarto-xref">Figura 3</a>). Ante un texto conservador, la izquierda baja 31 puntos su probabilidad de votar Sí y las derechas la suben entre 19 y 43. Ante uno soberanista, la izquierda baja 30 y las derechas suben entre 16 y 28. Ante uno pro-mercado, la izquierda baja 9 y las derechas suben 4. El orden es la excepción: la izquierda no reacciona a su contenido, y no es un eje que polarice la Cámara. La división entre izquierda y derecha es, sobre todo, valórica y de nación.</p>
+<p>El contenido muestra en qué consiste esa división (<a href="#tbl-si" class="quarto-xref">Tabla 3</a> y <a href="#fig-efecto" class="quarto-xref">Figura 3</a>). Ante un texto conservador, la izquierda baja 31 puntos su probabilidad de votar Sí y las derechas la suben entre 19 y 43. Ante uno soberanista, la izquierda baja 30 y las derechas suben entre 16 y 28. Ante uno pro-mercado, la izquierda baja 9 y las derechas suben 4. El orden es la excepción: la izquierda no reacciona a su contenido, y no es un eje que polarice la Cámara. La división entre izquierda y derecha es, sobre todo, valórica y de nación.</p>
 <div id="tbl-si" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-si-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabla 2: Puntos porcentuales de probabilidad de votar Sí cuando el texto va hacia el polo nombrado, frente a un texto que no toca el eje. Votos: nueva 4.035; tradicional 31.899; IND con la derecha 6.493; izquierda 27.566.
+Tabla 3: Puntos porcentuales de probabilidad de votar Sí cuando el texto va hacia el polo nombrado, frente a un texto que no toca el eje. Votos: nueva 4.035; tradicional 31.899; IND con la derecha 6.493; izquierda 27.566.
 </figcaption>
 <div aria-describedby="tbl-si-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -3821,11 +3891,11 @@ Figura 3: Efecto de la dirección del texto sobre la probabilidad de votar Sí,
 </section>
 <section id="sec-cuanto" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="sec-cuanto"><span class="header-section-number">3.2</span> ¿Cuánto se diferencian las derechas?</h2>
-<p>Medida con esa vara, la distancia entre las derechas es chica en casi todo (<a href="#tbl-cuanto" class="quarto-xref">Tabla 3</a>).</p>
+<p>Medida con esa vara, la distancia entre las derechas es chica en casi todo (<a href="#tbl-cuanto" class="quarto-xref">Tabla 4</a>).</p>
 <div id="tbl-cuanto" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cuanto-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabla 3: Distancia entre las derechas como fracción de la distancia entre la derecha tradicional y la izquierda (R). Posición: desviaciones estándar, con la UDI como derecha tradicional (<a href="#tbl-camara" class="quarto-xref">Tabla 1</a>). Contenido: puntos porcentuales (<a href="#tbl-si" class="quarto-xref">Tabla 2</a>). Provisión privada no se calcula: su kappa es 0,42 y la brecha entre izquierda y derecha es de 6 puntos.
+Tabla 4: Distancia entre las derechas como fracción de la distancia entre la derecha tradicional y la izquierda (R). Posición: desviaciones estándar, con la UDI como derecha tradicional (<a href="#tbl-camara" class="quarto-xref">Tabla 2</a>). Contenido: puntos porcentuales (<a href="#tbl-si" class="quarto-xref">Tabla 3</a>). Provisión privada no se calcula: su kappa es 0,42 y la brecha entre izquierda y derecha es de 6 puntos.
 </figcaption>
 <div aria-describedby="tbl-cuanto-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -3925,7 +3995,7 @@ Pendiente: acuerdo entre partidos
 <div id="tbl-presupuesto" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-presupuesto-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabla 4: Leyes de Presupuestos 2023 a 2026, votadas en noviembre del año anterior. «% igual al PLR» es el porcentaje de votos del partido que coincide con la mayoría republicana.
+Tabla 5: Leyes de Presupuestos 2023 a 2026, votadas en noviembre del año anterior. «% igual al PLR» es el porcentaje de votos del partido que coincide con la mayoría republicana.
 </figcaption>
 <div aria-describedby="tbl-presupuesto-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -4119,7 +4189,7 @@ Pendiente: la vara en el presupuesto
 <div id="tbl-expectativas" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-expectativas-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabla 5: Expectativas y lectura.
+Tabla 6: Expectativas y lectura.
 </figcaption>
 <div aria-describedby="tbl-expectativas-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">

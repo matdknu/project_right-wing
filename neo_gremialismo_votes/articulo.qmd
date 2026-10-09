@@ -113,9 +113,36 @@ Para el partido radical, el Fondecyt plantea una estrategia dual: moderación pa
 
 **Bloques.** Derecha tradicional: UDI, RN y Evópoli. Nueva derecha: PLR (REP en los datos) y, desde 2025-26, PNL.^[En la historiografía chilena, «nueva derecha» designó a la derecha que la dictadura y sus reformas de mercado reconfiguraron, la UDI y RN (Pollack, 1999). Aquí el término solo distingue a los partidos fundados desde 2019.] Un independiente cuenta como derecha si vota con la mayoría de la derecha en al menos el 75% de las votaciones en que derecha e izquierda se dividen.
 
-**Contenido.** Un modelo de lenguaje (OpenAI, gpt-6-luna) lee solo el texto de la indicación, con los autores enmascarados. Codifica qué implica votar Sí en cinco ejes (económico, subsidiariedad, valórico, orden y nación), además del tema, la naturaleza del cambio, si es presupuestario y si el texto es evaluable. Cada eje se reduce a +1 (polo de derecha), −1 o 0.
+**Qué se codifica.** Un modelo de lenguaje (OpenAI, gpt-6-luna) lee solo el texto sometido a votación. La autoría va enmascarada como «[autoría omitida]». No usa el proyecto, el gobierno, el partido ni cómo salió la votación. La pregunta es una: qué implica votar Sí.
 
-**Validación.** Un segundo modelo (DeepSeek) codifica 300 textos de validación. Kappa en la escala reducida: económico 0,68, valórico 0,72, orden 0,71, nación 0,72 y subsidiariedad 0,42. Subsidiariedad queda como provisional hasta la codificación humana de sus 31 desacuerdos. La figura A1 compara ese kappa con el del código anterior.
+El libro de códigos es una lista cerrada de palabras. El modelo tiene que copiarlas al pie de la letra, y la codificación humana usa las mismas. Primero escribe un resumen de hasta 25 palabras. Después marca si el texto permite saber qué cambia. Si está cortado o es solo una referencia («1° y 4°, con indicaciones de la Comisión de Hacienda»), no es evaluable y los cinco ejes quedan en «No aplica».
+
+Sobre ese texto codifica seis cosas descriptivas, con estas palabras:
+
+- **Objeto:** Indicación, Artículo con indicación, Admisibilidad, Texto sin indicación u Otro.
+- **Operación:** Agregar, Intercalar, Reemplazar, Suprimir, Varias u Otra.
+- **Naturaleza:** Sustantiva, si cambia derechos, obligaciones, sanciones, montos o el alcance de la norma; Técnica, si solo corrige redacción; Procedimental, si solo cambia plazos o trámites.
+- **Tema:** el área de la indicación, no la del proyecto entero si difieren. Va de macroeconomía y tributación a migración, pueblos indígenas o relaciones internacionales, o «No determinable».
+- **Presupuesto:** No, Rebaja simbólica, Reasignación o Glosa.
+- **Confianza:** Alta, si el texto es claro; Media, si hubo que inferir; Baja, si es fragmentario. Copia además una frase literal de evidencia, de hasta 20 palabras.
+
+La dirección del Sí se codifica en cinco ejes. Cada uno tiene dos polos y tres salidas residuales. «Neutral» solo si el texto toca el eje y el cambio no mueve la balanza. «Mixta» solo si empuja de forma explícita en las dos direcciones. «No aplica» si el texto no toca esa materia. No se usa Neutral por duda: se elige la dirección más probable y se baja la confianza.
+
+| Eje | +1, polo de derecha | −1 | Cuándo se usa el eje |
+|---|---|---|---|
+| Económico | Pro-mercado | Pro-Estado | Regulación, tributos, empresas y cargas a privados |
+| Subsidiariedad | Provisión privada | Provisión estatal | Solo si el texto regula quién provee un derecho social o la autonomía del prestador. No se infiere desde la macroeconomía |
+| Valórico | Conservadora | Progresista | Solo lo moral: familia, vida, sexualidad, religión o derechos de los padres. Un subsidio familiar no va aquí |
+| Orden | Orden y castigo | Garantías | Delitos, penas, policías, Fuerzas Armadas o la protesta |
+| Nación | Soberanista | Pluralista | Solo si el texto nombra migración, pueblos indígenas, plurinacionalidad, símbolos o soberanía |
+
+: Palabras del libro de códigos. La codificación humana tiene que usar estas mismas categorías, sin parafrasearlas. {#tbl-codigo}
+
+Tres reglas cambian la palabra que se elige. Si se vota suprimir una norma, el Sí va en la dirección contraria a lo suprimido: suprimir una exención es Pro-Estado; suprimir una pena es Garantías. Si se vota la admisibilidad, se codifica el contenido de esa indicación. Una rebaja a un monto simbólico, como $1.000, es «Rebaja simbólica» y el eje económico queda en «No aplica», salvo que el texto diga una política.
+
+En el análisis, cada eje se reduce a un número. La palabra del polo de derecha vale +1 y la contraria −1. Neutral, Mixta y No aplica valen 0. Si la confianza es Baja, el eje también vale 0: solo entran Alta y Media.
+
+**Validación.** DeepSeek codifica 300 textos con el mismo libro de códigos. El kappa se calcula en la escala reducida (+1 / −1 / 0): económico 0,68, valórico 0,72, orden 0,71, nación 0,72 y subsidiariedad 0,42. Subsidiariedad queda provisional hasta que una persona codifique, a ciegas y con las mismas palabras, sus 31 desacuerdos. La figura A1 compara ese kappa con el del código anterior.
 
 **Posiciones.** B-Call (Toro-Maureira et al., 2025) por período y por año legislativo, en dos universos: toda la Cámara y solo la derecha. En el universo de la derecha, el pivote es un diputado republicano desde 2022, y d1 positivo significa cercanía a la nueva derecha. Se excluye a quien vota en menos del 15% de las votaciones (el paper usa 10%).
 
