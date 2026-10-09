@@ -10,7 +10,7 @@ format:
     css: estilo.css
     toc: true
     toc-depth: 2
-    toc-location: left
+    toc-location: body
     number-sections: true
     embed-resources: true
     smooth-scroll: true
