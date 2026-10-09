@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Stephanie Alenda, Matías Deneken y Matías Diaz">
+<meta name="author" content="Alenda, Deneken, Díaz">
 
-<title>Converger en el contenido, diferenciarse en la táctica</title>
+<title>Converger en el contenido, ¿diferenciarse en la táctica?</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -3235,11 +3235,40 @@ font-size: 1.05rem;
 line-height: 1.55;
 font-weight: 400;
 }
+#quarto-sidebar,
+.sidebar,
+.sidebar-menu-container {
+background: #ffffff;
+border-right: 1px solid #e4e4e4;
+}
+#quarto-sidebar #toc-title,
+.sidebar-title {
+font-family: var(--paper);
+font-size: 0.72rem;
+font-weight: 600;
+letter-spacing: 0.08em;
+text-transform: uppercase;
+color: #1a1a1a;
+}
+#TOC .nav-link,
+#TOC .nav-link.active,
+.sidebar a,
+.sidebar a:hover,
+.sidebar .menu-text {
+font-family: var(--paper);
+color: #1a1a1a !important;
+font-size: 0.86rem;
+text-decoration: none;
+}
+#TOC .nav-link.active,
+.sidebar .active .menu-text {
+font-weight: 600;
+}
 #quarto-document-content,
 main.content {
-max-width: 40rem;
-margin: 2.2rem auto 4.5rem;
-padding: 0 1.2rem;
+max-width: 42rem;
+margin: 1.4rem 0 4.5rem;
+padding: 0 1.5rem 0 1.8rem;
 }
 h1, h2, h3, h4, h5,
 .title, .subtitle,
@@ -3299,6 +3328,21 @@ hyphens: none;
 font-size: 0.9rem;
 color: #444444;
 }
+#abstract,
+.abstract,
+.abstract p {
+text-align: justify;
+hyphens: auto;
+font-size: 0.95rem;
+}
+.abstract-title {
+text-align: left;
+font-style: italic;
+font-weight: 600;
+letter-spacing: 0;
+text-transform: none;
+font-size: 0.95rem;
+}
 #TOC {
 font-size: 0.92rem;
 border: none;
@@ -3332,6 +3376,12 @@ font-size: 1.08rem;
 font-weight: 600;
 font-style: italic;
 margin: 1.5rem 0 0.45rem;
+line-height: 1.3;
+}
+section.level3 > h3 {
+font-size: 1.02rem;
+font-weight: 600;
+margin: 1.25rem 0 0.4rem;
 line-height: 1.3;
 }
 .header-section-number {
@@ -3437,15 +3487,46 @@ margin-bottom: 0.3rem;
 
 <body>
 
-<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul class="collapse">
+  <li><a href="#sec-intro" id="toc-sec-intro" class="nav-link active" data-scroll-target="#sec-intro"><span class="header-section-number">1</span> Introducción</a>
+  <ul class="collapse">
+  <li><a href="#sec-niveles" id="toc-sec-niveles" class="nav-link" data-scroll-target="#sec-niveles"><span class="header-section-number">1.1</span> Dos niveles de diferencia</a></li>
+  <li><a href="#sec-teoria" id="toc-sec-teoria" class="nav-link" data-scroll-target="#sec-teoria"><span class="header-section-number">1.2</span> Contenido y táctica</a></li>
+  <li><a href="#sec-expectativas" id="toc-sec-expectativas" class="nav-link" data-scroll-target="#sec-expectativas"><span class="header-section-number">1.3</span> Expectativas</a></li>
+  </ul></li>
+  <li><a href="#sec-datos" id="toc-sec-datos" class="nav-link" data-scroll-target="#sec-datos"><span class="header-section-number">2</span> Datos y métodos</a>
+  <ul class="collapse">
+  <li><a href="#sec-bcall" id="toc-sec-bcall" class="nav-link" data-scroll-target="#sec-bcall"><span class="header-section-number">2.1</span> B-Call: uso y cautelas</a></li>
+  </ul></li>
+  <li><a href="#sec-resultados" id="toc-sec-resultados" class="nav-link" data-scroll-target="#sec-resultados"><span class="header-section-number">3</span> Resultados</a>
+  <ul class="collapse">
+  <li><a href="#sec-division" id="toc-sec-division" class="nav-link" data-scroll-target="#sec-division"><span class="header-section-number">3.1</span> Izquierda y derecha: la división que ordena la Cámara</a></li>
+  <li><a href="#sec-cuanto" id="toc-sec-cuanto" class="nav-link" data-scroll-target="#sec-cuanto"><span class="header-section-number">3.2</span> ¿Cuánto se diferencian las derechas?</a></li>
+  <li><a href="#sec-presupuesto" id="toc-sec-presupuesto" class="nav-link" data-scroll-target="#sec-presupuesto"><span class="header-section-number">3.3</span> La táctica: el presupuesto</a></li>
+  </ul></li>
+  <li><a href="#sec-discusion" id="toc-sec-discusion" class="nav-link" data-scroll-target="#sec-discusion"><span class="header-section-number">4</span> Discusión</a>
+  <ul class="collapse">
+  <li><a href="#sec-robustez" id="toc-sec-robustez" class="nav-link" data-scroll-target="#sec-robustez"><span class="header-section-number">4.1</span> Robustez</a></li>
+  <li><a href="#cierre" id="toc-cierre" class="nav-link" data-scroll-target="#cierre"><span class="header-section-number">4.2</span> Cierre</a></li>
+  </ul></li>
+  <li><a href="#apéndice" id="toc-apéndice" class="nav-link" data-scroll-target="#apéndice">Apéndice</a></li>
+  <li><a href="#referencias" id="toc-referencias" class="nav-link" data-scroll-target="#referencias">Referencias</a></li>
+  </ul>
+</nav>
+</div>
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
 </div>
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Converger en el contenido, diferenciarse en la táctica</h1>
-<p class="subtitle lead">Borrador para el Fondecyt «La derecha en disputa»</p>
+<h1 class="title">Converger en el contenido, ¿diferenciarse en la táctica?</h1>
+<p class="subtitle lead">Las derechas en la Cámara de Diputados de Chile, 2016–2026. Documento de trabajo</p>
 </div>
 
 
@@ -3455,7 +3536,7 @@ margin-bottom: 0.3rem;
     <div>
     <div class="quarto-title-meta-heading">Autor/a</div>
     <div class="quarto-title-meta-contents">
-             <p>Stephanie Alenda, Matías Deneken y Matías Diaz </p>
+             <p>Alenda, Deneken, Díaz </p>
           </div>
   </div>
     
@@ -3469,54 +3550,50 @@ margin-bottom: 0.3rem;
     
   </div>
   
+<div>
+  <div class="abstract">
+    <div class="block-title">Resumen</div>
+    <p>La izquierda y la derecha chilenas se separan con claridad en la Cámara de Diputados. Este artículo pregunta cuánto se separan, en comparación, las dos derechas: la convencional, Chile Vamos (UDI, RN y Evópoli), y la radical, el Partido Republicano. Analizamos las votaciones nominales sobre indicaciones entre 2016 y 2026. Un modelo de lenguaje codifica qué implica votar Sí a cada indicación; estimamos posiciones con B-Call y modelos lineales de probabilidad con efectos fijos por diputado, y expresamos la distancia entre las derechas como fracción de la que separa a la derecha convencional de la izquierda. El hallazgo más sólido es la convergencia en contenido: en la dimensión principal de la Cámara, la distancia entre las derechas va de 2% a 24% de la vara, y en economía y orden el texto mueve igual a ambas. Dos diferencias son tentativas. En lo valórico, la brecha llega a la mitad de la vara, pero descansa en pocas votaciones y no resiste la corrección por comparaciones múltiples. En la oposición al Ejecutivo, el Partido Republicano vota más en contra del presupuesto y Chile Vamos lo sigue a medias, pero esa medida todavía no descarta explicaciones de posición, como la exclusión de la negociación o el tamaño de la bancada. Las conclusiones valen para la Cámara de Diputados y las votaciones sobre indicaciones.</p>
+  </div>
+</div>
 
 
 </header>
 
-<nav id="TOC" role="doc-toc">
-    <h2 id="toc-title">Tabla de contenidos</h2>
-   
-  <ul>
-  <li><a href="#sec-intro" id="toc-sec-intro"><span class="header-section-number">1</span> Introducción</a>
-  <ul>
-  <li><a href="#sec-niveles" id="toc-sec-niveles"><span class="header-section-number">1.1</span> Dos niveles de diferencia</a></li>
-  <li><a href="#sec-teoria" id="toc-sec-teoria"><span class="header-section-number">1.2</span> Contenido y táctica</a></li>
-  <li><a href="#sec-expectativas" id="toc-sec-expectativas"><span class="header-section-number">1.3</span> Expectativas</a></li>
-  </ul></li>
-  <li><a href="#sec-datos" id="toc-sec-datos"><span class="header-section-number">2</span> Datos y métodos</a>
-  <ul>
-  <li><a href="#sec-bcall" id="toc-sec-bcall"><span class="header-section-number">2.1</span> B-Call: uso y cautelas</a></li>
-  </ul></li>
-  <li><a href="#sec-resultados" id="toc-sec-resultados"><span class="header-section-number">3</span> Resultados</a>
-  <ul>
-  <li><a href="#sec-division" id="toc-sec-division"><span class="header-section-number">3.1</span> Izquierda y derecha: la división que ordena la Cámara</a></li>
-  <li><a href="#sec-cuanto" id="toc-sec-cuanto"><span class="header-section-number">3.2</span> ¿Cuánto se diferencian las derechas?</a></li>
-  <li><a href="#sec-presupuesto" id="toc-sec-presupuesto"><span class="header-section-number">3.3</span> La táctica: el presupuesto</a></li>
-  </ul></li>
-  <li><a href="#sec-discusion" id="toc-sec-discusion"><span class="header-section-number">4</span> Discusión</a>
-  <ul>
-  <li><a href="#límites" id="toc-límites"><span class="header-section-number">4.1</span> Límites</a></li>
-  <li><a href="#cierre" id="toc-cierre"><span class="header-section-number">4.2</span> Cierre</a></li>
-  </ul></li>
-  <li><a href="#apéndice" id="toc-apéndice">Apéndice</a></li>
-  <li><a href="#referencias" id="toc-referencias">Referencias</a></li>
-  </ul>
-</nav>
+
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Estado del documento
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Documento de trabajo. <strong>Hallazgo sólido:</strong> las dos derechas convergen en el contenido de lo que votan. <strong>Hallazgos tentativos:</strong> la diferencia valórica y la diferencia en la oposición al Ejecutivo. Las pruebas que faltan para confirmarlos o descartarlos están en <a href="#sec-robustez" class="quarto-xref">Sección 4.1</a>.</p>
+</div>
+</div>
 <section id="sec-intro" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Introducción</h1>
 <p>En la Cámara de Diputados de Chile, la división entre izquierda y derecha es la que más ordena el voto. Desde el plebiscito de 1988, la competencia partidaria se organizó en dos bloques (Tironi y Agüero, 1999; Torcal y Mainwaring, 2003), y en las votaciones nominales la coalición pesó más que el partido (Alemán y Saiegh, 2007). Esa división sigue ahí: en la escala de B-Call de 2022 a 2026, los partidos de derecha quedan a unas dos desviaciones estándar de la mediana de la izquierda (<a href="#tbl-camara" class="quarto-xref">Tabla 1</a>).</p>
-<p>Lo que cambió es la derecha. En la elección de consejeros constitucionales del 7 de mayo de 2023, el Partido Republicano (PLR) obtuvo 35,5% de los votos y Chile Vamos (ChV), la coalición de la derecha convencional, 21%. En marzo de 2026, José Antonio Kast asumió la presidencia. El ascenso de la derecha radical obliga a preguntar cómo responde la derecha convencional: si converge con ella o se diferencia.</p>
+<p>Lo que cambió es la derecha. En la elección de consejeros constitucionales del 7 de mayo de 2023, el Partido Republicano (PLR) obtuvo 35,5% de los votos y Chile Vamos (ChV), la coalición de la derecha convencional, 21%. En diciembre de 2025, José Antonio Kast ganó la elección presidencial, y asumió el 11 de marzo de 2026, un día después del cierre de nuestros datos.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> El ascenso de la derecha radical obliga a preguntar cómo responde la derecha convencional: si converge con ella o se diferencia.</p>
 <p>Este artículo plantea la pregunta en dos niveles. El primero es conocido: la izquierda y la derecha se diferencian, y esa diferencia sirve de vara. El segundo es el que importa para entender a la derecha radical: cuánto se diferencian las derechas entre sí, medidas con esa vara, y en qué. Si la distancia entre el PLR y ChV es una fracción menor de la que separa a la derecha de la izquierda, el PLR es una variante dentro del bloque; si se le acerca, es una segunda división.</p>
-<p>La literatura sobre cómo responde la derecha convencional al ascenso de la radical mide sus estrategias con lo que los partidos dicen, sobre todo en sus programas (Meguid, 2008; Abou-Chadi y Krause, 2020; Krause et al., 2023). Los estudios que miran el voto parlamentario miden cuánto coinciden o se enfrentan los partidos (Santos et al., 2025), pero no qué implicaba cada voto. Con eso no se puede distinguir si dos partidos votan juntos porque comparten el contenido o porque comparten una posición frente al gobierno, dos lógicas que el voto nominal mezcla (Hix y Noury, 2016). El caso chileno agrega un problema: la derecha radical no es un partido de nicho externo, sino una escisión de la derecha convencional, y se ha anticipado que esa cercanía facilita la cooperación (Díaz et al., 2023) sin que se haya examinado en el comportamiento legislativo.</p>
+<p>La literatura sobre cómo responde la derecha convencional al ascenso de la radical mide sus estrategias con lo que los partidos dicen, sobre todo en sus programas (Meguid, 2008; Abou-Chadi y Krause, 2020; Krause et al., 2023). Los programas pueden moderarse mientras el comportamiento legislativo muestra otra cosa. Los estudios que miran el voto parlamentario miden cuánto coinciden o se enfrentan los partidos (Santos et al., 2025), pero no qué implicaba cada voto. Con eso no se puede distinguir si dos partidos votan juntos porque comparten el contenido o porque comparten una posición frente al gobierno, dos lógicas que el voto nominal mezcla (Hix y Noury, 2016). El caso chileno agrega un problema: la derecha radical no es un partido de nicho externo, sino una escisión de la derecha convencional, y se ha anticipado que esa cercanía facilita la cooperación (Díaz et al., 2023) sin que se haya examinado en el comportamiento legislativo.</p>
 <p>Para responder, analizamos las votaciones nominales sobre indicaciones entre 2016 y 2026. Codificamos con un modelo de lenguaje qué implica votar Sí a cada una, estimamos la posición de los diputados con B-Call y expresamos cada brecha entre las derechas como fracción de la brecha entre la derecha convencional y la izquierda.</p>
-<p>El argumento es que la diferencia entre las derechas tiene dos planos que conviene separar: el contenido de lo que se vota y la táctica con que se vota. En el contenido, las derechas son casi un mismo bloque. En la dimensión principal, su distancia es de 2% a 24% de la que las separa de la izquierda, y en economía y orden el texto las mueve igual. La excepción es lo valórico, donde la brecha llega a la mitad de la vara, aunque con pocas votaciones. En la táctica, el PLR se distingue por la intensidad de su oposición al presupuesto del Ejecutivo, y ChV lo sigue solo a medias.</p>
+<p>La idea central es que la respuesta de la derecha convencional tiene dos planos que conviene separar: el contenido de lo que se vota y la táctica con que se vota. No es lo mismo votar parecido cuando el texto va hacia la derecha que hacer oposición con otra intensidad. Los resultados tienen distinto grado de solidez:</p>
+<ul>
+<li><strong>Sólido: convergencia en contenido.</strong> En la dimensión principal, la distancia entre las derechas es de 2% a 24% de la que las separa de la izquierda, y en economía y orden el texto las mueve igual. El PLR no aparece como un bloque separado, sino como una variante dentro de la derecha.</li>
+<li><strong>Tentativo: diferencia valórica.</strong> Es el único eje de contenido donde las derechas se separan: la brecha llega a la mitad de la vara, pero con pocas votaciones y sin pasar la corrección por comparaciones múltiples.</li>
+<li><strong>Tentativo: diferencia en la oposición al Ejecutivo.</strong> El PLR vota más en contra del presupuesto y ChV lo sigue a medias. Que eso sea táctica, y no una consecuencia de la posición del PLR en la Cámara, todavía no está probado.</li>
+</ul>
 <p>El artículo hace tres aportes, uno por cada vacío:</p>
 <ul>
 <li><strong>Conceptual.</strong> Separa dos planos del voto legislativo, el contenido y la táctica, que el voto nominal mezcla. Así, la pregunta deja de ser si la derecha convencional converge con la radical y pasa a ser en qué plano lo hace y cuánto.</li>
 <li><strong>Empírico.</strong> Lleva la pregunta del programa al voto, en un caso donde la derecha radical es una escisión de la convencional, y mide la distancia entre las derechas con la vara de la división entre izquierda y derecha.</li>
 <li><strong>Metodológico.</strong> Mide qué implica votar Sí a cada indicación con un modelo de lenguaje validado contra un segundo modelo, y aplica B-Call dentro de la derecha, una extensión que Toro-Maureira et al. (2025) proponen en su conclusión pero no evalúan. La Ley de Presupuestos funciona como un diseño casi de panel: las mismas partidas se votan cada año.</li>
 </ul>
-<p>La teoría está en <a href="#sec-niveles" class="quarto-xref">Sección 1.1</a> y <a href="#sec-teoria" class="quarto-xref">Sección 1.2</a>, y las expectativas en <a href="#sec-expectativas" class="quarto-xref">Sección 1.3</a>. <a href="#sec-datos" class="quarto-xref">Sección 2</a> describe datos y métodos, <a href="#sec-resultados" class="quarto-xref">Sección 3</a> presenta los resultados y <a href="#sec-discusion" class="quarto-xref">Sección 4</a> los discute a la luz del proyecto Fondecyt «La derecha en disputa».</p>
+<p>La teoría está en <a href="#sec-niveles" class="quarto-xref">Sección 1.1</a> y <a href="#sec-teoria" class="quarto-xref">Sección 1.2</a>, y las expectativas en <a href="#sec-expectativas" class="quarto-xref">Sección 1.3</a>. <a href="#sec-datos" class="quarto-xref">Sección 2</a> describe datos y métodos, <a href="#sec-resultados" class="quarto-xref">Sección 3</a> presenta los resultados y <a href="#sec-discusion" class="quarto-xref">Sección 4</a> los discute a la luz del proyecto Fondecyt «La derecha en disputa». <a href="#sec-robustez" class="quarto-xref">Sección 4.1</a> reúne las pruebas pendientes.</p>
 <section id="sec-niveles" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="sec-niveles"><span class="header-section-number">1.1</span> Dos niveles de diferencia</h2>
 <p>La distancia entre partidos es un concepto relativo: importa cuán lejos están dos partidos en comparación con el resto del sistema (Sartori, 1976). Por eso este artículo mide la distancia entre las derechas con la vara de la división principal.</p>
@@ -3530,9 +3607,30 @@ margin-bottom: 0.3rem;
 <p>Los estudios sobre la derecha radical describen su normalización: deja de ser marginal y sus temas entran al sentido común y a la agenda de otros partidos (Mudde, 2019). Gidron y Ziblatt (2019) sostienen que su éxito no se entiende sin las decisiones de la derecha mainstream.</p>
 <p>Para esas decisiones hay una tipología conocida: desdén, conflicto y convergencia o adaptación (Meguid, 2008; Bale et al., 2010; Downs, 2001). Con el desdén, el partido convencional le resta relevancia al tema del radical; con el conflicto, toma la posición contraria; con la convergencia, adopta su posición y le disputa el tema. En Europa occidental, la derecha convencional ha enfrentado a la radical con resultados dispares, y su cambio más claro es la adopción de posiciones más restrictivas en inmigración (Bale y Rovira Kaltwasser, 2021).</p>
 <p>En Chile, el desdén y el conflicto son poco probables, por la cercanía de origen entre ambos partidos. La pregunta relevante es cuánto y en qué converge ChV, y si esa convergencia varía con el calendario electoral.</p>
-<p>Proponemos que la convergencia puede ocurrir en dos planos. El contenido es la respuesta a la dirección de lo que se vota: dos partidos convergen si votan igual ante el mismo texto. La táctica es cómo se vota más allá del contenido: la intensidad de la oposición al Ejecutivo, el voto de protesta (como las rebajas simbólicas del presupuesto) y la disciplina. Un partido puede converger en un plano y diferenciarse en el otro.</p>
+<p>Proponemos que la convergencia puede ocurrir en dos planos. El contenido es la respuesta a la dirección de lo que se vota: dos partidos convergen si votan igual ante el mismo texto. La táctica es cómo se vota más allá del contenido. Un partido puede converger en un plano y diferenciarse en el otro.</p>
 <p>La distinción tiene apoyo en dos literaturas. Hix y Noury (2016) muestran que el voto legislativo mezcla la posición de izquierda o derecha con la posición frente al gobierno, y que el peso de cada una depende de las instituciones. Y los partidos populistas hacen oposición de otra forma: en el parlamento neerlandés participan menos en la elaboración de políticas y algo más en el control del gobierno, incluido el voto contra sus proyectos (Louwerse y Otjes, 2019). Si el PLR se comporta así, debería distinguirse más en la táctica que en el contenido.</p>
+<section id="sec-tactica" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="sec-tactica"><span class="header-section-number">1.2.1</span> Qué es táctica y qué no</h3>
+<p>La táctica necesita una definición operativa; si no, se vuelve un residuo: todo lo que el contenido no explica. La definimos como <strong>la intensidad de la oposición al Ejecutivo a igual contenido del texto</strong>. Tiene varias manifestaciones observables:</p>
+<ul>
+<li>votar en contra de lo que propone el Ejecutivo;</li>
+<li>apoyar votos de protesta, como las rebajas simbólicas del presupuesto;</li>
+<li>la disciplina interna y los votos contra la propia coalición;</li>
+<li>la abstención y la ausencia estratégicas;</li>
+<li>el uso de herramientas de control, como interpelaciones o mociones de rechazo;</li>
+<li>la presentación de indicaciones y la participación en comisiones.</li>
+</ul>
+<p>Este artículo mide solo las dos primeras, y solo en el presupuesto.</p>
+<p>Además, una oposición más dura no es necesariamente una elección táctica. Puede venir de la posición del partido en la Cámara, y cada explicación de posición deja una huella distinta:</p>
+<ul>
+<li><strong>Exclusión de la negociación.</strong> Un partido que no participa de los acuerdos con el gobierno no tiene nada que defender en la votación. Si pesa esto, el No del PLR debería concentrarse en lo pactado con el gobierno.</li>
+<li><strong>Tamaño y pivotalidad.</strong> Una bancada chica, cuyo voto rara vez decide el resultado, paga menos por votar en contra. Si pesa esto, el No del PLR debería ser mayor en las votaciones de margen amplio que en las estrechas.</li>
+<li><strong>Coalición y experiencia de gobierno.</strong> ChV coordina su voto como coalición y gobernó hasta 2022; el PLR vota fuera de ella y nunca ha gobernado. En 2022–2026 las dos derechas están en la oposición, pero no en la misma situación frente al gobierno.</li>
+<li><strong>Calendario electoral.</strong> La cercanía de una elección premia la diferenciación. Esto no compite con la táctica: es una de sus causas posibles (expectativa 5).</li>
+</ul>
+<p>Mientras estas explicaciones no se descarten, la diferencia en la oposición al Ejecutivo se presenta como tentativa.</p>
 <p>Para el partido radical, el Fondecyt plantea una estrategia dual: moderación para legitimarse en el sistema político y fortalecimiento ideológico para movilizar a su núcleo. En el voto, la primera se vería como convergencia en contenido con la derecha convencional, y la segunda como diferenciación en táctica y en los temas de la batalla cultural.</p>
+</section>
 </section>
 <section id="sec-expectativas" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="sec-expectativas"><span class="header-section-number">1.3</span> Expectativas</h2>
@@ -3548,7 +3646,7 @@ margin-bottom: 0.3rem;
 <section id="sec-datos" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Datos y métodos</h1>
 <p><strong>Universo.</strong> Votaciones nominales sobre indicaciones en la Sala de la Cámara, del 11 de marzo de 2016 al 10 de marzo de 2026, tomadas de una base de 3.809 votaciones de indicaciones desde 2010. El voto se codifica Sí = 1, No = −1 y abstención = 0; la ausencia queda fuera.</p>
-<p><strong>Bloques.</strong> Derecha tradicional: UDI, RN y Evópoli. Nueva derecha: PLR (REP en los datos) y, desde 2025-26, PNL.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Un independiente cuenta como derecha si vota con la mayoría de la derecha en al menos el 75% de las votaciones en que derecha e izquierda se dividen.</p>
+<p><strong>Bloques.</strong> Derecha tradicional: UDI, RN y Evópoli. Nueva derecha: PLR (REP en los datos) y, desde 2025-26, PNL.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Un independiente cuenta como derecha si vota con la mayoría de la derecha en al menos el 75% de las votaciones en que derecha e izquierda se dividen.</p>
 <p><strong>Contenido.</strong> Un modelo de lenguaje (OpenAI, gpt-6-luna) lee solo el texto de la indicación, con los autores enmascarados. Codifica qué implica votar Sí en cinco ejes (económico, subsidiariedad, valórico, orden y nación), además del tema, la naturaleza del cambio, si es presupuestario y si el texto es evaluable. Cada eje se reduce a +1 (polo de derecha), −1 o 0.</p>
 <p><strong>Validación.</strong> Un segundo modelo (DeepSeek) codifica 300 textos de validación. Kappa en la escala reducida: económico 0,68, valórico 0,72, orden 0,71, nación 0,72 y subsidiariedad 0,42. Subsidiariedad queda como provisional hasta la codificación humana de sus 31 desacuerdos. La figura A1 compara ese kappa con el del código anterior.</p>
 <p><strong>Posiciones.</strong> B-Call (Toro-Maureira et al., 2025) por período y por año legislativo, en dos universos: toda la Cámara y solo la derecha. En el universo de la derecha, el pivote es un diputado republicano desde 2022, y d1 positivo significa cercanía a la nueva derecha. Se excluye a quien vota en menos del 15% de las votaciones (el paper usa 10%).</p>
@@ -4075,8 +4173,8 @@ Tabla 5: Expectativas y lectura.
 <p>Para ChV, los datos se parecen más a una acomodación parcial que a la convergencia o la diferenciación puras. Endurece su oposición sin alcanzar al PLR y mantiene su propia respuesta valórica.</p>
 <p>La H5 encuentra una primera evidencia en el presupuesto. El acuerdo con el PLR cae hasta el presupuesto 2025, tramitado en torno a las municipales y regionales de 2024, y sube en el de 2026, tramitado durante la campaña presidencial de 2025. Es coherente con una oscilación según el calendario electoral, pero falta fechar la tramitación y contrastarlo con el seguimiento de prensa del proyecto.</p>
 <p>Evópoli es el caso que el Fondecyt anticipa como reactivación de sensibilidades moderadas: se aleja de las rebajas simbólicas y tiene el índice valórico más bajo de la derecha (0,25 a 0,40 desde 2022, aunque con 3 a 5 votos por año). En la escala de la Cámara, Evópoli queda además más cerca del centro en 2022-23 y 2024-25 (1,70, frente a cerca de 2 de UDI y RN). RN y la UDI se mueven juntas casi siempre. El índice por partido y año está en la figura A2.</p>
-<section id="límites" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="límites"><span class="header-section-number">4.1</span> Límites</h2>
+<section id="sec-robustez" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="sec-robustez"><span class="header-section-number">4.1</span> Robustez</h2>
 <ul>
 <li><strong>La táctica se mide casi solo con el presupuesto.</strong> El No republicano al presupuesto puede leerse también como contenido, por ejemplo como austeridad fiscal. La partida fija controla el tema, no la motivación. Falta una segunda señal táctica: el voto ante indicaciones del Ejecutivo fuera del presupuesto, a igual contenido, y la disciplina (d2).</li>
 <li><strong>La vara.</strong> R es un cociente de estimaciones puntuales y todavía no tiene intervalo. Tampoco se calcula donde la brecha entre izquierda y derecha es chica.</li>
@@ -4141,7 +4239,8 @@ Tabla 5: Expectativas y lectura.
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Notas</h2>
 
 <ol>
-<li id="fn1"><p>En la historiografía chilena, «nueva derecha» designó a la derecha que la dictadura y sus reformas de mercado reconfiguraron, la UDI y RN (Pollack, 1999). Aquí el término solo distingue a los partidos fundados desde 2019.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Falta citar los resultados oficiales del Servel. El argumento no descansa en este hecho: los datos terminan antes del nuevo gobierno.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>En la historiografía chilena, «nueva derecha» designó a la derecha que la dictadura y sus reformas de mercado reconfiguraron, la UDI y RN (Pollack, 1999). Aquí el término solo distingue a los partidos fundados desde 2019.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main>
 <!-- /main column -->

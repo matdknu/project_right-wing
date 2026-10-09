@@ -1,34 +1,47 @@
 ---
-title: "Converger en el contenido, diferenciarse en la táctica"
-subtitle: "Borrador para el Fondecyt «La derecha en disputa»"
-author: "Stephanie Alenda, Matías Deneken y Matías Diaz"
-date: 2026-10-09
+title: "Converger en el contenido, ¿diferenciarse en la táctica?"
+subtitle: "Las derechas en la Cámara de Diputados de Chile, 2016–2026. Documento de trabajo"
+author: "Alenda, Deneken, Díaz"
+date: last-modified
+date-format: long
 lang: es
+abstract: |
+  La izquierda y la derecha chilenas se separan con claridad en la Cámara de Diputados. Este artículo pregunta cuánto se separan, en comparación, las dos derechas: la convencional, Chile Vamos (UDI, RN y Evópoli), y la radical, el Partido Republicano. Analizamos las votaciones nominales sobre indicaciones entre 2016 y 2026. Un modelo de lenguaje codifica qué implica votar Sí a cada indicación; estimamos posiciones con B-Call y modelos lineales de probabilidad con efectos fijos por diputado, y expresamos la distancia entre las derechas como fracción de la que separa a la derecha convencional de la izquierda. El hallazgo más sólido es la convergencia en contenido: en la dimensión principal de la Cámara, la distancia entre las derechas va de 2% a 24% de la vara, y en economía y orden el texto mueve igual a ambas. Dos diferencias son tentativas. En lo valórico, la brecha llega a la mitad de la vara, pero descansa en pocas votaciones y no resiste la corrección por comparaciones múltiples. En la oposición al Ejecutivo, el Partido Republicano vota más en contra del presupuesto y Chile Vamos lo sigue a medias, pero esa medida todavía no descarta explicaciones de posición, como la exclusión de la negociación o el tamaño de la bancada. Las conclusiones valen para la Cámara de Diputados y las votaciones sobre indicaciones.
 format:
   html:
     theme: default
     css: estilo.css
     toc: true
     toc-depth: 2
-    toc-location: body
+    toc-location: left
     number-sections: true
     embed-resources: true
     smooth-scroll: true
 ---
 
+::: {.callout-important}
+## Estado del documento
+
+Documento de trabajo. **Hallazgo sólido:** las dos derechas convergen en el contenido de lo que votan. **Hallazgos tentativos:** la diferencia valórica y la diferencia en la oposición al Ejecutivo. Las pruebas que faltan para confirmarlos o descartarlos están en @sec-robustez.
+:::
+
 # Introducción {#sec-intro}
 
 En la Cámara de Diputados de Chile, la división entre izquierda y derecha es la que más ordena el voto. Desde el plebiscito de 1988, la competencia partidaria se organizó en dos bloques (Tironi y Agüero, 1999; Torcal y Mainwaring, 2003), y en las votaciones nominales la coalición pesó más que el partido (Alemán y Saiegh, 2007). Esa división sigue ahí: en la escala de B-Call de 2022 a 2026, los partidos de derecha quedan a unas dos desviaciones estándar de la mediana de la izquierda (@tbl-camara).
 
-Lo que cambió es la derecha. En la elección de consejeros constitucionales del 7 de mayo de 2023, el Partido Republicano (PLR) obtuvo 35,5% de los votos y Chile Vamos (ChV), la coalición de la derecha convencional, 21%. En marzo de 2026, José Antonio Kast asumió la presidencia. El ascenso de la derecha radical obliga a preguntar cómo responde la derecha convencional: si converge con ella o se diferencia.
+Lo que cambió es la derecha. En la elección de consejeros constitucionales del 7 de mayo de 2023, el Partido Republicano (PLR) obtuvo 35,5% de los votos y Chile Vamos (ChV), la coalición de la derecha convencional, 21%. En diciembre de 2025, José Antonio Kast ganó la elección presidencial, y asumió el 11 de marzo de 2026, un día después del cierre de nuestros datos.^[Falta citar los resultados oficiales del Servel. El argumento no descansa en este hecho: los datos terminan antes del nuevo gobierno.] El ascenso de la derecha radical obliga a preguntar cómo responde la derecha convencional: si converge con ella o se diferencia.
 
 Este artículo plantea la pregunta en dos niveles. El primero es conocido: la izquierda y la derecha se diferencian, y esa diferencia sirve de vara. El segundo es el que importa para entender a la derecha radical: cuánto se diferencian las derechas entre sí, medidas con esa vara, y en qué. Si la distancia entre el PLR y ChV es una fracción menor de la que separa a la derecha de la izquierda, el PLR es una variante dentro del bloque; si se le acerca, es una segunda división.
 
-La literatura sobre cómo responde la derecha convencional al ascenso de la radical mide sus estrategias con lo que los partidos dicen, sobre todo en sus programas (Meguid, 2008; Abou-Chadi y Krause, 2020; Krause et al., 2023). Los estudios que miran el voto parlamentario miden cuánto coinciden o se enfrentan los partidos (Santos et al., 2025), pero no qué implicaba cada voto. Con eso no se puede distinguir si dos partidos votan juntos porque comparten el contenido o porque comparten una posición frente al gobierno, dos lógicas que el voto nominal mezcla (Hix y Noury, 2016). El caso chileno agrega un problema: la derecha radical no es un partido de nicho externo, sino una escisión de la derecha convencional, y se ha anticipado que esa cercanía facilita la cooperación (Díaz et al., 2023) sin que se haya examinado en el comportamiento legislativo.
+La literatura sobre cómo responde la derecha convencional al ascenso de la radical mide sus estrategias con lo que los partidos dicen, sobre todo en sus programas (Meguid, 2008; Abou-Chadi y Krause, 2020; Krause et al., 2023). Los programas pueden moderarse mientras el comportamiento legislativo muestra otra cosa. Los estudios que miran el voto parlamentario miden cuánto coinciden o se enfrentan los partidos (Santos et al., 2025), pero no qué implicaba cada voto. Con eso no se puede distinguir si dos partidos votan juntos porque comparten el contenido o porque comparten una posición frente al gobierno, dos lógicas que el voto nominal mezcla (Hix y Noury, 2016). El caso chileno agrega un problema: la derecha radical no es un partido de nicho externo, sino una escisión de la derecha convencional, y se ha anticipado que esa cercanía facilita la cooperación (Díaz et al., 2023) sin que se haya examinado en el comportamiento legislativo.
 
 Para responder, analizamos las votaciones nominales sobre indicaciones entre 2016 y 2026. Codificamos con un modelo de lenguaje qué implica votar Sí a cada una, estimamos la posición de los diputados con B-Call y expresamos cada brecha entre las derechas como fracción de la brecha entre la derecha convencional y la izquierda.
 
-El argumento es que la diferencia entre las derechas tiene dos planos que conviene separar: el contenido de lo que se vota y la táctica con que se vota. En el contenido, las derechas son casi un mismo bloque. En la dimensión principal, su distancia es de 2% a 24% de la que las separa de la izquierda, y en economía y orden el texto las mueve igual. La excepción es lo valórico, donde la brecha llega a la mitad de la vara, aunque con pocas votaciones. En la táctica, el PLR se distingue por la intensidad de su oposición al presupuesto del Ejecutivo, y ChV lo sigue solo a medias.
+La idea central es que la respuesta de la derecha convencional tiene dos planos que conviene separar: el contenido de lo que se vota y la táctica con que se vota. No es lo mismo votar parecido cuando el texto va hacia la derecha que hacer oposición con otra intensidad. Los resultados tienen distinto grado de solidez:
+
+- **Sólido: convergencia en contenido.** En la dimensión principal, la distancia entre las derechas es de 2% a 24% de la que las separa de la izquierda, y en economía y orden el texto las mueve igual. El PLR no aparece como un bloque separado, sino como una variante dentro de la derecha.
+- **Tentativo: diferencia valórica.** Es el único eje de contenido donde las derechas se separan: la brecha llega a la mitad de la vara, pero con pocas votaciones y sin pasar la corrección por comparaciones múltiples.
+- **Tentativo: diferencia en la oposición al Ejecutivo.** El PLR vota más en contra del presupuesto y ChV lo sigue a medias. Que eso sea táctica, y no una consecuencia de la posición del PLR en la Cámara, todavía no está probado.
 
 El artículo hace tres aportes, uno por cada vacío:
 
@@ -36,7 +49,7 @@ El artículo hace tres aportes, uno por cada vacío:
 - **Empírico.** Lleva la pregunta del programa al voto, en un caso donde la derecha radical es una escisión de la convencional, y mide la distancia entre las derechas con la vara de la división entre izquierda y derecha.
 - **Metodológico.** Mide qué implica votar Sí a cada indicación con un modelo de lenguaje validado contra un segundo modelo, y aplica B-Call dentro de la derecha, una extensión que Toro-Maureira et al. (2025) proponen en su conclusión pero no evalúan. La Ley de Presupuestos funciona como un diseño casi de panel: las mismas partidas se votan cada año.
 
-La teoría está en @sec-niveles y @sec-teoria, y las expectativas en @sec-expectativas. @sec-datos describe datos y métodos, @sec-resultados presenta los resultados y @sec-discusion los discute a la luz del proyecto Fondecyt «La derecha en disputa».
+La teoría está en @sec-niveles y @sec-teoria, y las expectativas en @sec-expectativas. @sec-datos describe datos y métodos, @sec-resultados presenta los resultados y @sec-discusion los discute a la luz del proyecto Fondecyt «La derecha en disputa». @sec-robustez reúne las pruebas pendientes.
 
 ## Dos niveles de diferencia {#sec-niveles}
 
@@ -58,9 +71,31 @@ Para esas decisiones hay una tipología conocida: desdén, conflicto y convergen
 
 En Chile, el desdén y el conflicto son poco probables, por la cercanía de origen entre ambos partidos. La pregunta relevante es cuánto y en qué converge ChV, y si esa convergencia varía con el calendario electoral.
 
-Proponemos que la convergencia puede ocurrir en dos planos. El contenido es la respuesta a la dirección de lo que se vota: dos partidos convergen si votan igual ante el mismo texto. La táctica es cómo se vota más allá del contenido: la intensidad de la oposición al Ejecutivo, el voto de protesta (como las rebajas simbólicas del presupuesto) y la disciplina. Un partido puede converger en un plano y diferenciarse en el otro.
+Proponemos que la convergencia puede ocurrir en dos planos. El contenido es la respuesta a la dirección de lo que se vota: dos partidos convergen si votan igual ante el mismo texto. La táctica es cómo se vota más allá del contenido. Un partido puede converger en un plano y diferenciarse en el otro.
 
 La distinción tiene apoyo en dos literaturas. Hix y Noury (2016) muestran que el voto legislativo mezcla la posición de izquierda o derecha con la posición frente al gobierno, y que el peso de cada una depende de las instituciones. Y los partidos populistas hacen oposición de otra forma: en el parlamento neerlandés participan menos en la elaboración de políticas y algo más en el control del gobierno, incluido el voto contra sus proyectos (Louwerse y Otjes, 2019). Si el PLR se comporta así, debería distinguirse más en la táctica que en el contenido.
+
+### Qué es táctica y qué no {#sec-tactica}
+
+La táctica necesita una definición operativa; si no, se vuelve un residuo: todo lo que el contenido no explica. La definimos como **la intensidad de la oposición al Ejecutivo a igual contenido del texto**. Tiene varias manifestaciones observables:
+
+- votar en contra de lo que propone el Ejecutivo;
+- apoyar votos de protesta, como las rebajas simbólicas del presupuesto;
+- la disciplina interna y los votos contra la propia coalición;
+- la abstención y la ausencia estratégicas;
+- el uso de herramientas de control, como interpelaciones o mociones de rechazo;
+- la presentación de indicaciones y la participación en comisiones.
+
+Este artículo mide solo las dos primeras, y solo en el presupuesto.
+
+Además, una oposición más dura no es necesariamente una elección táctica. Puede venir de la posición del partido en la Cámara, y cada explicación de posición deja una huella distinta:
+
+- **Exclusión de la negociación.** Un partido que no participa de los acuerdos con el gobierno no tiene nada que defender en la votación. Si pesa esto, el No del PLR debería concentrarse en lo pactado con el gobierno.
+- **Tamaño y pivotalidad.** Una bancada chica, cuyo voto rara vez decide el resultado, paga menos por votar en contra. Si pesa esto, el No del PLR debería ser mayor en las votaciones de margen amplio que en las estrechas.
+- **Coalición y experiencia de gobierno.** ChV coordina su voto como coalición y gobernó hasta 2022; el PLR vota fuera de ella y nunca ha gobernado. En 2022–2026 las dos derechas están en la oposición, pero no en la misma situación frente al gobierno.
+- **Calendario electoral.** La cercanía de una elección premia la diferenciación. Esto no compite con la táctica: es una de sus causas posibles (expectativa 5).
+
+Mientras estas explicaciones no se descarten, la diferencia en la oposición al Ejecutivo se presenta como tentativa.
 
 Para el partido radical, el Fondecyt plantea una estrategia dual: moderación para legitimarse en el sistema político y fortalecimiento ideológico para movilizar a su núcleo. En el voto, la primera se vería como convergencia en contenido con la derecha convencional, y la segunda como diferenciación en táctica y en los temas de la batalla cultural.
 
@@ -250,7 +285,7 @@ La H5 encuentra una primera evidencia en el presupuesto. El acuerdo con el PLR c
 
 Evópoli es el caso que el Fondecyt anticipa como reactivación de sensibilidades moderadas: se aleja de las rebajas simbólicas y tiene el índice valórico más bajo de la derecha (0,25 a 0,40 desde 2022, aunque con 3 a 5 votos por año). En la escala de la Cámara, Evópoli queda además más cerca del centro en 2022-23 y 2024-25 (1,70, frente a cerca de 2 de UDI y RN). RN y la UDI se mueven juntas casi siempre. El índice por partido y año está en la figura A2.
 
-## Límites
+## Robustez {#sec-robustez}
 
 - **La táctica se mide casi solo con el presupuesto.** El No republicano al presupuesto puede leerse también como contenido, por ejemplo como austeridad fiscal. La partida fija controla el tema, no la motivación. Falta una segunda señal táctica: el voto ante indicaciones del Ejecutivo fuera del presupuesto, a igual contenido, y la disciplina (d2).
 - **La vara.** R es un cociente de estimaciones puntuales y todavía no tiene intervalo. Tampoco se calcula donde la brecha entre izquierda y derecha es chica.
