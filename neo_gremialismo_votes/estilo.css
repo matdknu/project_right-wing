@@ -1,0 +1,129 @@
+:root {
+  --bs-body-bg: #ffffff;
+  --bs-body-color: #111111;
+  --bs-link-color: #111111;
+  --bs-link-hover-color: #111111;
+  --bs-primary: #111111;
+  --bs-font-sans-serif: "Iowan Old Style", Palatino, "Palatino Linotype", "Times New Roman", Times, serif;
+  --bs-body-font-family: "Iowan Old Style", Palatino, "Palatino Linotype", "Times New Roman", Times, serif;
+  --bs-body-font-size: 1.05rem;
+  --bs-body-line-height: 1.6;
+}
+
+html, body,
+#quarto-content,
+.page-layout-article,
+.quarto-title-block,
+header,
+.sidebar,
+#quarto-sidebar,
+#TOC,
+.sidebar-menu-container {
+  background: #ffffff;
+  color: #111111;
+}
+
+body {
+  font-family: "Iowan Old Style", Palatino, "Palatino Linotype", "Times New Roman", Times, serif;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+#quarto-document-content,
+main.content,
+.page-columns .content {
+  max-width: 42rem;
+}
+
+h1, h2, h3, h4, h5,
+.title, .subtitle,
+#TOC, #TOC a,
+caption, figcaption, .figure-caption, .table-caption,
+th, td, p, li {
+  font-family: "Iowan Old Style", Palatino, "Palatino Linotype", "Times New Roman", Times, serif;
+  letter-spacing: 0;
+}
+
+h1, h2, h3 {
+  font-weight: 600;
+  line-height: 1.25;
+  color: #111111;
+}
+
+h1.title {
+  font-size: 1.7rem;
+  margin-bottom: 0.25rem;
+}
+
+.quarto-title-meta, .subtitle {
+  color: #333333;
+  font-size: 1rem;
+}
+
+p { margin: 0.8rem 0; }
+
+a, a:hover {
+  color: #111111;
+  text-decoration-color: #888888;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  background: #ffffff;
+  margin: 1.1rem 0 0.2rem;
+  border-top: 1.5px solid #111111;
+  border-bottom: 1.5px solid #111111;
+}
+
+th, td {
+  padding: 0.28rem 0.4rem;
+  border: none;
+  vertical-align: top;
+  background: #ffffff;
+}
+
+thead th {
+  border-bottom: 0.6px solid #111111;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #111111;
+}
+
+caption, .table-caption, figcaption, .figure-caption {
+  caption-side: top;
+  text-align: left;
+  color: #222222;
+  font-size: 0.9rem;
+  margin: 0.6rem 0 0.8rem;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  background: #ffffff;
+}
+
+#TOC {
+  font-size: 0.86rem;
+  border-right: 1px solid #e6e6e6;
+}
+
+.referencias p {
+  margin: 0.35rem 0 0.35rem 1.2rem;
+  text-indent: -1.2rem;
+}
+
+.callout {
+  background: #ffffff;
+  border: 1px solid #cccccc;
+  border-left: 3px solid #111111;
+  color: #111111;
+  font-size: 0.95rem;
+}
+.callout-header, .callout-title-container, .callout-body, .callout-body p {
+  font-family: "Iowan Old Style", Palatino, "Palatino Linotype", "Times New Roman", Times, serif;
+  color: #111111;
+  background: #ffffff;
+}

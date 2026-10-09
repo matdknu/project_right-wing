@@ -1,0 +1,25 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Renviron
+renv/library/
+data/raw/*
+!data/raw/.gitkeep
+data/origen/*.parquet
+outputs/figures/*
+outputs/tables/*
+outputs/models/*
+*.sqlite-journal
+*.db-journal
+
+# Salidas regenerables (mantener muestras/cache/validación en git si se desea)
+data/analisis/bcall/*.csv
+data/analisis/bcall/*.csv.gz
+data/analisis/bcall/figuras/*
+data/analisis/regresiones/*.csv
+data/analisis/regresiones/figuras/*
+data/llm/resultados/indicaciones_codificadas.csv
+data/llm/resultados/muestras_codificadas_*.csv
+data/llm/resultados/costo_proyectado.csv
+

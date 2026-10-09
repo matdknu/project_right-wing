@@ -1,0 +1,27 @@
+
+/* Optional: add a little top spacing above affiliations */
+.title-slide .institute { 
+  margin-top: 3em; 
+}
+
+.remark-slide-content {
+  font-size: 160%;
+  line-height: 1.4;
+  padding-left: 3%;
+  padding-right: 3%;
+  max-width: 95%;
+}
+
+.remark-slide-content h1 {
+  font-size: 150%;
+}
+
+/* Increase only the body text size, leave h1 (titles) as-is */
+.remark-slide-content p,
+.remark-slide-content li {
+  font-size:120%;      /* try 150%–170% */
+  line-height: 1,8;
+}
+
+
+

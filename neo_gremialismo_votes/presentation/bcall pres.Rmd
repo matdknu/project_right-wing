@@ -1,0 +1,475 @@
+---
+title: "Comportamiento legislativo de las derechas chilenas"
+subtitle: "Una exploración con B-Call para la Cámara de Diputadas y Diputados, 2024"
+author: "Matías Díaz"
+date: "2026"
+output:
+  xaringan::moon_reader:
+    css:
+      - default
+      - metropolis
+      - metropolis-fonts
+      - title-affils.css
+    nature:
+      ratio: "16:9"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: "%current% / %total%"
+      navigation:
+        scroll: false
+      progress: true
+      seal: true
+knit: pagedown::chrome_print
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  out.width = "85%",
+  dpi = 160
+)
+
+library(here)
+```
+
+# Pregunta de investigación
+
+## ¿El surgimiento de una nueva derecha conservadora modifica el comportamiento legislativo de las derechas chilenas?
+
+Nos interesa estudiar si el **neo-gremialismo** no solo constituye un conjunto de ideas, sino también un principio que:
+
+- organiza el comportamiento de sus representantes;
+- diferencia a Republicanos de la derecha tradicional;
+- y eventualmente condiciona el movimiento del resto de la derecha.
+
+La presentación desarrolla una **primera exploración descriptiva** del componente conductual de este argumento.
+
+---
+
+# El ascenso de Republicanos
+
+La derecha chilena dejó de estar organizada exclusivamente en torno a RN y la UDI.
+
+- Republicanos emerge como un actor propio, a la derecha de los partidos tradicionales.
+- Su crecimiento electoral transforma la composición y la competencia dentro del sector.
+- Esto abre una pregunta conductual: ¿esa diferenciación también se observa en el Congreso?
+
+.note[
+El punto de partida no es asumir que Republicanos es solamente “más extremo”, sino examinar si constituye un bloque legislativo distintivo y coordinado.
+]
+
+---
+
+# Motivación teórica
+
+## Del neo-gremialismo como ideas al neo-gremialismo como comportamiento
+
+Si el neo-gremialismo organiza efectivamente a una nueva derecha, deberíamos observar al menos tres huellas:
+
+1. una **posición legislativa diferenciada**;
+2. una **bancada internamente coordinada**;
+3. una posible **presión sobre la derecha tradicional**.
+
+Esta presentación examina las dos primeras y ofrece evidencia descriptiva inicial sobre la tercera.
+
+---
+
+# Estrategia general
+
+1. Estimar la posición legislativa mediante **B-Call**.
+2. Observar su variación trimestral durante 2024.
+3. Comparar la localización de Republicanos con la derecha tradicional.
+4. Distinguir entre:
+   - la “cohesión” individual de B-Call;
+   - y la unidad partidaria observada voto a voto.
+5. Dejar el **contenido sustantivo de las votaciones** para una etapa posterior.
+
+---
+
+class: inverse, center, middle, mline
+
+# Datos y método
+
+---
+
+# Universo de votaciones
+
+La unidad básica es el voto de un diputado en una votación nominal.
+
+- Universo recolectado: **21.317 votaciones nominales entre 2010 y 2026**.
+- Votaciones identificadas como indicaciones: **3.809**.
+- Año utilizado en esta primera aplicación: **2024**.
+- Votaciones nominales analizadas en 2024: **1.844**.
+- Diputados observados: **155**.
+- Uunidad de Análisis: Registros diputado × votación = **221.250**.
+- Se incluyen **todas las votaciones**, sin filtrar por clase ni disponibilidad de texto.
+- B-Call excluye internamente las votaciones que no presentan varianza.
+
+El análisis de 2024 funciona como una **prueba del procedimiento**: permite comprobar la preparación de los datos, la estimación de B-Call y la interpretación de sus resultados antes de extender el análisis al universo completo.
+
+---
+
+# Universo recolectado por año
+
+```{r universo-completo, out.width='96%'}
+knitr::include_graphics(
+  here::here(
+    "presentation",
+    "figures",
+    "00_votaciones_por_anio.png"
+  )
+)
+```
+
+.small[
+Las 1.844 votaciones de 2024 representan aproximadamente el 8,7% de las 21.317 votaciones recolectadas. Las restantes se incorporarán en la aplicación definitiva.
+]
+
+---
+
+# Distribución trimestral
+
+```{r distribucion-trimestral, out.width='82%'}
+knitr::include_graphics(
+  here::here(
+    "presentation",
+    "figures",
+    "01_votaciones_por_trimestre.png"
+  )
+)
+```
+
+---
+
+# ¿Qué hace B-Call en cada votación?
+
+Para cada diputado $i$ y votación $j$, B-Call construye una posición específica:
+
+$$u_{ij}=f_j\left(\frac{v_{ij}-M_j}{S_j}\right)$$
+
+- $v_{ij}$: voto del diputado $i$ en la votación $j$.
+- $M_j$: promedio de la Cámara en esa votación.
+- $S_j$: dispersión de los votos en esa votación.
+- $f_j$: orienta el signo según cuál grupo —izquierda o derecha— apoyó relativamente más la propuesta.
+
+Por tanto, $u_{ij}$ representa la **desviación estandarizada y orientada del diputado respecto del marco general de una votación particular**.
+
+---
+
+# Primera dimensión: posición ideológica
+
+$$d_{1i}=\frac{1}{n}\sum_{j=1}^{n}u_{ij}$$
+$d_{1i}$ es la posición promedio del diputado a través de las votaciones.
+
+- Valores negativos: comportamiento relativamente más orientado hacia la izquierda.
+- Valores positivos: comportamiento relativamente más orientado hacia la derecha.
+- Una mayor magnitud indica una desviación promedio mayor respecto del patrón general de la Cámara.
+En esta aplicación, $d_1$ permite comparar la **localización legislativa** de Republicanos y los partidos de la derecha tradicional.
+
+---
+
+# Segunda dimensión: “cohesión” en B-Call
+
+$$d_{2i}=\sqrt{\frac{\sum_{j=1}^{n}\left(u_{ij}-d_{1i}\right)^2}{n}}$$
+
+$d_{2i}$ es la desviación estándar de las posiciones específicas $u_{ij}$ de un diputado.
+
+- **Menor $d_2$:** el diputado ocupa una posición relativa más similar entre votaciones.
+- **Mayor $d_2$:** su posición ideológica respecto del marco general de la Cámara fluctúa más entre votaciones.
+
+.note[
+El artículo denomina esta dimensión “cohesión”, pero se trata de una propiedad **intraindividual**. No mide directamente si los integrantes de un partido votan juntos.
+]
+
+---
+
+# Mismo $d_1$, distinto $d_2$
+
+```{r ejemplo-d2, out.width='86%', fig.height=5.0}
+knitr::include_graphics(
+  here::here(
+    "presentation",
+    "figures",
+    "02_mismo_d1_distinto_d2.png"
+  )
+)
+```
+
+---
+
+# Dos niveles que no debemos confundir
+
+| Concepto | Comparación | Indicador |
+|:--|:--|:--|
+| Posición B-Call | Promedio de un diputado entre votaciones | $d_{1i}$ |
+| “Cohesión” B-Call | Variación del mismo diputado entre votaciones | $d_{2i}$ |
+| Proximidad en el mapa | Similitud en $d_1$ y $d_2$ entre diputados | Distancia entre puntos |
+| Unidad partidaria | Coincidencia de votos entre copartidarios | Acuerdo entre pares |
+
+Republicanos puede presentar simultáneamente ** $d_2$ alto** y **alta unidad partidaria** si sus diputados cambian juntos su distancia respecto de la Cámara.
+
+---
+
+# Comparabilidad temporal
+
+- Se estima un modelo B-Call para el año completo como referencia descriptiva.
+- Luego se estima un modelo separado para cada trimestre.
+- Las puntuaciones trimestrales se utilizan en su escala B-Call original.
+- No aplicamos una regresión de alineamiento posterior.
+
+La comparación trimestral es **exploratoria**: cada trimestre contiene un conjunto diferente de votaciones y el cuarto trimestre concentra muchas más observaciones.
+
+---
+
+class: inverse, center, middle, mline
+
+# Resultados
+
+---
+
+# Mapa B-Call anual
+
+```{r mapa-anual, out.width='84%', fig.height=5.2}
+knitr::include_graphics(
+  here::here(
+    "presentation",
+    "figures",
+    "03_bcall_anual.png"
+  )
+)
+```
+
+---
+
+# Mapas B-Call trimestrales originales
+
+```{r mapas-trimestrales, out.width='96%', fig.height=5.5}
+knitr::include_graphics(
+  here::here(
+    "presentation",
+    "figures",
+    "04_bcall_trimestral.png"
+  )
+)
+```
+
+---
+
+# La derecha en el mapa anual
+
+| Partido | Diputados | Mediana $d_1$ | Mediana $d_2$ |
+|:--|--:|--:|--:|
+| Evópoli | 2 | 0,422 | 0,833 |
+| PSC | 3 | 0,490 | 0,806 |
+| RN | 17 | 0,529 | 0,715 |
+| UDI | 19 | 0,574 | 0,793 |
+| Republicanos | 7 | **0,977** | **0,956** |
+
+Republicanos aparece como el partido ubicado **más a la derecha** entre los partidos considerados. Su separación respecto de RN, UDI y Evópoli es visible en $d_1$.
+Su $d_2$ relativamente alto requiere una lectura distinta: no prueba falta de unidad partidaria, sino una mayor variación entre votaciones en la distancia de sus diputados respecto de la Cámara.
+
+---
+
+# Posición trimestral de las derechas
+
+```{r posicion-trimestral, out.width='85%', fig.height=5.1}
+knitr::include_graphics(
+  here::here(
+    "presentation",
+    "figures",
+    "05_posicion_trimestral_derechas.png"
+  )
+)
+```
+
+---
+
+# ¿Qué muestra la posición trimestral?
+
+## Un patrón de diferenciación, más que una simple ampliación de la derecha existente
+
+- Republicanos se mantiene sistemáticamente en el extremo derecho del espacio legislativo.
+- Sus diputados forman un conjunto compacto en la dimensión de posición.
+- La distancia respecto de la derecha tradicional no parece reducirse a un único trimestre.
+- RN, UDI y Evópoli ocupan posiciones más próximas entre sí que respecto de Republicanos.
+
+.note[
+Esta evidencia describe una diferenciación conductual. Por sí sola, no permite atribuirla al contenido neo-gremialista de las iniciativas votadas.
+]
+
+---
+
+# La dimensión $d_2$
+
+```{r variabilidad-bcall, out.width='85%', fig.height=5.1}
+knitr::include_graphics(
+  here::here(
+    "presentation",
+    "figures",
+    "06_cohesion_bcall_d2.png"
+  )
+)
+```
+
+---
+
+# Cohesión partidaria: índice de Rice
+
+Para cada partido $p$ y votación $j$, el índice compara votos afirmativos y negativos:
+
+$$Rice_{pj}=\frac{\left|A_{pj}-N_{pj}\right|}{A_{pj}+N_{pj}}$$
+
+- $A_{pj}$: votos afirmativos del partido.
+- $N_{pj}$: votos negativos del partido.
+- 0 indica división perfecta; 1 indica completa unidad entre afirmativos y negativos.
+- Las abstenciones no entran en el denominador del índice clásico.
+
+Luego promediamos el índice entre las votaciones de cada trimestre.
+
+## ¿Los diputados de un mismo partido votan juntos?
+
+---
+
+# Índice de Rice por trimestre
+
+```{r unidad-partidaria, out.width='85%', fig.height=5.1}
+knitr::include_graphics(
+  here::here(
+    "presentation",
+    "figures",
+    "07_indice_rice.png"
+  )
+)
+```
+
+---
+
+# El patrón de Republicanos
+
+| Trimestre | Votaciones | Índice de Rice promedio |
+|:--|--:|--:|
+| 2024-T1 | 260 | 99,5% |
+| 2024-T2 | 344 | 98,8% |
+| 2024-T3 | 331 | 99,0% |
+| 2024-T4 | 908 | 99,4% |
+
+Republicanos combina:
+
+- una localización sistemáticamente más a la derecha;
+- diputados próximos entre sí en el mapa B-Call;
+- un $d_2$ relativamente alto;
+- y niveles muy elevados en el índice de Rice.
+
+---
+
+# Interpretación sustantiva
+
+## Republicanos constituye un bloque compacto y altamente coordinado, ubicado sistemáticamente más a la derecha.
+
+Su $d_2$ elevado indica que la **magnitud de su distancia respecto del patrón general de la Cámara cambia entre votaciones**.
+
+El alto índice de Rice indica, al mismo tiempo, que sus diputados tienden a votar **de manera conjunta**.
+
+Por tanto, no observamos una bancada internamente errática, sino una bancada que puede variar su distancia respecto de la Cámara sin perder coordinación interna.
+
+---
+
+# Polarización dentro de la derecha
+
+```{r polarizacion-derecha, out.width='80%', fig.height=5.4}
+knitr::include_graphics(
+  here::here(
+    "presentation",
+    "figures",
+    "08_polarizacion_dentro_derecha.png"
+  )
+)
+```
+
+.small[
+Los paneles combinan tres expresiones distintas de la distancia: rango de posiciones partidarias, distancia entre nueva y derecha tradicional, y frecuencia de votos modales opuestos.
+]
+
+---
+
+# ¿Se mueve la derecha tradicional?
+
+```{r movimiento-derecha-tradicional, out.width='85%', fig.height=5.1}
+knitr::include_graphics(
+  here::here(
+    "presentation",
+    "figures",
+    "09_movimiento_derecha_tradicional.png"
+  )
+)
+```
+
+---
+
+# ¿Existe convergencia hacia la nueva derecha?
+
+```{r convergencia-nueva-derecha, out.width='85%', fig.height=5.1}
+knitr::include_graphics(
+  here::here(
+    "presentation",
+    "figures",
+    "10_convergencia_nueva_derecha.png"
+  )
+)
+```
+
+---
+
+class: inverse, center, middle, mline
+
+# Conclusiones
+
+---
+
+# Principales hallazgos
+
+1. **Diferenciación ideológica:** Republicanos ocupa durante 2024 una posición legislativa más a la derecha que RN, UDI y Evópoli.
+2. **Compacidad:** sus diputados presentan posiciones B-Call semejantes entre sí.
+3. **Coordinación:** Republicanos registra niveles muy altos en el índice de Rice.
+4. **Variación conjunta:** su $d_2$ alto no implica desunión; señala que la distancia respecto de la Cámara fluctúa entre votaciones, mientras sus miembros continúan votando juntos.
+5. **Condicionamiento todavía abierto:** los movimientos de la derecha tradicional son descriptivos y no permiten afirmar todavía que Republicanos los cause.
+
+---
+
+# ¿Qué podemos afirmar sobre el neo-gremialismo?
+
+Los resultados son compatibles con la existencia de un actor nuevo que combina:
+
+- una posición legislativa distintiva;
+- una bancada compacta;
+- y una fuerte capacidad de coordinación interna.
+
+Sin embargo, B-Call identifica un **patrón de comportamiento**, no el contenido ideológico específico que lo produce.
+
+Para vincular este patrón con el neo-gremialismo se necesitaría estudiar posteriormente **qué materias, proyectos e indicaciones generan la diferenciación observada**.
+
+---
+
+# Alcances y límites
+
+- Los resultados presentados corresponden solamente a 2024, utilizado como prueba del procedimiento.
+- El universo recolectado contiene 21.317 votaciones entre 2010 y 2026 y será incorporado posteriormente.
+- Los trimestres contienen números y composiciones diferentes de votaciones.
+- B-Call estima posiciones relativas al universo legislativo de cada periodo.
+- $d_2$ no debe presentarse sin más como cohesión partidaria.
+- El índice de Rice describe coordinación, pero no explica sus fundamentos ideológicos y excluye las abstenciones.
+- Sin análisis de contenido, la conexión con el neo-gremialismo sigue siendo una interpretación teórica que debe contrastarse.
+
+---
+
+class: inverse, center, middle
+
+# Gracias
+
+## Comportamiento legislativo de las derechas chilenas
+
+### Exploración B-Call, 2024
