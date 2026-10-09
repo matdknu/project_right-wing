@@ -174,11 +174,13 @@ Los resultados van en dos niveles. Primero, qué separa a la izquierda de la der
 
 ## Izquierda y derecha: la división que ordena la Cámara {#sec-division}
 
-En la dimensión principal de la Cámara, las dos derechas son un mismo bloque. El mapa clásico de B-Call lo muestra de una vez (@fig-mapa): cada diputado del período 2022-2026, con la posición en el eje horizontal y la variabilidad en el vertical. UDI, RN, Evópoli y PLR quedan en el mismo extremo, lejos de la izquierda.
+En la dimensión principal de la Cámara, las dos derechas son un mismo bloque. El mapa clásico de B-Call lo muestra para el período 2022-2026 (@fig-mapa).
 
-![B-Call de la Cámara, 2022-2026, todas las indicaciones. Cada punto es un diputado. d1 es la posición y d2 la variabilidad. La línea horizontal es la mediana de d2. Los partidos con menos de 3 diputados, salvo Evópoli, se agrupan en Otro.](figuras/fig_mapa.png){#fig-mapa fig-align="center" width="100%"}
+![B-Call de la Cámara, 2022-2026, todas las indicaciones. Cada punto es un diputado. El eje horizontal es la posición y el vertical la variabilidad del voto. La línea horizontal es la mediana de esa variabilidad. Los partidos con menos de 3 diputados, salvo Evópoli, se agrupan en Otro.](figuras/fig_mapa.png){#fig-mapa fig-align="center" width="100%"}
 
-En una escala comparable entre años (cero = mediana de la izquierda; unidad = desviación estándar de los diputados de ese año), UDI, RN y Evópoli quedan cerca de 2 toda la década, y el PLR también desde que tiene bancada (@tbl-camara y @fig-posicion).
+Cada punto de @fig-mapa es un diputado. El eje horizontal es su posición (d1) y el vertical la variabilidad de su voto (d2). La línea punteada horizontal marca la mediana de esa variabilidad. La nube se parte en dos y el centro del eje queda casi vacío. A la izquierda, entre cerca de −1 y −0,5, están el PC, el PS, el Frente Amplio, el PPD y la DC. A la derecha, desde cerca de 0,5 hasta el extremo, están la UDI, RN, Evópoli, los independientes que votan con la derecha y el PLR. Los triángulos del PLR se superponen con la UDI en ese extremo. Evópoli, en celeste, queda un poco más hacia el centro que el resto de la derecha, del mismo lado del eje. Los partidos con menos de tres diputados, salvo Evópoli, aparecen agrupados como Otro.
+
+La @tbl-camara pone esa misma posición en una escala que se puede comparar de un año a otro. El cero es la mediana de la izquierda (PC, PS, FA y PPD) y la unidad es la desviación estándar de los diputados de ese año. En los cuatro años en que el PLR tiene bancada, UDI, RN y Evópoli quedan entre 1,70 y 2,18, y el PLR entre 2,10 y 2,47. La última columna es la brecha entre el PLR y la UDI: +0,30 en 2022-23, −0,05 en 2023-24, +0,47 en 2024-25 y −0,05 en 2025-26. En dos de esos años el PLR queda un poco más a la derecha; en los otros dos la diferencia desaparece.
 
 | Año legislativo | PLR | UDI | RN | Evópoli | PLR − UDI |
 |---|---:|---:|---:|---:|---:|
@@ -191,7 +193,11 @@ En una escala comparable entre años (cero = mediana de la izquierda; unidad = d
 
 ![Posición de los partidos de derecha en la escala de la Cámara, por año legislativo, y distancia estandarizada entre la nueva derecha y la tradicional.](figuras/fig1.png){#fig-posicion fig-align="center" width="100%"}
 
-El contenido muestra en qué consiste esa división (@tbl-si y @fig-efecto). Ante un texto conservador, la izquierda baja 31 puntos su probabilidad de votar Sí y las derechas la suben entre 19 y 43. Ante uno soberanista, la izquierda baja 30 y las derechas suben entre 16 y 28. Ante uno pro-mercado, la izquierda baja 9 y las derechas suben 4. El orden es la excepción: la izquierda no reacciona a su contenido, y no es un eje que polarice la Cámara. La división entre izquierda y derecha es, sobre todo, valórica y de nación.
+@fig-posicion tiene dos paneles y conviene leerlos por separado. El panel A extiende la escala de la @tbl-camara a toda la década. Cada punto es la mediana del partido en ese año legislativo, y el eje va de 0, la mediana de la izquierda, hasta 3 desviaciones estándar. UDI y RN se mantienen cerca de 2 desde 2016-17. Evópoli entra en el mismo tramo cuando tiene al menos tres diputados. El PLR aparece en 2022-23 y se ubica junto a ellos, a veces un poco más a la derecha. El panel omite los años en que un partido tiene menos de tres diputados. Por eso Evópoli está en la tabla de 2022-23 a 2025-26, donde tiene dos diputados, y no en el gráfico de esos años.
+
+El panel B cambia de pregunta. Ya no mide la distancia a la izquierda, sino la distancia entre la nueva derecha y la tradicional dentro de un B-Call calculado solo entre ellas. Esa distancia estandarizada pasa de 0,77 en 2022-23 a 2,99 en 2023-24 y 2,71 en 2024-25, y baja a 2,02 en 2025-26. El solapamiento de las dos nubes es 0,02, 0,02, 0,00 y 0,08. El tamaño del triángulo es el número de diputados de la nueva derecha, entre 7 y 9. La nota del gráfico advierte que parte de esa separación puede ser mecánica: el grupo republicano es chico y B-Call orienta cada votación para separar a los dos grupos (@sec-bcall).
+
+El contenido muestra en qué consiste la división de la Cámara (@tbl-si y @fig-efecto). La división es, sobre todo, valórica y de nación.
 
 | Polo del Sí | Nueva | Tradicional | IND con la derecha | Izquierda |
 |---|---:|---:|---:|---:|
@@ -203,11 +209,17 @@ El contenido muestra en qué consiste esa división (@tbl-si y @fig-efecto). Ant
 
 : Puntos porcentuales de probabilidad de votar Sí cuando el texto va hacia el polo nombrado, frente a un texto que no toca el eje. Votos: nueva 4.035; tradicional 31.899; IND con la derecha 6.493; izquierda 27.566. {#tbl-si}
 
+Cada fila de la @tbl-si es un polo del texto y cada número es el cambio, en puntos porcentuales, de la probabilidad de votar Sí cuando el texto va hacia ese polo, respecto de un texto que no toca el eje. Ante un texto conservador, la nueva derecha sube 43 puntos, la tradicional 19, los independientes que votan con la derecha 25 y la izquierda baja 31. Ante uno soberanista, la tradicional sube 28 y la nueva 16, mientras la izquierda baja 30. Ante orden y castigo, las derechas suben entre 11 y 14 puntos y la izquierda queda en cero. Ante un texto pro-mercado, las tres columnas de derecha suben 4 puntos y la izquierda baja 9. Provisión privada queda en torno a cero o ligeramente negativa, y la fila va marcada como provisional.
+
 ![Efecto de la dirección del texto sobre la probabilidad de votar Sí, por eje y bloque. El punto lleno es el modelo lineal; el hueco, el efecto marginal del logit.](figuras/fig2.png){#fig-efecto fig-align="center" width="100%"}
+
+El panel A de @fig-efecto dibuja los coeficientes de la @tbl-si con su intervalo de confianza. El triángulo es la nueva derecha, el círculo azul la tradicional, el cuadrado los independientes y el rombo la izquierda. El punto lleno es el modelo lineal de probabilidad. El punto hueco es el efecto marginal del logit, y solo se estima en lo valórico y en nación; cae encima del punto lleno. El intervalo de provisión privada va discontinuo porque el eje es provisional. Lo que se ve de una vez es que lo valórico y nación separan a la izquierda de las derechas, y que entre las derechas el salto grande está en lo conservador.
+
+El panel B deja de comparar cada bloque con un texto neutro y mide la brecha entre la nueva y la tradicional en las mismas 531 votaciones. Solo lo conservador se aparta de cero, en unos 17 puntos, con p = 0,024 antes de corregir por los cinco ejes. Después de la corrección de Holm ese p queda en 0,118. Los otros cuatro ejes cruzan el cero y su p de Holm es 1.
 
 ## ¿Cuánto se diferencian las derechas? {#sec-cuanto}
 
-Medida con esa vara, la distancia entre las derechas es chica en casi todo (@tbl-cuanto).
+Medida con esa vara, la distancia entre las derechas es chica en casi todo. La @tbl-cuanto pone las dos distancias en la misma escala. La primera columna es cuánto se separan las derechas entre sí. La segunda es cuánto se separa la derecha tradicional de la izquierda. R es el cociente de las dos. En la posición, la UDI es la referencia de la derecha tradicional y la unidad son desviaciones estándar de la @tbl-camara. En el contenido, la unidad son los puntos porcentuales de la @tbl-si.
 
 | Medida | Nueva − tradicional | Tradicional − izquierda | R |
 |---|---:|---:|---:|
@@ -220,12 +232,15 @@ Medida con esa vara, la distancia entre las derechas es chica en casi todo (@tbl
 | Sí ante texto de orden | +1 | 13 | 0,08 |
 | Sí ante texto pro-mercado | 0 | 13 | 0,00 |
 
-: Distancia entre las derechas como fracción de la distancia entre la derecha tradicional y la izquierda (R). Posición: desviaciones estándar, con la UDI como derecha tradicional (@tbl-camara). Contenido: puntos porcentuales (@tbl-si). Provisión privada no se calcula: su kappa es 0,42 y la brecha entre izquierda y derecha es de 6 puntos. {#tbl-cuanto}
+: Distancia entre las derechas como fracción de la distancia entre la derecha tradicional y la izquierda (R). Posición: desviaciones estándar, con la UDI como derecha tradicional (@tbl-camara). Contenido: puntos porcentuales (@tbl-si). Provisión privada queda fuera: su kappa es 0,42 y la brecha entre izquierda y derecha es de 6 puntos. {#tbl-cuanto}
 
-- **Dimensión principal.** La brecha entre el PLR y la UDI va de 2% a 24% de la que separa a la UDI de la izquierda. Se abre en 2022-23 (14%) y en 2024-25 (24%), y casi desaparece en 2023-24 y 2025-26. El año 2024-25 es el del presupuesto con mayor oposición republicana (@sec-presupuesto).
-- **Economía y orden.** El contenido no distingue a las derechas: R es 0 ante el texto pro-mercado y 0,08 ante el de orden. La ventaja pro-mercado del PLR en 2024-25 (índice 0,86 frente a 0,65 de la UDI) está en el presupuesto del Ejecutivo: +25 puntos ahí y +3 fuera de él. Es una diferencia de táctica, no de contenido.
-- **Nación.** R es negativo (−0,21), pero no indica una derecha tradicional más soberanista. Hay techo: ante un texto soberanista, las dos derechas votan Sí casi siempre, y eso comprime el coeficiente de la nueva.
-- **Valórico.** Es el único eje de contenido donde las derechas se separan de verdad: R = 0,48, la mitad de la vara. En logit, el efecto marginal es +45 en la nueva y +16 en la tradicional. Pero la brecha a nivel de votación (+17 puntos, p = 0,024) no pasa la corrección de Holm en los cinco ejes (p = 0,118), y entre 2022 y 2026 hay solo 10 votaciones valóricas.
+En la dimensión principal, R va de −0,02 a 0,24. La brecha entre el PLR y la UDI es, según el año, entre un 2% y un 24% de la que separa a la UDI de la izquierda. Se abre en 2022-23 (0,14) y en 2024-25 (0,24), y casi desaparece en 2023-24 y en 2025-26. Ese 2024-25 es también el año del presupuesto con mayor oposición republicana (@sec-presupuesto).
+
+En economía y en orden, R es 0 ante el texto pro-mercado y 0,08 ante el de orden. La ventaja pro-mercado del PLR en 2024-25, un índice de 0,86 frente a 0,65 de la UDI, se concentra en el presupuesto del Ejecutivo: +25 puntos ahí y +3 fuera de él. Esa ventaja es de táctica.
+
+En nación, R es negativo (−0,21). Las dos derechas votan Sí casi siempre ante un texto soberanista, y ese techo comprime el coeficiente de la nueva. La tradicional queda con el coeficiente más alto, +28 frente a +16, y las dos quedan del mismo lado de la izquierda.
+
+Lo valórico es el único eje de contenido donde las derechas se separan con claridad: R = 0,48, cerca de la mitad de la vara. En el logit, el efecto marginal es +45 en la nueva y +16 en la tradicional. La brecha a nivel de votación es de 17 puntos (p = 0,024) y no pasa la corrección de Holm en los cinco ejes (p = 0,118). Entre 2022 y 2026 hay solo 10 votaciones valóricas.
 
 Estos cocientes comparan estimaciones puntuales de modelos separados por bloque. Falta su intervalo de confianza, con bootstrap por votación.
 
@@ -235,13 +250,7 @@ Estos cocientes comparan estimaciones puntuales de modelos separados por bloque.
 La medida más directa de cuánto se diferencian es el porcentaje de votaciones en que coinciden las mayorías de dos partidos. Falta calcularlo por año legislativo para los pares UDI–PLR, RN–PLR, Evópoli–PLR y UDI–PS, junto con la cohesión de cada partido según el índice de acuerdo de Hix, Noury y Roland (2005). Permitirá decir, en una cifra, con qué frecuencia la UDI vota como el PLR y con qué frecuencia como el PS.
 :::
 
-Dentro de la derecha, el B-Call propio da una imagen más fuerte. La distancia estandarizada entre nueva y tradicional sube de 0,77 (2022-23) a 2,99 (2023-24) y 2,71 (2024-25), con solapamiento casi nulo. Las dos medidas no se contradicen, pero no miden lo mismo:
-
-- La distancia interna se mide en desviaciones de un grupo muy cohesionado, así que una diferencia chica se vuelve grande.
-- Parte de ella puede venir de cómo B-Call orienta cada votación entre dos grupos (@sec-bcall).
-- No se mueven juntas: en 2023-24, el año de mayor distancia interna (2,99), en la escala de la Cámara quedan a 0,05.
-
-La lectura prudente: hay una diferencia secundaria y consistente dentro de la derecha, pero no una fractura en el eje que ordena la Cámara.
+Dentro de la derecha, el panel B de @fig-posicion da una imagen más fuerte que la escala de la Cámara. Las dos medidas conviven porque responden preguntas distintas. La distancia interna está expresada en desviaciones de un grupo muy cohesionado, de modo que una diferencia chica en la Cámara se vuelve grande ahí. Parte de ella puede venir de cómo B-Call orienta cada votación entre dos grupos (@sec-bcall), con un grupo republicano de 7 a 9 diputados. Tampoco se mueven juntas: en 2023-24, el año de mayor distancia interna (2,99), en la escala de la Cámara quedan a 0,05. La lectura prudente es una diferencia secundaria y consistente dentro de la derecha, sobre el mismo eje que ordena a la Cámara.
 
 ## La táctica: el presupuesto {#sec-presupuesto}
 
@@ -271,12 +280,15 @@ ChV endurece su voto en las mismas partidas, pero el PLR se endurece más rápid
 
 ![Porcentaje de No, acuerdo con la mayoría del PLR y apoyo a rebajas simbólicas, por partido, en las leyes de Presupuestos 2023–2026.](figuras/fig3.png){#fig-presupuesto fig-align="center" width="100%"}
 
-- Con la partida fija, el No de la UDI sube 17 puntos en 2024 y 16 en 2025 (p < 0,001): un endurecimiento real, en la dirección del PLR.
-- Aun así, el acuerdo de la UDI con la mayoría republicana baja de 82% a 73%, porque el No del PLR pasa de 33% a 67%.
-- Las rebajas simbólicas dividen a ChV: el PLR y la UDI las apoyan cada vez más (100% y 95% en 2025), mientras Evópoli baja de 67% a 40%.
-- El acercamiento de 2026 tiene advertencias: son 110 votaciones, ninguna rebaja simbólica, y la partida se extrajo solo en el 73%. Falta descomponer si se moderó el PLR, se endureció ChV o cambiaron las partidas votadas.
+@fig-presupuesto dibuja las tres columnas de la @tbl-presupuesto. El número bajo cada año es la cantidad de votaciones del proyecto: 290, 517, 601 y 110. Evópoli vota unas pocas menos (286, 504, 589 y 106). El Partido Nacional Libertario solo aparece en 2026.
 
-La lectura propuesta es endurecimiento en paralelo, no contagio: ChV sigue al PLR a medias. En la tipología de Meguid (2008), es una acomodación parcial en la táctica opositora.
+El primer panel es el porcentaje de No. El PLR pasa de 33% en la ley 2023 a 51% en 2024 y 67% en 2025, y baja a 53% en 2026. UDI, RN y Evópoli suben también entre 2023 y 2024, y después se quedan entre 40% y 46%. Con la partida fija, el No de la UDI sube 17 puntos en 2024 y 16 en 2025 (p < 0,001). Es un endurecimiento en la misma dirección que el PLR, y el No republicano crece más rápido.
+
+El segundo panel es el porcentaje de votos del partido que coincide con la mayoría republicana. El PLR queda fuera del gráfico porque su acuerdo está entre 99% y 100%. El de la UDI baja de 82% a 73% entre 2023 y 2025, y vuelve a 91% en 2026. RN y Evópoli siguen la misma curva, siempre por debajo de la UDI. El acuerdo cae mientras el No del PLR sube de 33% a 67%, porque ChV se endurece menos que el PLR.
+
+El tercer panel es el apoyo a las rebajas simbólicas, los recortes a un monto testimonial. El PLR pasa de 84% a 100% y la UDI de 82% a 95%. Evópoli hace el camino inverso, de 67% a 40%. En 2026 el panel queda vacío: en esa ley no hubo rebajas simbólicas. El acercamiento de ese año tiene además otras dos advertencias. Son 110 votaciones, y la partida se extrajo solo en el 73%. Falta descomponer si se moderó el PLR, se endureció ChV o cambiaron las partidas votadas.
+
+La lectura es un endurecimiento en paralelo. ChV sigue al PLR a medias. En la tipología de Meguid (2008), es una acomodación parcial en la táctica opositora.
 
 ::: {.callout-note}
 ## Pendiente: la vara en el presupuesto
@@ -297,6 +309,8 @@ La respuesta a la pregunta del título tiene dos partes. La izquierda y la derec
 | 5. Oscilación electoral | Acuerdo de la UDI con el PLR: 82, 76, 73 y 91% | Primera evidencia; falta fechar |
 
 : Expectativas y lectura. {#tbl-expectativas}
+
+La @tbl-expectativas resume esa lectura fila por fila. La jerarquía de distancias se cumple: la brecha entre el PLR y la UDI es entre un 2% y un 24% de la que separa a la UDI de la izquierda. La convergencia en contenido también se cumple. R es 0 en lo pro-mercado y 0,08 en orden, y en nación las dos derechas topan el Sí. La diferenciación valórica queda como sugerente: R llega a 0,48 y el efecto conservador es +43 frente a +19, pero la brecha no pasa Holm (p = 0,118). La diferenciación táctica se cumple en el presupuesto. Ahí el PLR queda 25 puntos sobre la UDI en el texto pro-mercado del Ejecutivo, y su No pasa de 33% a 67%. La oscilación electoral tiene una primera evidencia en el acuerdo de la UDI con el PLR, que va de 82% a 76%, 73% y 91%, todavía sin fechar la tramitación contra el calendario.
 
 El resultado calza con una división principal que sigue siendo la de los dos bloques (Tironi y Agüero, 1999; Alemán y Saiegh, 2007). El PLR no abre una segunda división en el voto: es una variante dentro del bloque de derecha, más dura en la táctica. En el contenido, el resultado es coherente con lo que anticipaban Díaz et al. (2023): la relación fluida entre ambas derechas facilita la cooperación.
 
@@ -331,7 +345,11 @@ La izquierda y la derecha siguen siendo los dos polos de la Cámara. Entre las d
 
 ![Figura A1. Kappa en la escala reducida (+1 / −1 / 0), código actual frente al anterior. Líneas en 0,4 y 0,6. Subsidiariedad es provisional.](figuras/figA1.png){fig-align="center" width="92%"}
 
+La figura A1 compara el acuerdo entre los dos modelos en la escala reducida. El triángulo es el código actual y el círculo el anterior. La línea de 0,60 es el umbral práctico de este artículo y la de 0,40 marca un acuerdo débil. Nación, valórico, orden y económico quedan sobre 0,60 en los dos códigos. El código actual baja un poco el kappa en nación, valórico y orden, y deja el económico casi en el mismo lugar. Subsidiariedad queda junto a 0,40 en los dos códigos, y por eso el eje sigue como provisional.
+
 ![Figura A2. Índice LLM por partido y año, valórico y económico. No se grafican celdas con menos de 10 votos.](figuras/figA2.png){fig-align="center" width="92%"}
+
+La figura A2 muestra el índice por partido y año en lo valórico y en lo económico. El índice va de 0 a 1 hacia el polo de la derecha, y el tamaño del punto es el número de votos de esa celda. Las celdas con menos de 10 votos quedan fuera, así que Evópoli desaparece en varios años valóricos. En lo valórico, UDI y RN se mueven juntas, y el PLR, cuando entra con suficientes votos, queda en el mismo tramo. En lo económico la serie es más baja y más pareja, salvo el salto del PLR en 2024-25. La nota del gráfico recuerda que el salto valórico de ese año es de composición: los boletines no se repiten respecto de 2022-23.
 
 # Referencias {.unnumbered}
 
