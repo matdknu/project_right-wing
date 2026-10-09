@@ -1,7 +1,7 @@
 ---
 title: "Converger en el contenido, diferenciarse en la táctica"
 subtitle: "Borrador para el Fondecyt «La derecha en disputa»"
-author: "Matías Díaz"
+author: "Stephanie Alenda, Matías Deneken y Matías Diaz"
 date: 2026-10-09
 lang: es
 format:
