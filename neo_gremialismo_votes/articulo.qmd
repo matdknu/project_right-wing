@@ -19,12 +19,6 @@ format:
     smooth-scroll: true
 ---
 
-::: {.callout-important}
-## Estado del documento
-
-Documento de trabajo. **Hallazgo sólido:** las dos derechas convergen en el contenido de lo que votan. **Hallazgos tentativos:** la diferencia valórica y la diferencia en la oposición al Ejecutivo. Las pruebas que faltan para confirmarlos o descartarlos están en @sec-robustez.
-:::
-
 # Introducción {#sec-intro}
 
 En la Cámara de Diputados de Chile, la división entre izquierda y derecha es la que más ordena el voto. Desde el plebiscito de 1988, la competencia partidaria se organizó en dos bloques (Tironi y Agüero, 1999; Torcal y Mainwaring, 2003), y en las votaciones nominales la coalición pesó más que el partido (Alemán y Saiegh, 2007). Esa división sigue ahí: en la escala de B-Call de 2022 a 2026, los partidos de derecha quedan a unas dos desviaciones estándar de la mediana de la izquierda (@tbl-camara).
@@ -217,12 +211,6 @@ Lo valórico es el único eje de contenido donde las derechas se separan con cla
 
 Estos cocientes comparan estimaciones puntuales de modelos separados por bloque. Falta su intervalo de confianza, con bootstrap por votación.
 
-::: {.callout-note}
-## Pendiente: acuerdo entre partidos
-
-La medida más directa de cuánto se diferencian es el porcentaje de votaciones en que coinciden las mayorías de dos partidos. Falta calcularlo por año legislativo para los pares UDI–PLR, RN–PLR, Evópoli–PLR y UDI–PS, junto con la cohesión de cada partido según el índice de acuerdo de Hix, Noury y Roland (2005). Permitirá decir, en una cifra, con qué frecuencia la UDI vota como el PLR y con qué frecuencia como el PS.
-:::
-
 Dentro de la derecha, el panel B de @fig-posicion da una imagen más fuerte que la escala de la Cámara. Las dos medidas conviven porque responden preguntas distintas. La distancia interna está expresada en desviaciones de un grupo muy cohesionado, de modo que una diferencia chica en la Cámara se vuelve grande ahí. Parte de ella puede venir de cómo B-Call orienta cada votación entre dos grupos (@sec-bcall), con un grupo republicano de 7 a 9 diputados. Tampoco se mueven juntas: en 2023-24, el año de mayor distancia interna (2,99), en la escala de la Cámara quedan a 0,05. La lectura prudente es una diferencia secundaria y consistente dentro de la derecha, sobre el mismo eje que ordena a la Cámara.
 
 ## La táctica: el presupuesto {#sec-presupuesto}
@@ -262,12 +250,6 @@ El segundo panel es el porcentaje de votos del partido que coincide con la mayor
 El tercer panel es el apoyo a las rebajas simbólicas, los recortes a un monto testimonial. El PLR pasa de 84% a 100% y la UDI de 82% a 95%. Evópoli hace el camino inverso, de 67% a 40%. En 2026 el panel queda vacío: en esa ley no hubo rebajas simbólicas. El acercamiento de ese año tiene además otras dos advertencias. Son 110 votaciones, y la partida se extrajo solo en el 73%. Falta descomponer si se moderó el PLR, se endureció ChV o cambiaron las partidas votadas.
 
 La lectura es un endurecimiento en paralelo. ChV sigue al PLR a medias. En la tipología de Meguid (2008), es una acomodación parcial en la táctica opositora.
-
-::: {.callout-note}
-## Pendiente: la vara en el presupuesto
-
-Para calcular R también en la táctica falta el % de No de la izquierda en las mismas votaciones, por ley y con la partida fija.
-:::
 
 # Discusión {#sec-discusion}
 
