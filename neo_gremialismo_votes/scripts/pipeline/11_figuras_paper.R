@@ -22,7 +22,7 @@ anios <- c(
 # Okabe-Ito. Tradicional en azules, nueva en naranja/bermellón, IND en verde,
 # izquierda en gris. La forma separa nueva (triángulo) de tradicional (círculo).
 paleta <- c(
-  PLR = "#D55E00",
+  PRCh = "#D55E00",
   PNL = "#E69F00",
   UDI = "#08306B",
   RN = "#2171B5",
@@ -31,32 +31,32 @@ paleta <- c(
   Izquierda = "#4D4D4D"
 )
 formas <- c(
-  PLR = 17, PNL = 17,
+  PRCh = 17, PNL = 17,
   UDI = 16, RN = 16, Evópoli = 16,
   `IND con la derecha` = 15,
   Izquierda = 18
 )
 formas_huecas <- c(
-  PLR = 2, PNL = 2,
+  PRCh = 2, PNL = 2,
   UDI = 1, RN = 1, Evópoli = 1,
   `IND con la derecha` = 0,
   Izquierda = 5
 )
 lineas <- c(
-  PLR = "solid", PNL = "solid",
+  PRCh = "solid", PNL = "solid",
   UDI = "solid", RN = "dashed", Evópoli = "dotted",
   `IND con la derecha` = "solid", Izquierda = "solid"
 )
 # Los bloques del coefplot usan el color de su partido ancla.
 paleta_bloque <- c(
-  Nueva = paleta[["PLR"]],
+  Nueva = paleta[["PRCh"]],
   Tradicional = paleta[["UDI"]],
   `IND con la derecha` = paleta[["IND con la derecha"]],
   Izquierda = paleta[["Izquierda"]]
 )
 
 etiquetar_partido <- function(x) {
-  recode(x, REP = "PLR", EVOP = "Evópoli", .default = x)
+  recode(x, REP = "PRCh", EVOP = "Evópoli", .default = x)
 }
 
 tema <- function() {
@@ -128,11 +128,11 @@ exigir("p_holm_cinco_ejes" %in% names(brecha),
 
 no_plr <- presupuesto |> filter(partido == "REP") |> arrange(ciclo) |> pull(pct_no)
 exigir(identical(round(no_plr * 100), c(33, 51, 67, 53)),
-       paste("PLR % de No no da 33/51/67/53:", paste(round(no_plr * 100), collapse = "/")))
+       paste("PRCh % de No no da 33/51/67/53:", paste(round(no_plr * 100), collapse = "/")))
 
 acuerdo_udi <- presupuesto |> filter(partido == "UDI") |> arrange(ciclo) |> pull(pct_igual_rep)
 exigir(identical(round(acuerdo_udi * 100), c(82, 76, 73, 91)),
-       paste("UDI acuerdo con PLR no da 82/76/73/91:", paste(round(acuerdo_udi * 100), collapse = "/")))
+       paste("UDI acuerdo con PRCh no da 82/76/73/91:", paste(round(acuerdo_udi * 100), collapse = "/")))
 
 pp <- function(bloque, termino) {
   coef |> filter(.data$bloque == .env$bloque, term == termino) |> pull(estimate) * 100
@@ -203,13 +203,13 @@ paleta_mapa <- c(
   RN = paleta[["RN"]],
   Evópoli = paleta[["Evópoli"]],
   UDI = paleta[["UDI"]],
-  PLR = paleta[["PLR"]]
+  PRCh = paleta[["PRCh"]]
 )
 exigir(all(levels(mapa_plot$partido) %in% names(paleta_mapa)),
        paste("Falta color para:", paste(setdiff(levels(mapa_plot$partido), names(paleta_mapa)), collapse = ", ")))
 
 formas_mapa <- setNames(rep(16, length(paleta_mapa)), names(paleta_mapa))
-formas_mapa[["PLR"]] <- 17
+formas_mapa[["PRCh"]] <- 17
 formas_mapa[["IND con la derecha"]] <- 15
 
 mapa_fig <- ggplot(mapa_plot, aes(ref_d1, ref_d2, colour = partido, shape = partido)) +
@@ -301,7 +301,7 @@ pb <- distancia |>
 
 pb_plot <- ggplot(pb, aes(tiempo, distancia)) +
   geom_line(group = 1, colour = "grey35", linewidth = 0.4) +
-  geom_point(aes(size = n_nueva), colour = paleta[["PLR"]], shape = formas[["PLR"]]) +
+  geom_point(aes(size = n_nueva), colour = paleta[["PRCh"]], shape = formas[["PRCh"]]) +
   geom_text_repel(
     aes(label = solap_etiq),
     size = 2.7, colour = "grey25", direction = "y", seed = 1,
@@ -318,7 +318,7 @@ fig1 <- pa / pb_plot +
     tag_levels = "A",
     caption = str_wrap(paste0(
       "A omite partidos con menos de 3 diputados: ", nota_omitidos, ". ",
-      "B: parte de la separación puede ser mecánica: 7–9 diputados PLR, pivote PLR."
+      "B: parte de la separación puede ser mecánica: 7–9 diputados PRCh, pivote PRCh."
     ), 108)
   )
 
@@ -481,11 +481,11 @@ guardar(fig2, "fig2", 5.5)
 
 n_ciclo <- c(`2023` = 290, `2024` = 517, `2025` = 601, `2026` = 110)
 exigir(all(presupuesto |> filter(partido == "REP") |> arrange(ciclo) |> pull(n_votaciones) == unname(n_ciclo)),
-       "Las votaciones por ciclo del PLR no son 290, 517, 601 y 110.")
+       "Las votaciones por ciclo del PRCh no son 290, 517, 601 y 110.")
 
 medidas <- c(
   pct_no = "% de No",
-  pct_igual_rep = "% igual a la mayoría del PLR",
+  pct_igual_rep = "% igual a la mayoría del PRCh",
   pct_si_rebaja = "% de Sí a rebajas simbólicas"
 )
 
@@ -496,7 +496,7 @@ fig3_datos <- presupuesto |>
     panel = unname(medidas[medida]),
     panel = factor(panel, levels = unname(medidas)),
     valor = proporcion * 100,
-    valor = if_else(panel == "% igual a la mayoría del PLR" & partido == "PLR", NA_real_, valor)
+    valor = if_else(panel == "% igual a la mayoría del PRCh" & partido == "PRCh", NA_real_, valor)
   )
 
 fig3 <- ggplot(fig3_datos, aes(ciclo, valor, colour = partido, shape = partido, linetype = partido, group = partido)) +
@@ -505,14 +505,14 @@ fig3 <- ggplot(fig3_datos, aes(ciclo, valor, colour = partido, shape = partido, 
   facet_wrap(~panel, nrow = 1) +
   scale_y_continuous(labels = num1, limits = c(0, 100)) +
   scale_x_discrete(labels = function(x) paste0(x, "\n(", n_ciclo[x], ")")) +
-  scale_colour_manual(values = paleta, breaks = c("PLR", "PNL", "UDI", "RN", "Evópoli")) +
-  scale_shape_manual(values = formas, breaks = c("PLR", "PNL", "UDI", "RN", "Evópoli")) +
-  scale_linetype_manual(values = lineas, breaks = c("PLR", "PNL", "UDI", "RN", "Evópoli")) +
+  scale_colour_manual(values = paleta, breaks = c("PRCh", "PNL", "UDI", "RN", "Evópoli")) +
+  scale_shape_manual(values = formas, breaks = c("PRCh", "PNL", "UDI", "RN", "Evópoli")) +
+  scale_linetype_manual(values = lineas, breaks = c("PRCh", "PNL", "UDI", "RN", "Evópoli")) +
   labs(x = "Ley de Presupuestos", y = NULL, colour = NULL, shape = NULL, linetype = NULL) +
   tema()
 
 fig3 <- fig3 +
-  labs(caption = str_wrap("En el acuerdo no se grafica al PLR (queda en 99–100%). En las rebajas, 2026 queda vacío: no hubo. PNL solo en 2026. El número bajo el año es el de votaciones del proyecto; Evópoli vota en 286, 504, 589 y 106.", 108))
+  labs(caption = str_wrap("En el acuerdo no se grafica al PRCh (queda en 99–100%). En las rebajas, 2026 queda vacío: no hubo. PNL solo en 2026. El número bajo el año es el de votaciones del proyecto; Evópoli vota en 286, 504, 589 y 106.", 108))
 
 write_csv(
   fig3_datos |> transmute(panel = as.character(panel), ciclo = as.character(ciclo), partido, valor, n_votaciones),
@@ -574,8 +574,8 @@ fa2 <- ggplot(indice_plot, aes(tiempo, indice, colour = partido, shape = partido
   geom_point() +
   facet_wrap(~eje, ncol = 1) +
   scale_y_continuous("Índice hacia el polo de la derecha", labels = num, limits = c(0, 1)) +
-  scale_colour_manual(values = paleta, breaks = c("PLR", "PNL", "UDI", "RN", "Evópoli")) +
-  scale_shape_manual(values = formas, breaks = c("PLR", "PNL", "UDI", "RN", "Evópoli")) +
+  scale_colour_manual(values = paleta, breaks = c("PRCh", "PNL", "UDI", "RN", "Evópoli")) +
+  scale_shape_manual(values = formas, breaks = c("PRCh", "PNL", "UDI", "RN", "Evópoli")) +
   scale_size_continuous("Votos", range = c(1.5, 5)) +
   labs(
     x = "Año legislativo",
