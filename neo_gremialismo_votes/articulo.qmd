@@ -18,6 +18,17 @@ format:
     embed-resources: true
     smooth-scroll: true
     html-math-method: katex
+  pdf:
+    pdf-engine: xelatex
+    documentclass: article
+    papersize: a4
+    fontsize: 11pt
+    geometry: margin=2.5cm
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    colorlinks: true
+    fig-pos: "H"
 ---
 
 # Introducción {#sec-intro}
