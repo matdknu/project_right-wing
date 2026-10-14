@@ -14,16 +14,9 @@ document.addEventListener("DOMContentLoaded", function () {
     setTimeout(function () { aviso.classList.remove("visible"); }, 1800);
   }
 
-  // Portada: etiqueta, tiempo de lectura y acciones
+  // Portada: acciones bajo el título
   var cabecera = document.getElementById("title-block-header");
-  var palabras = main ? main.innerText.split(/\s+/).length : 0;
-  var minutos = Math.max(1, Math.round(palabras / 220));
   if (cabecera) {
-    var etiqueta = document.createElement("span");
-    etiqueta.className = "etiqueta-portada";
-    etiqueta.textContent = "Documento de trabajo · " + minutos + " min de lectura";
-    cabecera.insertAdjacentElement("afterbegin", etiqueta);
-
     var meta = cabecera.querySelector(".quarto-title-meta");
     var ruta = window.location.pathname.split("/").pop() || "converger.html";
     var pdf = ruta.replace(/\.html?$/, ".pdf");
