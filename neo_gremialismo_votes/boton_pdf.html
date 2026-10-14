@@ -1,0 +1,13 @@
+<script>
+// El PDF vive junto al HTML con el mismo nombre (articulo.pdf / converger.pdf)
+document.addEventListener("DOMContentLoaded", function () {
+  var meta = document.querySelector("#title-block-header .quarto-title-meta");
+  if (!meta) return;
+  var ruta = window.location.pathname.split("/").pop() || "converger.html";
+  var pdf = ruta.replace(/\.html?$/, ".pdf");
+  var wrap = document.createElement("div");
+  wrap.className = "boton-pdf-wrap";
+  wrap.innerHTML = '<a class="boton-pdf" href="' + pdf + '" target="_blank" rel="noopener">Ver PDF</a>';
+  meta.insertAdjacentElement("afterend", wrap);
+});
+</script>

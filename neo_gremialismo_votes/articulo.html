@@ -3402,6 +3402,115 @@ font-weight: 600;
 text-align: left;
 margin-bottom: 0.3rem;
 }
+
+html, body, #quarto-content {
+background: #eeede9;
+}
+#quarto-sidebar,
+.sidebar,
+.sidebar-menu-container {
+background: #eeede9;
+border-right: none;
+}
+main.content,
+#quarto-document-content {
+background: #ffffff;
+max-width: 47rem;
+margin: 2rem 0 4rem;
+padding: 3.4rem 3.6rem 3.8rem;
+box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 6px 22px rgba(0, 0, 0, 0.06);
+}
+.quarto-title-block,
+header#title-block-header {
+background: #ffffff;
+}
+.quarto-title-block {
+border-bottom: none;
+margin-bottom: 1.2rem;
+}
+h1.title {
+font-size: 1.7rem;
+}
+
+.abstract {
+margin: 1.6rem 2.2rem 0.6rem;
+padding-top: 1rem;
+border-top: 0.6px solid #1a1a1a;
+}
+.abstract-title,
+.abstract .block-title {
+text-align: center;
+font-style: normal;
+font-weight: 600;
+text-transform: none;
+font-variant: small-caps;
+letter-spacing: 0.06em;
+font-size: 1rem;
+color: #1a1a1a;
+margin-bottom: 0.4rem;
+}
+.abstract p {
+font-size: 0.92rem;
+line-height: 1.5;
+}
+
+section > p {
+margin: 0;
+}
+section > p + p {
+text-indent: 1.5em;
+}
+section.level1 > h1 {
+font-variant: small-caps;
+letter-spacing: 0.04em;
+font-size: 1.3rem;
+text-align: center;
+margin: 2.6rem 0 0.9rem;
+}
+section.level1 > h1 .header-section-number {
+font-variant: normal;
+}
+figcaption, .figure-caption, .table-caption, caption {
+font-style: normal;
+font-size: 0.86rem;
+}
+
+.boton-pdf-wrap {
+text-align: center;
+margin: 1.1rem 0 0;
+}
+a.boton-pdf {
+display: inline-block;
+font-family: var(--paper);
+font-size: 0.86rem;
+letter-spacing: 0.04em;
+color: #1a1a1a;
+text-decoration: none;
+border: 1px solid #1a1a1a;
+border-radius: 2px;
+padding: 0.32rem 0.95rem;
+transition: background 0.15s, color 0.15s;
+}
+a.boton-pdf:hover {
+background: #1a1a1a;
+color: #ffffff;
+}
+@media (max-width: 767.98px) {
+main.content,
+#quarto-document-content {
+margin: 0;
+padding: 1.6rem 1.2rem 2.4rem;
+box-shadow: none;
+}
+.abstract {
+margin: 1.2rem 0 0.4rem;
+}
+}
+@media print {
+html, body, #quarto-content { background: #ffffff; }
+main.content, #quarto-document-content { box-shadow: none; padding: 0; margin: 0; }
+.boton-pdf-wrap { display: none; }
+}
 </style>
 </head>
 
@@ -3458,7 +3567,7 @@ margin-bottom: 0.3rem;
   <li><a href="#apéndice" id="toc-apéndice" class="nav-link" data-scroll-target="#apéndice">Apéndice</a></li>
   <li><a href="#referencias" id="toc-referencias" class="nav-link" data-scroll-target="#referencias">Referencias</a></li>
   </ul>
-<div class="quarto-alternate-formats"><h2>Otros formatos</h2><ul><li><a href="articulo.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+</nav>
 </div>
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
 </div>
@@ -4557,6 +4666,19 @@ Tabla 9: Hipótesis y lectura.
 </ol>
 </section></div></main>
 <!-- /main column -->
+<script>
+// El PDF vive junto al HTML con el mismo nombre (articulo.pdf / converger.pdf)
+document.addEventListener("DOMContentLoaded", function () {
+  var meta = document.querySelector("#title-block-header .quarto-title-meta");
+  if (!meta) return;
+  var ruta = window.location.pathname.split("/").pop() || "converger.html";
+  var pdf = ruta.replace(/\.html?$/, ".pdf");
+  var wrap = document.createElement("div");
+  wrap.className = "boton-pdf-wrap";
+  wrap.innerHTML = '<a class="boton-pdf" href="' + pdf + '" target="_blank" rel="noopener">Ver PDF</a>';
+  meta.insertAdjacentElement("afterend", wrap);
+});
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

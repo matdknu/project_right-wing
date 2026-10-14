@@ -18,6 +18,8 @@ format:
     embed-resources: true
     smooth-scroll: true
     html-math-method: katex
+    include-after-body: boton_pdf.html
+    format-links: false
   pdf:
     pdf-engine: xelatex
     documentclass: article
