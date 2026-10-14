@@ -129,6 +129,8 @@ $$
 P_{gt} = \frac{\operatorname{mediana}_{i \in g}\, d1_{it} - \operatorname{mediana}_{i \in L}\, d1_{it}}{\operatorname{sd}_t(d1)}.
 $$
 
+Este cero usa solo una parte de la izquierda de @sec-universo, los partidos con bancada estable: el PC, el PS y el PPD en todos los años, y el FA en 2025-26, cuando ya figura en los datos como un solo partido, para que la referencia no cambie con partidos de uno o dos diputados como la FRVS o el PR.
+
 El tercero es que los diputados extremos tienden a ser más volátiles, así que $d2$ se compara entre grupos después de ajustarlo por la posición: es el residuo de una regresión de $d2$ sobre $d1$ y $d1^2$ dentro de cada año, $\tilde d2_{it} = d2_{it} - \widehat{d2}(d1_{it})$.
 
 ## Medidas de separación, cohesión y orden {#sec-medidas}
@@ -191,7 +193,7 @@ Con $R = 0$, las derechas no se distinguen; con $R = 1$, se separan tanto como l
 | Orden | Orden y castigo | Garantías | Delitos, penas, policías, Fuerzas Armadas o la protesta |
 | Nación | Soberanista | Pluralista | Solo si el texto nombra migración, pueblos indígenas, plurinacionalidad, símbolos o soberanía |
 
-: Palabras del libro de códigos de cinco ejes. La codificación humana usa estas mismas categorías. {#tbl-codigo}
+: Palabras del libro de códigos de cinco ejes. La codificación humana prevista usará estas mismas categorías. {#tbl-codigo}
 
 En el análisis, cada eje se reduce a un número $x_{jk} \in \{-1, 0, +1\}$: la palabra del polo de derecha vale +1, la contraria −1, y Neutral, Mixta, No aplica y la confianza baja valen 0. DeepSeek codifica 300 textos con el mismo libro. El kappa en la escala reducida es 0,68 en el eje económico, 0,72 en el valórico, 0,71 en orden, 0,72 en nación y 0,42 en subsidiariedad, que queda provisional hasta que una persona codifique a ciegas sus 31 desacuerdos (figura A1).
 
@@ -492,15 +494,21 @@ La izquierda y la derecha siguen siendo los dos polos de la Cámara. Entre las d
 
 # Apéndice {.unnumbered}
 
-![Figura A1. Kappa del libro de códigos de cinco ejes en la escala reducida (+1 / −1 / 0), código actual frente al anterior. Líneas en 0,4 y 0,6. Subsidiariedad es provisional.](figuras/figA1.png){fig-align="center" width="92%"}
+![](figuras/figA1.png){fig-align="center" width="92%"}
+
+*Figura A1. Kappa del libro de códigos de cinco ejes en la escala reducida (+1 / −1 / 0), código actual frente al anterior. Líneas en 0,4 y 0,6. Subsidiariedad es provisional.*
 
 La figura A1 compara el acuerdo entre los dos modelos en la escala reducida. El triángulo es el código actual y el círculo el anterior. Nación, valórico, orden y económico quedan sobre 0,60 en los dos códigos. Subsidiariedad queda junto a 0,40, y por eso el eje sigue como provisional.
 
-![Figura A2. Índice LLM de cinco ejes por partido y año, valórico y económico. No se grafican celdas con menos de 10 votos.](figuras/figA2.png){fig-align="center" width="92%"}
+![](figuras/figA2.png){fig-align="center" width="92%"}
+
+*Figura A2. Índice LLM de cinco ejes por partido y año, valórico y económico. No se grafican celdas con menos de 10 votos.*
 
 La figura A2 muestra el índice del libro de códigos por partido y año, de 0 a 1 hacia el polo de la derecha. En lo valórico, UDI y RN se mueven juntas, y el PRCh, cuando entra con suficientes votos, queda en el mismo tramo. El salto valórico de 2024-25 es de composición: los boletines no se repiten respecto de 2022-23.
 
-![Figura A3. Sensibilidad al termómetro mercado-Estado por grupo y año: pendiente $b_{gt}$ del Sí sobre el signo del texto, con intervalo al 95%.](figuras/b3_sensibilidad.png){fig-align="center" width="92%"}
+![](figuras/b3_sensibilidad.png){fig-align="center" width="92%"}
+
+*Figura A3. Sensibilidad al termómetro mercado-Estado por grupo y año: pendiente $b_{gt}$ del Sí sobre el signo del texto, con intervalo al 95%.*
 
 La figura A3 muestra la pendiente $b_{gt}$ de @sec-modelos. Entre 2018-19 y 2022-23, la UDI, RN y Evópoli oscilan en torno a cero. Desde 2023-24 la pendiente de la derecha es positiva y la del PS negativa. En 2024-25, el año del presupuesto 2025, el PRCh llega a +0,32, la UDI a +0,21 y RN a +0,19.
 
