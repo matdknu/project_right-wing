@@ -1,13 +1,105 @@
+<div id="barra-progreso"></div>
+<div id="visor" role="dialog" aria-modal="true" aria-label="Figura ampliada"><img alt=""><p></p></div>
+<div id="aviso" role="status"></div>
+<button id="boton-arriba" type="button" title="Volver arriba" aria-label="Volver arriba">↑</button>
 <script>
-// El PDF vive junto al HTML con el mismo nombre (articulo.pdf / converger.pdf)
 document.addEventListener("DOMContentLoaded", function () {
-  var meta = document.querySelector("#title-block-header .quarto-title-meta");
-  if (!meta) return;
-  var ruta = window.location.pathname.split("/").pop() || "converger.html";
-  var pdf = ruta.replace(/\.html?$/, ".pdf");
-  var wrap = document.createElement("div");
-  wrap.className = "boton-pdf-wrap";
-  wrap.innerHTML = '<a class="boton-pdf" href="' + pdf + '" target="_blank" rel="noopener">Ver PDF</a>';
-  meta.insertAdjacentElement("afterend", wrap);
+  var main = document.querySelector("main.content");
+
+  // Aviso breve
+  var aviso = document.getElementById("aviso");
+  function avisar(texto) {
+    aviso.textContent = texto;
+    aviso.classList.add("visible");
+    setTimeout(function () { aviso.classList.remove("visible"); }, 1800);
+  }
+
+  // Portada: etiqueta, tiempo de lectura y acciones
+  var cabecera = document.getElementById("title-block-header");
+  var palabras = main ? main.innerText.split(/\s+/).length : 0;
+  var minutos = Math.max(1, Math.round(palabras / 220));
+  if (cabecera) {
+    var etiqueta = document.createElement("span");
+    etiqueta.className = "etiqueta-portada";
+    etiqueta.textContent = "Documento de trabajo · " + minutos + " min de lectura";
+    cabecera.insertAdjacentElement("afterbegin", etiqueta);
+
+    var meta = cabecera.querySelector(".quarto-title-meta");
+    var ruta = window.location.pathname.split("/").pop() || "converger.html";
+    var pdf = ruta.replace(/\.html?$/, ".pdf");
+    var acciones = document.createElement("div");
+    acciones.className = "acciones-portada";
+    acciones.innerHTML =
+      '<a class="principal" href="' + pdf + '" target="_blank" rel="noopener">Ver PDF</a>' +
+      '<a class="secundario" href="#sec-intro">Empezar a leer ↓</a>' +
+      '<button class="secundario" type="button" id="boton-copiar">Copiar enlace</button>';
+    (meta || cabecera.querySelector(".quarto-title")).insertAdjacentElement("afterend", acciones);
+    document.getElementById("boton-copiar").addEventListener("click", function () {
+      navigator.clipboard.writeText(window.location.href.split("#")[0])
+        .then(function () { avisar("Enlace copiado"); });
+    });
+  }
+
+  // Barra de progreso y botón para volver arriba
+  var barra = document.getElementById("barra-progreso");
+  var arriba = document.getElementById("boton-arriba");
+  function alBajar() {
+    var alto = document.documentElement.scrollHeight - window.innerHeight;
+    var y = window.scrollY;
+    barra.style.width = (alto > 0 ? (y / alto) * 100 : 0) + "%";
+    arriba.classList.toggle("visible", y > 600);
+  }
+  window.addEventListener("scroll", alBajar, { passive: true });
+  alBajar();
+  arriba.addEventListener("click", function () { window.scrollTo({ top: 0, behavior: "smooth" }); });
+
+  // Tablas con desplazamiento horizontal en pantallas chicas
+  document.querySelectorAll("main table").forEach(function (t) {
+    if (t.parentElement.classList.contains("tabla-envoltura")) return;
+    var env = document.createElement("div");
+    env.className = "tabla-envoltura";
+    t.parentNode.insertBefore(env, t);
+    env.appendChild(t);
+  });
+
+  // Figuras ampliables
+  var visor = document.getElementById("visor");
+  var visorImg = visor.querySelector("img");
+  var visorTxt = visor.querySelector("p");
+  function cerrar() { visor.classList.remove("abierto"); }
+  document.querySelectorAll("main img").forEach(function (img) {
+    img.addEventListener("click", function () {
+      var fig = img.closest("figure") || img.closest("div.quarto-float, div.quarto-figure");
+      var pie = fig ? fig.querySelector("figcaption") : null;
+      if (!pie) {
+        var sig = img.closest("p") ? img.closest("p").nextElementSibling : null;
+        pie = sig && sig.tagName === "P" ? sig : null;
+      }
+      visorImg.src = img.src;
+      visorImg.alt = img.alt || "";
+      visorTxt.textContent = pie ? pie.innerText : "";
+      visor.classList.add("abierto");
+    });
+  });
+  visor.addEventListener("click", cerrar);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") cerrar(); });
+
+  // Aparición suave de figuras y tablas
+  if ("IntersectionObserver" in window) {
+    var obs = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add("visto"); obs.unobserve(en.target); }
+      });
+    }, { rootMargin: "0px 0px -8% 0px" });
+    document.querySelectorAll("main div.quarto-float, main section > p > img, main section.level1 > h1")
+      .forEach(function (el) { el.classList.add("revelar"); obs.observe(el); });
+  }
+
+  // Copiar el enlace de una sección al hacer clic en su ancla
+  document.querySelectorAll("main a.anchorjs-link").forEach(function (a) {
+    a.addEventListener("click", function () {
+      navigator.clipboard && navigator.clipboard.writeText(a.href).then(function () { avisar("Enlace a la sección copiado"); });
+    });
+  });
 });
 </script>
