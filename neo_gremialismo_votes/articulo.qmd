@@ -6,7 +6,7 @@ date: last-modified
 date-format: long
 lang: es
 abstract: |
-  La izquierda y la derecha chilenas se separan con claridad en la Cámara de Diputados. Este artículo pregunta cuánto se separan, en comparación, las dos derechas: la convencional, Chile Vamos (UDI, RN y Evópoli), y la radical, el Partido Republicano (PRCh). Analizamos las votaciones nominales sobre indicaciones entre 2016 y 2026. Un modelo de lenguaje codifica qué implica votar Sí a cada indicación; estimamos posiciones con B-Call y modelos lineales de probabilidad con efectos fijos por diputado, y expresamos la distancia entre las derechas como fracción de la que separa a la derecha convencional de la izquierda. El hallazgo más sólido es la convergencia en contenido: en la dimensión principal de la Cámara, la distancia entre las derechas va de 2% a 24% de la vara, y en economía y orden el texto mueve igual a ambas. Dos diferencias son tentativas. En lo valórico, la brecha llega a la mitad de la vara, pero descansa en pocas votaciones y no resiste la corrección por comparaciones múltiples. En la oposición al Ejecutivo, el PRCh vota más en contra del presupuesto y Chile Vamos lo sigue a medias, pero esa medida todavía no descarta explicaciones de posición, como la exclusión de la negociación o el tamaño de la bancada. Las conclusiones valen para la Cámara de Diputados y las votaciones sobre indicaciones.
+  La izquierda y la derecha chilenas se separan con claridad en la Cámara de Diputados. Este artículo pregunta qué pasó dentro de la derecha cuando entró el Partido Republicano (PRCh) junto a la derecha convencional de Chile Vamos (UDI, RN y Evópoli). Analizamos las votaciones nominales sobre indicaciones entre 2016 y 2026 en tres bloques. El primero usa B-Call y el índice de Rice: en ningún año un diputado de derecha queda a la izquierda de uno de izquierda, cada partido de derecha vota muy cohesionado y la derecha tomada en conjunto pierde cohesión desde 2022, porque la división aparece entre partidos y no dentro de ellos. El segundo muestra que el PRCh desordenó las etiquetas, con más cambios de grupo, y ordenó el voto: la UDI y RN quedan más compactas, no se mueven de posición y casi no pierden votos hacia el PRCh, mientras parte del centro se acerca a la derecha. El tercero combina dos codificaciones con modelos de lenguaje y un diccionario de tópicos: ante el mismo texto, las derechas convergen cuando el Sí va hacia más mercado y se separan cuando va hacia más Estado, sobre todo si el texto viene del Ejecutivo de Boric. La diferencia valórica es grande pero descansa en pocas votaciones. Las conclusiones valen para la Cámara de Diputados y las votaciones sobre indicaciones.
 format:
   html:
     theme: default
@@ -17,143 +17,232 @@ format:
     number-sections: true
     embed-resources: true
     smooth-scroll: true
+    html-math-method: katex
 ---
 
 # Introducción {#sec-intro}
 
-Las dos derechas de la Cámara convergen en el contenido de lo que votan. Se separan, de forma todavía tentativa, en lo valórico y en la intensidad de la oposición al Ejecutivo. Entre 2016 y 2026, UDI, RN, Evópoli y el PRCh quedan a unas dos desviaciones estándar de la mediana de la izquierda (@tbl-camara y el panel A de @fig-posicion). En el mapa de 2022-2026 el PRCh se superpone con la UDI en el mismo extremo (@fig-mapa). La distancia entre el PRCh y la UDI es, según el año, entre un 2% y un 24% de la que separa a la UDI de la izquierda (@tbl-cuanto). En la dimensión que ordena la Cámara, el PRCh es una variante dentro del bloque de derecha.
+La llegada del Partido Republicano (PRCh) a la Cámara no partió a la derecha chilena en dos. La dejó con dos polos dentro del mismo bloque, que coinciden en lo que votan y se separan en cómo enfrentan al Ejecutivo. Este artículo llega a esa conclusión en tres pasos, y cada uno responde una pregunta distinta.
 
-En el contenido, un texto pro-mercado sube en 4 puntos el Sí de ambas derechas, y uno de orden y castigo las mueve en torno a 13 (@tbl-si y @fig-efecto). Ante un texto conservador la brecha es más grande: el PRCh sube 43 puntos y la derecha tradicional 19, cerca de la mitad de la vara que las separa de la izquierda. Esa diferencia valórica descansa en pocas votaciones y no pasa la corrección del panel B de @fig-efecto. En nación las dos derechas votan Sí casi siempre. El orden no polariza a la Cámara: la izquierda queda en cero.
+El primero pregunta si la izquierda y la derecha se diferencian y, dado que sí, cuán cohesionadas están las derechas. En B-Call, entre 2016 y 2026, ningún diputado de derecha queda a la izquierda de un diputado de izquierda, y la distancia entre los dos bloques nunca baja de 7,6 desviaciones estándar (@fig-separacion). La mayoría de cada lado vota distinto en el 46% de las votaciones de 2016-17 y en el 86% de las de 2025-26. Dentro de la derecha, cada partido vota muy unido: el índice de Rice del PRCh está entre 0,99 y 1,00, y el de la UDI y RN entre 0,86 y 0,96 (@fig-cohesion-dentro). Lo que cae es la cohesión de la derecha tomada en conjunto. La distancia entre el Rice promedio de sus partidos y el Rice de la derecha completa es casi cero en 2016-17, de 0,03 a 0,05 con Evópoli en 2018-22, y de 0,07 a 0,12 desde que entra el PRCh (@fig-cohesion-entre). La división nueva está entre partidos, no dentro de ellos.
 
-En la táctica, medida en las leyes de Presupuestos, el No del PRCh pasa de 33% en 2023 a 67% en 2025, y ChV lo sigue a medias (@tbl-presupuesto y @fig-presupuesto). El acuerdo de la UDI con la mayoría del PRCh baja de 82% a 73% entre 2023 y 2025, y vuelve a 91% en 2026. @sec-robustez deja abierto si ese endurecimiento es táctica o si viene de la posición del PRCh en la Cámara.
+El segundo pregunta si el PRCh ordenó o desordenó ese espacio. Desordenó las etiquetas: los cambios de grupo que tocan a la derecha pasan de entre 0 y 3 por año a entre 4 y 10, y casi todos giran en torno a la propia nueva derecha, con republicanos que pasan a votar como independientes y terminan en el Partido Nacional Libertario (PNL) (@fig-cambios). Y ordenó el voto. La dispersión interna de la UDI y RN, que llega a 0,37 y 0,44 en 2021-22, cae a entre 0,05 y 0,10 desde 2022-23, y la parte de la variación de posición dentro de la derecha que explica el grupo sube de 15% a 63% (@fig-orden). La UDI está en 2,16 desviaciones de la izquierda en 2016-17 y en 2,15 en 2025-26: el PRCh no la arrastró. Quienes sí se movieron hacia la derecha están en el centro, con Demócratas, y entre los independientes, que votan con la derecha más del 90% de las veces (@fig-atraccion).
 
-En la Cámara de Diputados de Chile, la división entre izquierda y derecha es la que más ordena el voto. Desde el plebiscito de 1988, la competencia partidaria se organizó en dos bloques (Tironi y Agüero, 1999; Torcal y Mainwaring, 2003), y en las votaciones nominales la coalición pesó más que el partido (Alemán y Saiegh, 2007). Esa división sigue ahí: en la escala de B-Call de 2022 a 2026, los partidos de derecha quedan a unas dos desviaciones estándar de la mediana de la izquierda (@tbl-camara).
+El tercero pregunta qué movió a las derechas. Un termómetro mercado-Estado, codificado con un modelo de lenguaje, muestra que bajo Piñera la derecha votaba casi igual los textos que ampliaban el Estado y los que lo achicaban, y que bajo Boric empezó a votar según ese eje (@fig-respuesta). Ante textos de más mercado, todas las derechas votan Sí entre 81% y 88% de las veces. Ante textos de más Estado se separan: el PRCh vota Sí el 36% de las veces y la UDI y RN el 49% y el 53%. La división es más probable cuando el texto viene del Ejecutivo: la mayoría del PRCh y la de la derecha tradicional votan distinto en el 22% de las indicaciones del Ejecutivo y en el 6% de las de diputados (@fig-divide). En el libro de códigos de cinco ejes, un texto pro-mercado sube en 4 puntos el Sí de las dos derechas y uno conservador sube 43 el del PRCh y 19 el de la derecha tradicional, una brecha que descansa en pocas votaciones (@tbl-si). En el presupuesto, el No del PRCh pasa de 33% en 2023 a 67% en 2025, y la UDI lo sigue a medias (@tbl-presupuesto).
 
-Lo que cambió es la derecha. En la elección de consejeros constitucionales del 7 de mayo de 2023, el Partido Republicano (PRCh) obtuvo 35,5% de los votos y Chile Vamos (ChV), la coalición de la derecha convencional, 21%. En diciembre de 2025, José Antonio Kast ganó la elección presidencial, y asumió el 11 de marzo de 2026, un día después del cierre de nuestros datos.^[Falta citar los resultados oficiales del Servel. El argumento no descansa en este hecho: los datos terminan antes del nuevo gobierno.] El ascenso de la derecha radical obliga a preguntar cómo responde la derecha convencional: si converge con ella o se diferencia.
+En la Cámara de Diputados de Chile, la división entre izquierda y derecha es la que más ordena el voto. Desde el plebiscito de 1988, la competencia partidaria se organizó en dos bloques (Tironi y Agüero, 1999; Torcal y Mainwaring, 2003), y en las votaciones nominales la coalición pesó más que el partido (Alemán y Saiegh, 2007). Lo que cambió es la derecha. En la elección de consejeros constitucionales del 7 de mayo de 2023, el PRCh obtuvo 35,5% de los votos y Chile Vamos (ChV), la coalición de la derecha convencional, 21%. En diciembre de 2025, José Antonio Kast ganó la elección presidencial y asumió el 11 de marzo de 2026, un día después del cierre de nuestros datos.^[Falta citar los resultados oficiales del Servel. El argumento no descansa en este hecho: los datos terminan antes del nuevo gobierno.] El ascenso de la derecha radical obliga a preguntar cómo responde la convencional.
 
-El problema tiene dos niveles, y el segundo es el que este artículo viene a medir. El primero es conocido: la izquierda y la derecha se diferencian, y esa diferencia es la vara. El segundo es cuánto se diferencian las derechas entre sí, medidas con esa vara, y en qué plano. Si la distancia entre el PRCh y ChV es una fracción menor de la que separa a la derecha de la izquierda, el PRCh es una variante dentro del bloque. Si se le acerca, abre una segunda división. Esa fracción es R. La vara se ve en el mapa de la Cámara (@fig-mapa), en la escala anual (@tbl-camara y el panel A de @fig-posicion) y en el cociente de @tbl-cuanto. Los dos planos en los que la distancia puede abrirse son el contenido, en @tbl-si y @fig-efecto, y la táctica, en @tbl-presupuesto y @fig-presupuesto.
+El problema tiene dos niveles. El primero es conocido: la izquierda y la derecha se diferencian, y esa diferencia sirve de vara. El segundo es el que este artículo mide: cuánto se diferencian las derechas entre sí con esa vara, si esa diferencia está dentro de los partidos o entre ellos, si la entrada del PRCh ordenó o desordenó el bloque, y en qué contenido y frente a quién se abre.
 
-El vacío de la literatura es anterior a esa medición. Los trabajos sobre cómo responde la derecha convencional al ascenso de la radical miran lo que los partidos dicen, sobre todo en sus programas (Meguid, 2008; Abou-Chadi y Krause, 2020; Krause et al., 2023). Un programa puede moderarse mientras el voto muestra otra cosa. Los estudios que sí miran el voto parlamentario miden cuánto coinciden o se enfrentan los partidos (Santos et al., 2025), y se detienen antes de preguntar qué implicaba cada voto. Sin esa pieza, un Sí compartido puede ser contenido compartido o una misma posición frente al gobierno, las dos lógicas que el voto nominal mezcla (Hix y Noury, 2016). El caso chileno deja el vacío más a la vista: la derecha radical es una escisión de la convencional, y se ha anticipado que esa cercanía facilita la cooperación (Díaz et al., 2023) sin examinarla en el comportamiento legislativo. Este artículo cierra ese vacío al codificar qué implica votar Sí (@tbl-codigo) y, con eso, separar el efecto del texto (@fig-efecto) de la intensidad de la oposición (@fig-presupuesto).
+El vacío de la literatura es anterior a esa medición. Los trabajos sobre cómo responde la derecha convencional al ascenso de la radical miran lo que los partidos dicen, sobre todo en sus programas (Meguid, 2008; Abou-Chadi y Krause, 2020; Krause et al., 2023). Un programa puede moderarse mientras el voto muestra otra cosa. Los estudios que sí miran el voto parlamentario miden cuánto coinciden o se enfrentan los partidos (Santos et al., 2025), y se detienen antes de preguntar qué implicaba cada voto. Sin esa pieza, un Sí compartido puede ser contenido compartido o una misma posición frente al gobierno, las dos lógicas que el voto nominal mezcla (Hix y Noury, 2016). El caso chileno deja el vacío más a la vista: la derecha radical es una escisión de la convencional, y se ha anticipado que esa cercanía facilita la cooperación (Díaz et al., 2023) sin examinarla en el comportamiento legislativo.
 
-Para hacerlo, usamos las votaciones nominales sobre indicaciones entre 2016 y 2026. Un modelo de lenguaje codifica qué implica votar Sí a cada una, B-Call estima la posición de los diputados y cada brecha entre las derechas se expresa como fracción de la brecha entre la derecha convencional y la izquierda.
+El artículo llena ese vacío en tres planos. En lo conceptual, separa la diferencia entre bloques de la diferencia dentro del bloque, y dentro de esta, la cohesión de cada partido de la cohesión entre partidos, el orden del voto del orden de las etiquetas y el contenido de la táctica. En lo empírico, lleva la pregunta del programa al voto en una escisión de la propia derecha. En lo metodológico, combina B-Call, que mide posición y cohesión al mismo tiempo (Toro-Maureira et al., 2025), con dos codificaciones de texto hechas por un modelo de lenguaje y validadas contra un segundo modelo, y con un diccionario de tópicos que describe la agenda.
 
-La respuesta de ChV puede darse en dos planos. El contenido es votar parecido cuando el texto va hacia la derecha. La táctica es la intensidad con que se hace oposición al Ejecutivo. Esos tres resultados llenan el vacío en tres pasos. En lo conceptual, el artículo separa el contenido de la táctica, de modo que la pregunta pasa a ser en qué plano converge ChV y cuánto. En lo empírico, lleva la pregunta del programa al voto, en una escisión de la propia derecha, y mide esa distancia con la vara de @tbl-camara. En lo metodológico, codifica qué implica votar Sí con un modelo validado contra un segundo modelo (@tbl-codigo y la figura A1) y aplica B-Call dentro de la derecha, la extensión que Toro-Maureira et al. (2025) proponen en su conclusión y no evalúan. La Ley de Presupuestos acerca el diseño a un panel, porque las mismas partidas se votan cada año (@tbl-presupuesto).
+@sec-teoria presenta la teoría y @sec-hipotesis las hipótesis. @sec-datos describe los datos, las medidas y sus fórmulas. Los resultados van en tres secciones: la división y la cohesión (@sec-bloque1), el orden y el desorden (@sec-bloque2) y lo que movió a las derechas (@sec-bloque3). @sec-discusion discute los resultados a la luz del proyecto Fondecyt «La derecha en disputa» y @sec-robustez reúne los límites.
 
-La teoría está en @sec-niveles y @sec-teoria, y las expectativas en @sec-expectativas. @sec-datos describe datos y métodos, @sec-resultados presenta los resultados y @sec-discusion los discute a la luz del proyecto Fondecyt «La derecha en disputa». @sec-robustez reúne las pruebas pendientes.
+# Teoría {#sec-teoria}
 
 ## Dos niveles de diferencia {#sec-niveles}
 
-La distancia entre partidos es un concepto relativo: importa cuán lejos están dos partidos en comparación con el resto del sistema (Sartori, 1976). Por eso este artículo mide la distancia entre las derechas con la vara de la división principal.
-
-En Chile, esa división tiene una raíz conocida. La dictadura produjo una fisura entre autoritarismo y democracia que, desde el plebiscito de 1988, ordenó a los partidos en dos bloques (Tironi y Agüero, 1999) y eclipsó a las demás divisiones (Torcal y Mainwaring, 2003). En la Cámara, la pertenencia a la coalición ordenó el voto más que la posición de cada partido (Alemán y Saiegh, 2007).
+La distancia entre partidos es un concepto relativo: importa cuán lejos están dos partidos en comparación con el resto del sistema (Sartori, 1976). Por eso este artículo mide la distancia entre las derechas con la vara de la división principal. En Chile, esa división tiene una raíz conocida. La dictadura produjo una fisura entre autoritarismo y democracia que, desde 1988, ordenó a los partidos en dos bloques (Tironi y Agüero, 1999) y eclipsó a las demás divisiones (Torcal y Mainwaring, 2003). En la Cámara, la pertenencia a la coalición ordenó el voto más que la posición de cada partido (Alemán y Saiegh, 2007).
 
 El PRCh nace dentro de uno de esos bloques. Kast no es un outsider: militó veinte años en la UDI antes de renunciar en 2016 y fundar el PRCh en 2019, y ambos partidos comparten redes. Si la división principal sigue ordenando el voto, la distancia entre el PRCh y ChV debería ser una fracción menor de la que separa a la derecha de la izquierda.
 
-Que sea menor no significa que sea nula. La derecha chilena nunca fue homogénea: combina conservadurismo moral, socialcristianismo y liberalismo económico, y sus dirigentes difieren en su visión del Estado, con diferencias que cruzan a los partidos (Alenda, 2020). Tampoco ha votado siempre igual en la oposición: entre 2002 y 2006, la UDI aprobó cerca del 11% de los proyectos del Ejecutivo y RN cerca del 36% (Toro Maureira, 2007). La diferencia dentro de la derecha puede estar en el programa o en la forma de hacer oposición.
+Una distancia menor puede tomar dos formas, y la diferencia importa. La cohesión de un grupo legislativo se mide desde Rice (1925) como la proporción en que sus miembros votan en la misma dirección, y la literatura comparada la estudia tanto para partidos como para coaliciones (Hix et al., 2005; Carey, 2007). Un bloque puede perder cohesión porque sus partidos se dividen por dentro, o porque partidos cohesionados votan en direcciones distintas. La primera forma es indisciplina; la segunda, una línea de división entre partidos. Con un partido nuevo que nace por escisión, la segunda es la esperable: los que se van se llevan su diferencia, y lo que queda en cada partido es más homogéneo.
 
-En el programa, hay razones para esperar que la diferencia esté en lo valórico. Rovira Kaltwasser (2019) muestra que RN, la UDI y Evópoli moderaron sus programas en economía y en temas morales, y sugiere que esa moderación dejó huérfano a un segmento del electorado que una derecha radical podía captar. Pero, según el mismo autor, la moderación económica fue selectiva: ChV mantuvo, por ejemplo, la defensa del sistema privado de pensiones. Y Díaz et al. (2023) describen al PRCh como autoritario, nativista y populista, pero con posiciones económicas neoliberales claras. Si ambos tienen razón, las derechas deberían coincidir en economía y separarse en lo moral.
+Que la distancia sea menor tampoco significa que sea nula. La derecha chilena combina conservadurismo moral, socialcristianismo y liberalismo económico, y sus dirigentes difieren en su visión del Estado, con diferencias que cruzan a los partidos (Alenda, 2020). Tampoco ha votado siempre igual en la oposición: entre 2002 y 2006, la UDI aprobó cerca del 11% de los proyectos del Ejecutivo y RN cerca del 36% (Toro Maureira, 2007).
 
-## Contenido y táctica {#sec-teoria}
+## Ordenar o desordenar {#sec-orden}
 
-Los estudios sobre la derecha radical describen su normalización: deja de ser marginal y sus temas entran al sentido común y a la agenda de otros partidos (Mudde, 2019). Gidron y Ziblatt (2019) sostienen que su éxito no se entiende sin las decisiones de la derecha mainstream.
+La entrada de un partido nuevo puede ordenar o desordenar un bloque, y conviene distinguir dos planos. El primero son las etiquetas. Los legisladores cambian de partido cuando el cambio les mejora la posición electoral o el acceso a recursos, y esos cambios se concentran en momentos de reacomodo del sistema (Heller y Mershon, 2009). Un partido que crece desde dentro de un bloque abre una salida para los legisladores más cercanos a él, y esa salida puede ser escalonada: primero se declaran independientes y después ingresan al partido nuevo, o a una nueva escisión. Ese movimiento desordena las etiquetas aunque no cambie el voto de nadie.
 
-Para esas decisiones hay una tipología conocida: desdén, conflicto y convergencia o adaptación (Meguid, 2008; Bale et al., 2010; Downs, 2001). Con el desdén, el partido convencional le resta relevancia al tema del radical; con el conflicto, toma la posición contraria; con la convergencia, adopta su posición y le disputa el tema. En Europa occidental, la derecha convencional ha enfrentado a la radical con resultados dispares, y su cambio más claro es la adopción de posiciones más restrictivas en inmigración (Bale y Rovira Kaltwasser, 2021).
+El segundo plano es el voto. Si los que salen eran los más extremos de su partido, el partido que queda se vuelve más compacto, y los grupos quedan mejor clasificados: cada uno ocupa su propio tramo del eje. Ese es el sentido en que una escisión puede ordenar. El partido nuevo puede además atraer a quienes estaban fuera del bloque, como los independientes o el centro, si el espacio que deja libre la derecha convencional o la polarización del período los empuja hacia la derecha. La pregunta empírica es cuál de estas cosas pasó, y a quién: a los partidos de ChV, a los independientes o al centro.
 
-En Chile, el desdén y el conflicto son poco probables, por la cercanía de origen entre ambos partidos. La pregunta relevante es cuánto y en qué converge ChV, y si esa convergencia varía con el calendario electoral.
+## Contenido y táctica {#sec-contenido}
 
-Proponemos que la convergencia puede ocurrir en dos planos. El contenido es la respuesta a la dirección de lo que se vota: dos partidos convergen si votan igual ante el mismo texto. La táctica es cómo se vota más allá del contenido. Un partido puede converger en un plano y diferenciarse en el otro.
+Los estudios sobre la derecha radical describen su normalización: deja de ser marginal y sus temas entran a la agenda de otros partidos (Mudde, 2019). Gidron y Ziblatt (2019) sostienen que su éxito no se entiende sin las decisiones de la derecha mainstream. Para esas decisiones hay una tipología conocida: desdén, conflicto y convergencia o adaptación (Downs, 2001; Meguid, 2008; Bale et al., 2010). En Europa occidental, el cambio más claro de la derecha convencional es la adopción de posiciones más restrictivas en inmigración (Bale y Rovira Kaltwasser, 2021). En Chile, el desdén y el conflicto son poco probables por la cercanía de origen, y la pregunta relevante es cuánto y en qué converge ChV.
 
-La distinción tiene apoyo en dos literaturas. Hix y Noury (2016) muestran que el voto legislativo mezcla la posición de izquierda o derecha con la posición frente al gobierno, y que el peso de cada una depende de las instituciones. Y los partidos populistas hacen oposición de otra forma: en el parlamento neerlandés participan menos en la elaboración de políticas y algo más en el control del gobierno, incluido el voto contra sus proyectos (Louwerse y Otjes, 2019). Si el PRCh se comporta así, debería distinguirse más en la táctica que en el contenido.
+Proponemos que la convergencia puede ocurrir en dos planos. El contenido es la respuesta a la dirección de lo que se vota: dos partidos convergen si votan igual ante el mismo texto. La táctica es la intensidad de la oposición al Ejecutivo a igual contenido. Hix y Noury (2016) muestran que el voto legislativo mezcla la posición de izquierda o derecha con la posición frente al gobierno. Los partidos populistas, además, hacen oposición de otra forma: en el parlamento neerlandés participan menos en la elaboración de políticas y más en el control del gobierno, incluido el voto contra sus proyectos (Louwerse y Otjes, 2019). Si el PRCh se comporta así, debería distinguirse más en la táctica que en el contenido.
 
-### Qué es táctica y qué no {#sec-tactica}
+En el contenido, hay razones para esperar que la diferencia esté en lo valórico y no en lo económico. Rovira Kaltwasser (2019) muestra que RN, la UDI y Evópoli moderaron sus programas en economía y en temas morales, y que la moderación económica fue selectiva. Díaz et al. (2023) describen al PRCh como autoritario, nativista y populista, con posiciones económicas neoliberales claras. Si ambos tienen razón, las derechas deberían coincidir ante los textos de más mercado. Ante los de más Estado, la cosa cambia, porque ahí el contenido se cruza con la táctica: con un gobierno de izquierda, casi todo lo que amplía el Estado lo propone el Ejecutivo, y la derecha convencional, que gobernó hasta 2022 y coordina su voto como coalición, tiene más incentivos para negociarlo que un partido que se presenta como alternativa. El eje mercado-Estado es entonces el lugar donde contenido y táctica se pueden separar: la misma dirección del texto, con y sin el Ejecutivo detrás.
 
-La táctica necesita una definición operativa, porque si no se vuelve el residuo de todo lo que el contenido no explica. La definimos como **la intensidad de la oposición al Ejecutivo a igual contenido del texto**. Esa intensidad puede verse al votar en contra de lo que propone el Ejecutivo, al apoyar votos de protesta como las rebajas simbólicas del presupuesto, en la disciplina interna y los votos contra la propia coalición, en la abstención y la ausencia estratégicas, en herramientas de control como interpelaciones o mociones de rechazo, y en la presentación de indicaciones y la participación en comisiones. Este artículo mide solo las dos primeras, y solo en el presupuesto. Son el porcentaje de No y el apoyo a rebajas simbólicas de @tbl-presupuesto y @fig-presupuesto. El resto queda fuera de las figuras, y por eso la táctica de este documento es una táctica presupuestaria.
+La táctica necesita una definición operativa para no volverse el residuo de todo lo que el contenido no explica. La definimos como la intensidad de la oposición al Ejecutivo a igual contenido del texto. Puede verse al votar en contra de lo que propone el Ejecutivo, al apoyar rebajas simbólicas del presupuesto, en la disciplina y en la abstención estratégica, entre otras herramientas. Este artículo mide el voto ante las indicaciones del Ejecutivo y, en el presupuesto, el No y el apoyo a las rebajas simbólicas. Una oposición más dura puede venir también de la posición del partido en la Cámara, como la exclusión de la negociación o el tamaño de la bancada, y esa explicación queda abierta en @sec-robustez.
 
-Una oposición más dura puede venir además de la posición del partido en la Cámara, y cada explicación deja una huella que estas figuras todavía no separan. Si el PRCh queda fuera de la negociación, su No debería concentrarse en lo pactado con el gobierno. Si pesa el tamaño, una bancada chica paga menos por votar en contra, y el No debería ser mayor cuando el margen es amplio que cuando la votación es estrecha. ChV coordina su voto como coalición y gobernó hasta 2022, mientras el PRCh vota fuera de ella y no ha gobernado, de modo que en 2022–2026 las dos derechas están en la oposición con una situación distinta frente al gobierno. El calendario electoral premia la diferenciación y es una causa posible de esa táctica: es la expectativa 5, que se lee en el panel central de @fig-presupuesto. Mientras estas explicaciones no se descarten, la diferencia en la oposición al Ejecutivo se presenta como tentativa.
+Para el partido radical, el Fondecyt plantea una estrategia dual: moderación para legitimarse en el sistema político y fortalecimiento ideológico para movilizar a su núcleo. En el voto, la primera se vería como convergencia en contenido con la derecha convencional, y la segunda como diferenciación en la táctica y en los temas de la batalla cultural.
 
-Para el partido radical, el Fondecyt plantea una estrategia dual: moderación para legitimarse en el sistema político y fortalecimiento ideológico para movilizar a su núcleo. En el voto, la primera se vería como convergencia en contenido con la derecha convencional, y la segunda como diferenciación en táctica y en los temas de la batalla cultural.
+# Hipótesis {#sec-hipotesis}
 
-## Expectativas {#sec-expectativas}
+De ese marco salen seis hipótesis. Cada una tiene una medida, definida en @sec-datos, y una figura o tabla donde se lee el resultado. @tbl-hipotesis las retoma al final con la lectura.
 
-De ese problema salen cinco expectativas, y cada una tiene una tabla o una figura donde se lee el resultado. @tbl-expectativas las retoma al final, ya con la lectura.
+La primera fija la jerarquía de distancias (H1). La izquierda y la derecha deberían separarse sin superponerse, y la distancia entre el PRCh y ChV debería ser una fracción menor de esa separación. En las medidas de @sec-medidas, el solapamiento entre izquierda y derecha $\Omega$ debería estar cerca de cero y el cociente $R$ entre las dos distancias, lejos de uno. Se lee en @fig-separacion y @tbl-cuanto.
 
-La primera fija la jerarquía de distancias. En la dimensión principal de la Cámara, la distancia entre el PRCh y ChV debería ser una fracción menor de la que separa a la derecha de la izquierda. Esa fracción es R. Se calcula con la posición de @tbl-camara, se ve en el panel A de @fig-posicion y se resume en las primeras filas de @tbl-cuanto. Si R se mantiene cerca de cero, el PRCh es una variante del bloque. Si se acerca a uno, abre una segunda división, y el mapa de @fig-mapa dejaría de mostrar un solo extremo de derecha.
+La segunda dice dónde está la división dentro de la derecha (H2). Cada partido de derecha debería mantener una cohesión alta, y la cohesión de la derecha completa debería caer con la entrada del PRCh. En las medidas, el Rice de cada partido se mantiene alto y la pérdida $\Delta$ entre el Rice promedio de los partidos y el Rice conjunto crece desde 2022. Se lee en @fig-cohesion-dentro y @fig-cohesion-entre.
 
-Las tres siguientes dicen en qué plano puede abrirse esa distancia, que es justo el vacío que el voto coincidente no puede cerrar. En orden, nación y economía, un texto hacia el polo de derecha debería mover el Sí de ambas derechas en magnitudes parecidas. Esa convergencia en contenido aparece cuando las derechas se superponen en @tbl-si y en el panel A de @fig-efecto, y cuando R queda cerca de cero en las filas de contenido de @tbl-cuanto. En lo valórico, el texto conservador debería mover más el Sí del PRCh que el de ChV. Esa brecha se juzga en la fila conservadora de @tbl-si y en el panel B de @fig-efecto, que compara a las dos derechas en las mismas votaciones y corrige por los cinco ejes. En la táctica, a igual contenido, el PRCh debería oponerse más a las iniciativas de un Ejecutivo de izquierda. La medida disponible es el presupuesto: el porcentaje de No y las rebajas simbólicas de @tbl-presupuesto y @fig-presupuesto.
+La tercera es la del orden (H3). La entrada del PRCh debería desordenar las etiquetas y ordenar el voto: más cambios de grupo en la derecha y, al mismo tiempo, menor dispersión interna de la UDI y RN y mayor clasificación de los grupos ($\eta^2$). Se lee en @fig-cambios y @fig-orden.
 
-La quinta es la oscilación electoral, la H5 del Fondecyt. El acuerdo de ChV con el PRCh debería caer cuando compiten, como en las municipales y regionales de 2024, y subir cuando importa coordinarse, como en la presidencial de 2025. Esa serie es el panel central de @fig-presupuesto, el porcentaje de votos que coincide con la mayoría republicana.
+La cuarta es la de la atracción (H4). El PRCh no debería mover la posición de la UDI y RN, y sí debería ampliar el bloque hacia independientes y parte del centro. Se lee en @fig-atraccion y @fig-panel.
+
+La quinta es la del contenido (H5). Ante textos que van hacia más mercado o hacia más orden, el Sí de las dos derechas debería moverse en magnitudes parecidas; ante textos conservadores, debería moverse más el del PRCh. Se lee en @tbl-si, @fig-efecto y @fig-respuesta.
+
+La sexta es la de la táctica (H6). A igual contenido, la división entre las derechas debería concentrarse en las iniciativas de un Ejecutivo de izquierda, y en el presupuesto el PRCh debería oponerse más que ChV. Si la oscilación electoral de la H5 del Fondecyt opera, el acuerdo de ChV con el PRCh debería caer cuando compiten, como en las municipales y regionales de 2024, y subir cuando importa coordinarse, como en la presidencial de 2025. Se lee en @fig-divide, @tbl-divide, @tbl-presupuesto y @fig-presupuesto.
 
 # Datos y métodos {#sec-datos}
 
-**Universo.** Votaciones nominales sobre indicaciones en la Sala de la Cámara, del 11 de marzo de 2016 al 10 de marzo de 2026, tomadas de una base de 3.809 votaciones de indicaciones desde 2010. El voto se codifica Sí = 1, No = −1 y abstención = 0; la ausencia queda fuera.
+## Universo y grupos {#sec-universo}
 
-**Bloques.** Derecha tradicional: UDI, RN y Evópoli. Nueva derecha: PRCh (REP en los datos) y, desde 2025-26, PNL.^[En la historiografía chilena, «nueva derecha» designó a la derecha que la dictadura y sus reformas de mercado reconfiguraron, la UDI y RN (Pollack, 1999). Aquí el término solo distingue a los partidos fundados desde 2019.] Un independiente cuenta como derecha si vota con la mayoría de la derecha en al menos el 75% de las votaciones en que derecha e izquierda se dividen.
+El universo son las votaciones nominales sobre indicaciones en la Sala de la Cámara, del 11 de marzo de 2016 al 10 de marzo de 2026: 2.677 votaciones, tomadas de una base de 3.809 votaciones de indicaciones desde 2010. El voto se codifica Sí = 1, No = −1 y abstención = 0; la ausencia queda fuera. Los años son legislativos, del 11 de marzo al 10 de marzo.
 
-**Qué se codifica.** Un modelo de lenguaje (OpenAI, gpt-6-luna) lee solo el texto sometido a votación. La pregunta es una: qué implica votar Sí. Esa lectura es la que separa el contenido de la táctica. Sin ella, un Sí compartido puede ser un texto compartido o la misma posición frente al gobierno, y @tbl-si y @fig-efecto no se pueden armar.
+La derecha tradicional es la UDI, RN y Evópoli. La nueva derecha es el PRCh (REP en los datos) y, desde 2025-26, el PNL.^[En la historiografía chilena, «nueva derecha» designó a la derecha que la dictadura y sus reformas de mercado reconfiguraron, la UDI y RN (Pollack, 1999). Aquí el término solo distingue a los partidos fundados desde 2019.] La nueva derecha cuenta desde 2022-23, cuando tiene al menos tres diputados; antes tiene uno o dos. La izquierda es el PC, el PS, el PPD, el Frente Amplio, la FRVS, el PL y el PR. Un independiente cuenta como «IND con la derecha» si vota con la mayoría de la derecha en al menos el 75% de las votaciones del período en que la mayoría de la derecha y la de la izquierda votan distinto. El grupo de cada diputado en un año es el que más se repite en sus votos; si un diputado vota con más de una etiqueta en el mismo año, cada tramo cuenta como un cambio de grupo.
 
-**El prompt.** El modelo no recibe una pregunta abierta. El prompt lo sitúa como un politólogo que codifica votaciones de la Sala para una investigación académica, y le entrega el texto entre etiquetas. La autoría va reemplazada por «[autoría omitida]». La tarea es determinar qué implica votar Sí en cada dimensión, y las reglas acotan cómo. Usa solo ese texto: el proyecto, el gobierno, el partido y el resultado de la votación quedan fuera. Evalúa el efecto del cambio, no si la medida le parece conveniente. Si se vota suprimir una norma, el Sí va en la dirección contraria a lo suprimido: suprimir una exención es Pro-Estado y suprimir una pena es Garantías. Si se vota la admisibilidad, codifica el contenido de esa indicación. Una rebaja a un monto simbólico, como $1.000, se marca como protesta y el eje económico queda en «No aplica», salvo que el texto diga una política. Neutral y Mixta tienen un uso estrecho. Si hay duda, elige la dirección más probable y baja la confianza. Si el texto no permite saber qué cambia, los cinco ejes quedan en «No aplica». Cuando el texto trae varias indicaciones, codifica el conjunto que se vota. Después de esas reglas, el prompt enumera las variables en el orden en que deben escribirse. Cada una solo acepta las palabras de @tbl-codigo, y el esquema de salida exige copiarlas. El mismo prompt, con las mismas palabras, es el que usa DeepSeek en los 300 textos de validación y el que recibe quien codifica a mano.
+## B-Call {#sec-bcall}
 
-**Por qué un modelo generativo.** Esta tarea pide aplicar una regla a un texto jurídico nuevo. Contar palabras no alcanza, porque la misma materia cambia de signo según la operación: suprimir una exención tributaria empuja hacia el Estado y agregarla empuja hacia el mercado. Un diccionario de términos las trataría como el mismo tema y perdería la inversión que el prompt escribe de forma explícita. El corpus de indicaciones de la Sala hace inviable que un equipo aplique esa regla, con las mismas palabras, a cada texto de una sola vez. El modelo generativo entra como codificador. La lista está cerrada, el esquema rechaza una categoría parafraseada, y cada código tiene que apoyarse en una frase literal del texto. A @tbl-si y a @fig-efecto entra la dirección reducida a +1, −1 o 0, y solo cuando la confianza es alta o media. El resumen que escribe el modelo queda como descripción del texto. Un segundo modelo repite 300 textos con ese mismo prompt. El acuerdo, eje por eje, está en el apartado de validación y en la figura A1. Donde falla, en subsidiariedad, el eje queda provisional y no sostiene el resultado. La posición de los diputados la estima B-Call y la brecha la estiman los modelos lineales. El modelo de lenguaje no ve el partido ni cómo salió la votación.
+B-Call (Toro-Maureira et al., 2025) resume cada voto como su desvío del promedio de la votación, estandarizado y orientado. Para el diputado $i$ en la votación $j$, con voto $v_{ij}$, promedio $\bar v_j$ y desviación estándar $\sigma_j$,
 
-El libro de códigos es una lista cerrada de palabras. El modelo tiene que copiarlas al pie de la letra, y la codificación humana usa las mismas. Primero escribe un resumen de hasta 25 palabras. Después marca si el texto permite saber qué cambia. Si está cortado o es solo una referencia («1° y 4°, con indicaciones de la Comisión de Hacienda»), no es evaluable y los cinco ejes quedan en «No aplica».
+$$
+z_{ij} = s_j \, \frac{v_{ij} - \bar v_j}{\sigma_j}, \qquad s_j = \operatorname{signo}\!\left(\bar v_{D,j} - \bar v_{I,j}\right),
+$$
 
-Sobre ese texto codifica, con palabras cerradas, el objeto de lo que se vota (indicación, artículo con indicación, admisibilidad, texto sin indicación u otro), la operación (agregar, intercalar, reemplazar, suprimir, varias u otra) y la naturaleza del cambio. El cambio es sustantivo si altera derechos, obligaciones, sanciones, montos o el alcance de la norma; técnico si solo corrige la redacción; procedimental si solo cambia plazos o trámites. Codifica también el tema de la indicación, que puede diferir del tema del proyecto entero y va de la macroeconomía y la tributación a la migración, los pueblos indígenas o las relaciones internacionales, o queda como no determinable. Marca si el texto es de presupuesto (no, rebaja simbólica, reasignación o glosa) y la confianza de la lectura: alta si el texto es claro, media si hubo que inferir y baja si es fragmentario. Junto con la confianza copia una frase literal de evidencia, de hasta 20 palabras. Esas piezas describen el texto. La que entra a @tbl-si y a @fig-efecto es otra: la dirección del Sí.
+donde $s_j$ orienta la votación según el voto promedio de un grupo «derecho» $D$ y uno «izquierdo» $I$. La posición del diputado es el promedio de esos desvíos y su variabilidad, la desviación estándar:
 
-La dirección del Sí se codifica en cinco ejes. Cada uno tiene dos polos y tres salidas residuales. «Neutral» solo si el texto toca el eje y el cambio no mueve la balanza. «Mixta» solo si empuja de forma explícita en las dos direcciones. «No aplica» si el texto no toca esa materia. No se usa Neutral por duda: se elige la dirección más probable y se baja la confianza.
+$$
+d1_i = \frac{1}{J_i}\sum_{j} z_{ij}, \qquad d2_i = \sqrt{\frac{1}{J_i - 1}\sum_j \left(z_{ij} - d1_i\right)^2 }.
+$$
+
+Un $d2$ bajo es un voto consistente. Estimamos B-Call por año legislativo en dos universos: toda la Cámara y solo la derecha. En el universo de la derecha, el pivote es un diputado republicano desde 2022, y $d1$ positivo significa cercanía a la nueva derecha. Se excluye a quien vota en menos del 15% de las votaciones.
+
+Tres rasgos del método condicionan la lectura. El primero es el signo: dentro de la derecha, si los dos grupos coinciden con el PRCh y ChV, cada votación se orienta para separarlos, y parte de la distancia del panel B de @fig-posicion se produce por construcción, más con un grupo de 7 a 9 republicanos. Falta una prueba de permutación. El segundo es que los modelos de distintos años no comparten escala, así que $d1$ se lee dentro de cada año. Para comparar entre años usamos una escala anual común. Si $L$ son los diputados del PC, el PS, el FA y el PPD y $\operatorname{sd}_t$ es la desviación estándar de $d1$ entre los diputados del año $t$, la posición del grupo $g$ es
+
+$$
+P_{gt} = \frac{\operatorname{mediana}_{i \in g}\, d1_{it} - \operatorname{mediana}_{i \in L}\, d1_{it}}{\operatorname{sd}_t(d1)}.
+$$
+
+El tercero es que los diputados extremos tienden a ser más volátiles, así que $d2$ se compara entre grupos después de ajustarlo por la posición: es el residuo de una regresión de $d2$ sobre $d1$ y $d1^2$ dentro de cada año, $\tilde d2_{it} = d2_{it} - \widehat{d2}(d1_{it})$.
+
+## Medidas de separación, cohesión y orden {#sec-medidas}
+
+**Separación.** Con $d1$ de la Cámara, la distancia estandarizada entre la derecha ($D$) y la izquierda ($I$) es $\delta = (\tilde m_D - \tilde m_I) / \sqrt{(s_D^2 + s_I^2)/2}$, con $\tilde m$ la mediana y $s$ la desviación estándar de cada bloque. El solapamiento es la probabilidad de que un diputado de derecha quede a la izquierda de uno de izquierda,
+
+$$
+\Omega = \Pr\left(d1_D < d1_I\right) + \tfrac{1}{2}\Pr\left(d1_D = d1_I\right),
+$$
+
+que vale 0 con separación total y 0,5 si los bloques son iguales. En las votaciones, medimos además el porcentaje en que el voto mayoritario de cada lado difiere.
+
+**Cohesión dentro.** El índice de Rice del grupo $g$ en la votación $j$, con $S$ votos Sí y $N$ votos No, es
+
+$$
+\text{Rice}_{gj} = \frac{\lvert S_{gj} - N_{gj} \rvert}{S_{gj} + N_{gj}},
+$$
+
+y se promedia en las votaciones con al menos tres miembros votando. Vale 1 si todos votan igual.
+
+**Cohesión entre.** El acuerdo de mayorías entre los partidos $g$ y $h$ es la proporción de votaciones en que coincide su voto mayoritario $m$ (Sí, No o abstención), $A_{gh} = J^{-1}\sum_j \mathbf{1}[m_{gj} = m_{hj}]$. La división entre partidos se mide como la pérdida de cohesión al juntarlos: si $K$ son los partidos de derecha con al menos tres diputados,
+
+$$
+\Delta_j = \frac{1}{K}\sum_{g=1}^{K} \text{Rice}_{gj} \;-\; \text{Rice}_{D,j}.
+$$
+
+Si los partidos votan cohesionados en direcciones distintas, el Rice de la derecha completa $\text{Rice}_{D,j}$ cae y $\Delta_j$ crece.
+
+**Orden.** La dispersión interna de un partido es el rango intercuartil de $P$ entre sus diputados. La clasificación es la parte de la variación de $d1$ dentro de la derecha (universo derecha) que explica el grupo,
+
+$$
+\eta^2_t = 1 - \frac{\sum_i \left(d1_{it} - \bar d1_{g(i),t}\right)^2}{\sum_i \left(d1_{it} - \bar d1_{t}\right)^2},
+$$
+
+que es más alta cuando cada grupo ocupa su propio tramo. La atracción del PRCh es, en las votaciones en que la mayoría del partido $g$ y la del PRCh votan distinto, la proporción de votos de $g$ que coinciden con la mayoría republicana. Los cambios de grupo se cuentan como tramos consecutivos de votos con una etiqueta distinta para el mismo diputado.
+
+**Cuánto se diferencian.** Cada brecha entre las derechas se expresa como fracción de la brecha entre la derecha convencional y la izquierda en la misma medida:
+
+$$
+R = \frac{\text{nueva} - \text{tradicional}}{\text{tradicional} - \text{izquierda}}.
+$$
+
+Con $R = 0$, las derechas no se distinguen; con $R = 1$, se separan tanto como la derecha convencional de la izquierda. Lo calculamos en la posición $P$, con la UDI como referencia, y en el efecto del contenido sobre el Sí. No lo calculamos cuando la brecha entre izquierda y derecha es menor de 10 puntos.
+
+## Codificación de los textos con un modelo de lenguaje {#sec-llm}
+
+**Qué se codifica.** Un modelo de lenguaje (OpenAI, gpt-6-luna) lee solo el texto sometido a votación y responde qué implica votar Sí. Esa lectura es la que separa el contenido de la táctica. Sin ella, un Sí compartido puede ser un texto compartido o la misma posición frente al gobierno. Hay dos codificaciones. La primera es un libro de códigos de cinco ejes, que alimenta @tbl-si y @fig-efecto. La segunda es un termómetro mercado-Estado, que alimenta las figuras del tercer bloque. Las dos usan el mismo modelo, el mismo enmascaramiento de autores y un segundo modelo (DeepSeek, deepseek-v4-flash) como validador.
+
+**El prompt.** El modelo no recibe una pregunta abierta. El prompt lo sitúa como un experto que codifica votaciones de la Sala para una investigación académica, y le entrega el texto entre etiquetas, con la autoría reemplazada por «[autoría omitida]». Las reglas acotan la tarea. Usa solo ese texto: el proyecto, el gobierno, el partido y el resultado quedan fuera. Evalúa el efecto del cambio, no si la medida le parece conveniente. Si se vota suprimir una norma, el Sí va en la dirección contraria a lo suprimido: suprimir una exención es más Estado y suprimir una pena es más garantías. Una rebaja a un monto simbólico, como $1.000, se marca como protesta y no como política económica. Si el texto no permite saber qué cambia, no es evaluable y los ejes quedan en «No aplica». Cada variable solo acepta las palabras de su lista, y el esquema de salida exige copiarlas.
+
+**Por qué un modelo generativo.** Esta tarea pide aplicar una regla a un texto jurídico nuevo. Contar palabras no alcanza, porque la misma materia cambia de signo según la operación: suprimir una exención tributaria empuja hacia el Estado y agregarla empuja hacia el mercado. Un diccionario las trataría como el mismo tema y perdería la inversión que el prompt escribe de forma explícita. El corpus de indicaciones hace inviable que un equipo aplique esa regla, con las mismas palabras, a cada texto de una sola vez. El modelo generativo entra como codificador y no como juez: la lista está cerrada, el esquema rechaza categorías parafraseadas y un segundo modelo repite una muestra con el mismo prompt (Gilardi et al., 2023). El modelo no ve el partido de quien firma ni cómo salió la votación. La posición la estima B-Call y la brecha, los modelos lineales.
+
+**El libro de códigos de cinco ejes.** Primero el modelo escribe un resumen de hasta 25 palabras y marca si el texto es evaluable. Después codifica el objeto de lo que se vota, la operación, la naturaleza del cambio (sustantiva, técnica o procedimental), el tema, si es presupuesto (no, rebaja simbólica, reasignación o glosa), la confianza y una frase literal de evidencia. La dirección del Sí se codifica en cinco ejes, cada uno con dos polos y tres salidas residuales: «Neutral» solo si el texto toca el eje y no mueve la balanza, «Mixta» solo si empuja en las dos direcciones, «No aplica» si no toca esa materia.
 
 | Eje | +1, polo de derecha | −1 | Cuándo se usa el eje |
 |---|---|---|---|
 | Económico | Pro-mercado | Pro-Estado | Regulación, tributos, empresas y cargas a privados |
-| Subsidiariedad | Provisión privada | Provisión estatal | Solo si el texto regula quién provee un derecho social o la autonomía del prestador. No se infiere desde la macroeconomía |
-| Valórico | Conservadora | Progresista | Solo lo moral: familia, vida, sexualidad, religión o derechos de los padres. Un subsidio familiar no va aquí |
+| Subsidiariedad | Provisión privada | Provisión estatal | Solo si el texto regula quién provee un derecho social o la autonomía del prestador |
+| Valórico | Conservadora | Progresista | Solo lo moral: familia, vida, sexualidad, religión o derechos de los padres |
 | Orden | Orden y castigo | Garantías | Delitos, penas, policías, Fuerzas Armadas o la protesta |
 | Nación | Soberanista | Pluralista | Solo si el texto nombra migración, pueblos indígenas, plurinacionalidad, símbolos o soberanía |
 
-: Palabras del libro de códigos. La codificación humana tiene que usar estas mismas categorías, sin parafrasearlas. {#tbl-codigo}
+: Palabras del libro de códigos de cinco ejes. La codificación humana usa estas mismas categorías. {#tbl-codigo}
 
-En el análisis, cada eje se reduce a un número. La palabra del polo de derecha vale +1 y la contraria −1. Neutral, Mixta y No aplica valen 0. Si la confianza es Baja, el eje también vale 0: solo entran Alta y Media.
+En el análisis, cada eje se reduce a un número $x_{jk} \in \{-1, 0, +1\}$: la palabra del polo de derecha vale +1, la contraria −1, y Neutral, Mixta, No aplica y la confianza baja valen 0. DeepSeek codifica 300 textos con el mismo libro. El kappa en la escala reducida es 0,68 en el eje económico, 0,72 en el valórico, 0,71 en orden, 0,72 en nación y 0,42 en subsidiariedad, que queda provisional hasta que una persona codifique a ciegas sus 31 desacuerdos (figura A1).
 
-**Validación.** DeepSeek codifica 300 textos con el mismo libro de códigos. El kappa se calcula en la escala reducida (+1 / −1 / 0): económico 0,68, valórico 0,72, orden 0,71, nación 0,72 y subsidiariedad 0,42. Subsidiariedad queda provisional hasta que una persona codifique, a ciegas y con las mismas palabras, sus 31 desacuerdos. La figura A1 compara ese kappa con el del código anterior.
+**El termómetro mercado-Estado.** La segunda codificación hace una sola pregunta: hacia dónde mueve la balanza entre mercado y Estado votar Sí. El prompt define cada polo. Más Estado es más gasto o transferencias públicas, más impuestos o menos exenciones, más regulación o fiscalización, provisión estatal, propiedad pública, más protección laboral o más control público de los recursos naturales. Más mercado es lo contrario: menos gasto o impuestos, desregulación, provisión privada o libertad de elegir prestador, privatización o concesión, flexibilidad laboral y propiedad privada de los recursos. El modelo responde en una escala de −3 (mucho más Estado) a +3 (mucho más mercado), con «No aplica» si el texto no toca la materia, y marca el mecanismo principal: gasto y transferencias, impuestos, regulación, provisión de servicios sociales, propiedad, trabajo, recursos naturales o rebaja simbólica. Los textos de menos de 60 caracteres, como «INDICACIÓN 52 - PARTIDA 09», no se envían y quedan como no evaluables. Se codificaron 1.921 textos únicos, con un costo cercano a USD 0,30.
 
-**Posiciones.** B-Call (Toro-Maureira et al., 2025) por período y por año legislativo, en dos universos: toda la Cámara y solo la derecha. En el universo de la derecha, el pivote es un diputado republicano desde 2022, y d1 positivo significa cercanía a la nueva derecha. Se excluye a quien vota en menos del 15% de las votaciones (el paper usa 10%).
+| Medida | Valor |
+|---|---:|
+| Acuerdo en si el texto es evaluable | 0,88 |
+| Acuerdo en si el termómetro aplica | 0,89 |
+| Kappa del signo (más Estado, 0 o No aplica, más mercado) | 0,70 |
+| Kappa ponderado de la escala de −3 a +3, cuando ambos aplican | 0,29 |
+| Kappa del mecanismo | 0,76 |
 
-**Modelos.** Modelos lineales de probabilidad del voto Sí, con efectos fijos por diputado y errores agrupados por votación. Predictores: dirección del texto en cada eje, autoría × gobierno, tipo de votación y tema. En el presupuesto, efectos fijos por partida.
+: Acuerdo entre OpenAI y DeepSeek en 100 textos del termómetro, estratificados por año. {#tbl-termometro}
 
-**Cuánto se diferencian.** Para responder cuánto, expresamos cada brecha entre las derechas como fracción de la brecha entre la derecha convencional y la izquierda en la misma medida:
+Los dos modelos coinciden en la dirección y no en la intensidad (@tbl-termometro). Por eso el análisis usa solo el signo, $s_j \in \{-1, 0, +1\}$. De las 638 votaciones con signo, 467 empujan hacia más Estado, 93 son neutrales y 78 empujan hacia más mercado; el mecanismo dominante es el gasto (366), seguido de la regulación (142). La asimetría es parte del dato: en este período, lo que se vota en indicaciones es sobre todo cuánto Estado agregar.
+
+**El índice mercado-Estado.** Con el signo del texto y el voto se arma un índice por diputado y año. Si $J_{it}$ son las votaciones con $s_j \neq 0$ en que el diputado vota Sí o No,
 
 $$
-R = \frac{\text{nueva} - \text{tradicional}}{\text{tradicional} - \text{izquierda}}
+I_{it} = \frac{1}{\lvert J_{it}\rvert} \sum_{j \in J_{it}} s_j \, v_{ij},
 $$
 
-Con R = 0, las derechas no se distinguen; con R = 1, se separan tanto como la derecha convencional de la izquierda. Si R es positivo, la nueva derecha queda más lejos de la izquierda que la tradicional; si es negativo, más cerca. Lo calculamos en la posición dentro de la escala de la Cámara, con la UDI como referencia de la derecha tradicional, y en el efecto del contenido sobre el Sí. No lo calculamos cuando la brecha entre izquierda y derecha es menor de 10 puntos, porque el cociente se vuelve inestable.
+que va de −1 (siempre vota con más Estado) a +1 (siempre con más mercado). Entra quien tiene al menos 10 de esos votos en el año. A diferencia de $d1$, el índice está anclado en el texto y no en el resto de la Cámara, pero depende de qué se votó cada año.
 
-## B-Call: uso y cautelas {#sec-bcall}
+## Tópicos por diccionario {#sec-topicos}
 
-B-Call resume cada voto como su desvío del promedio de la votación, estandarizado y con signo (Toro-Maureira et al., 2025). d1 es el promedio de esos desvíos (posición) y d2 su desviación estándar (cohesión). Tres rasgos del método cambian la lectura de @fig-mapa y de @fig-posicion, y conviene tenerlos presentes antes de tratar una distancia como fractura.
+Para describir la agenda usamos un diccionario de palabras y no el modelo de lenguaje. Aquí la tarea es otra: no se trata de leer la dirección del cambio, sino de saber de qué trata el texto, y para eso las palabras alcanzan. El diccionario tiene 19 tópicos, de educación y salud a pueblos indígenas, ciencia y migración. Se aplica al texto normalizado, sin tildes ni mayúsculas. Si el texto de la indicación no trae ninguna palabra del diccionario, se usa el nombre del proyecto. Una indicación puede tocar varios tópicos, y su tópico principal es el de más coincidencias. En la Ley de Presupuestos, la partida asigna el sector (la 09 es Educación, la 16 Salud, la 10, 23 y 31 seguridad y justicia); Interior, Hacienda y Tesoro Público mezclan materias y quedan como presupuesto sin sector. En las 736 indicaciones con un tema equivalente en el libro de códigos, el tópico principal coincide con el del modelo en el 81%; la coincidencia es de 88% a 99% en educación, salud, cultura y seguridad, y más baja en sistema político (44%) e impuestos (36%).
 
-El primero es el signo. Cada votación se orienta comparando el voto promedio de un grupo «izquierdo» y uno «derecho», definidos por conocimiento previo o por agrupamiento. En la Cámara esa división es natural, y por eso @fig-mapa se lee como la división entre izquierda y derecha. Dentro de la derecha, si los dos grupos coinciden con el PRCh y ChV, cada votación se orienta para separarlos. Parte de la distancia del panel B de @fig-posicion se produce entonces por construcción, y más con un grupo de 7 a 9 republicanos. Antes de leer ese panel como una fractura hace falta una prueba de permutación, y revisar en el código de `bcall_auto` cómo arma los grupos.
+## Modelos {#sec-modelos}
 
-El segundo es que el paper de B-Call abre la puerta al modelo dentro de un grupo y deja la prueba para después. Su conclusión propone aplicar B-Call dentro de partidos o bancadas, con d1 como ideología interna y d2 como cohesión respecto del grupo, y trata la versión jerárquica como trabajo futuro. El panel B de @fig-posicion es esa aplicación: una distancia calculada solo entre las derechas, distinta de la distancia a la izquierda que muestra el panel A.
+El efecto del contenido se estima con modelos lineales de probabilidad del voto Sí, por bloque, con efectos fijos por diputado y errores agrupados por votación:
 
-El tercero es que d2, la cohesión, queda subusado, aunque es el aporte central de B-Call. La disciplina es una táctica en sí misma, y falta comparar el d2 de PRCh, UDI, RN y Evópoli por año. El paper advierte que los legisladores extremos tienden a ser más volátiles, así que esa comparación debe controlar por d1. @fig-mapa muestra la variabilidad en el eje vertical para un solo período, y no la sigue entre las derechas a lo largo de la década.
+$$
+\text{Sí}_{ij} = \alpha_i + \sum_{k=1}^{5} \beta_k\, x_{jk} + \boldsymbol{\gamma}'\mathbf{w}_j + \varepsilon_{ij},
+$$
 
-Como en el paper, los modelos de distintos años se comparan solo de forma descriptiva: d1 se lee dentro de cada modelo. La medida comparable en el tiempo es el índice LLM. El paper ubica además a José Antonio Kast en 2014–2017 como el diputado más a la derecha y uno de los menos cohesivos, antes de su salida de la UDI: un antecedente útil para la sección de contexto.
+donde $x_{jk}$ es la dirección del texto en el eje $k$ y $\mathbf{w}_j$ incluye autoría × gobierno, tipo de votación y tema. El coeficiente $\beta_k$ es el cambio en la probabilidad de votar Sí cuando el texto va hacia el polo de derecha, frente a un texto que no toca el eje.
 
-Para leer la posición de un año a otro, este artículo no compara el d1 crudo. Expresa la mediana de cada partido en desviaciones estándar de los diputados de ese año, con el cero en la mediana de la izquierda (PC, PS, FA y PPD). Esa escala es la del panel A de @fig-posicion y la que usa R en la posición.
+La sensibilidad al termómetro se estima por grupo $g$ y año $t$ como la pendiente de una regresión del Sí sobre el signo del texto, con errores agrupados por votación: $\text{Sí}_{ij} = a_{gt} + b_{gt}\, s_j + e_{ij}$. Un $b_{gt}$ positivo indica que el grupo vota más Sí cuanto más hacia el mercado va el texto.
 
-# Resultados {#sec-resultados}
+Lo que divide a las derechas se estima a nivel de votación, para 2022-26. Si $D_j = 1$ cuando el voto mayoritario de la nueva derecha y el de la tradicional difieren,
 
-Los resultados van en dos niveles. Primero, qué separa a la izquierda de la derecha; después, cuánto se separan las derechas entre sí, en el contenido y en la táctica.
+$$
+D_j = \tau_t + \theta_E\,\text{Ejecutivo}_j + \theta_C\,\text{Comisión}_j + \sum_{d} \phi_d\,\mathbf{1}[s_j = d] + \psi\,\text{Presupuesto}_j + u_j,
+$$
 
-## Izquierda y derecha: la división que ordena la Cámara {#sec-division}
+con efectos fijos por año $\tau_t$, la autoría parlamentaria y el texto neutral como referencia, y errores robustos. La autoría se identifica con una heurística sobre el encabezado del texto, que el modelo de lenguaje no ve.
 
-En la dimensión principal de la Cámara, las dos derechas son un mismo bloque. El mapa clásico de B-Call lo muestra para el período 2022-2026 (@fig-mapa).
+# La división y la cohesión {#sec-bloque1}
+
+## Izquierda y derecha no se superponen {#sec-separacion}
+
+La división entre izquierda y derecha es completa en toda la década. @fig-separacion la muestra de dos formas.
+
+![Separación entre izquierda y derecha en B-Call de la Cámara, por año legislativo. A: un punto por diputado y la mediana de cada bloque. B: solapamiento y porcentaje de votaciones en que el voto mayoritario de cada lado difiere.](figuras/b1_separacion.png){#fig-separacion fig-align="center" width="100%"}
+
+En el panel A, cada punto es un diputado y el rombo es la mediana del bloque. La derecha queda entre +0,7 y +0,9 y la izquierda entre −0,5 y −0,8, con el cero vacío. En el panel B, la línea naranja es el solapamiento $\Omega$, que vale 0 todos los años: ningún diputado de derecha queda a la izquierda de un diputado de izquierda. La distancia estandarizada va de 7,6 a 25,5 desviaciones. La línea azul es el porcentaje de votaciones en que la mayoría de cada lado vota distinto. Sube de 46% en 2016-17 a 76% en 2019-20 y a 86% en 2025-26: la Cámara se polariza en el período.
+
+El mapa clásico de B-Call muestra ese mismo bloque para 2022-2026 (@fig-mapa), con la variabilidad en el eje vertical.
 
 ![B-Call de la Cámara, 2022-2026, todas las indicaciones. Cada punto es un diputado. El eje horizontal es la posición y el vertical la variabilidad del voto. La línea horizontal es la mediana de esa variabilidad. Los partidos con menos de 3 diputados, salvo Evópoli, se agrupan en Otro.](figuras/fig_mapa.png){#fig-mapa fig-align="center" width="100%"}
 
-Cada punto de @fig-mapa es un diputado. El eje horizontal es su posición (d1) y el vertical la variabilidad de su voto (d2). La línea punteada horizontal marca la mediana de esa variabilidad. La nube se parte en dos y el centro del eje queda casi vacío. A la izquierda, entre cerca de −1 y −0,5, están el PC, el PS, el Frente Amplio, el PPD y la DC. A la derecha, desde cerca de 0,5 hasta el extremo, están la UDI, RN, Evópoli, los independientes que votan con la derecha y el PRCh. Los triángulos del PRCh se superponen con la UDI en ese extremo. Evópoli, en celeste, queda un poco más hacia el centro que el resto de la derecha, del mismo lado del eje. Los partidos con menos de tres diputados, salvo Evópoli, aparecen agrupados como Otro.
-
-La @tbl-camara pone esa misma posición en una escala que se puede comparar de un año a otro. El cero es la mediana de la izquierda (PC, PS, FA y PPD) y la unidad es la desviación estándar de los diputados de ese año. En los cuatro años en que el PRCh tiene bancada, UDI, RN y Evópoli quedan entre 1,70 y 2,18, y el PRCh entre 2,10 y 2,47. La última columna es la brecha entre el PRCh y la UDI: +0,30 en 2022-23, −0,05 en 2023-24, +0,47 en 2024-25 y −0,05 en 2025-26. En dos de esos años el PRCh queda un poco más a la derecha; en los otros dos la diferencia desaparece.
+La nube se parte en dos y el centro del eje queda casi vacío. A la izquierda, entre cerca de −1 y −0,5, están el PC, el PS, el Frente Amplio, el PPD y la DC. A la derecha, desde cerca de 0,5 hasta el extremo, están la UDI, RN, Evópoli, los independientes que votan con la derecha y el PRCh, cuyos triángulos se superponen con la UDI. La @tbl-camara pone esa posición en la escala anual común $P$. En los cuatro años en que el PRCh tiene bancada, UDI, RN y Evópoli quedan entre 1,70 y 2,18 desviaciones de la izquierda, y el PRCh entre 2,10 y 2,47.
 
 | Año legislativo | PRCh | UDI | RN | Evópoli | PRCh − UDI |
 |---|---:|---:|---:|---:|---:|
@@ -162,15 +251,93 @@ La @tbl-camara pone esa misma posición en una escala que se puede comparar de u
 | 2024-25 | 2,47 | 2,00 | 1,99 | 1,70 | +0,47 |
 | 2025-26 | 2,10 | 2,15 | 2,02 | 2,05 | −0,05 |
 
-: B-Call de toda la Cámara, eje de todas las indicaciones. Antes de 2022 el PRCh tiene uno o dos diputados. Evópoli tiene dos diputados de 2022-23 a 2025-26; la @fig-posicion no los dibuja. {#tbl-camara}
+: Posición $P$ en la escala anual común: mediana del partido menos mediana de la izquierda, en desviaciones estándar de los diputados del año. Evópoli tiene dos diputados de 2022-23 a 2025-26. {#tbl-camara}
 
-![Posición de los partidos de derecha en la escala de la Cámara, por año legislativo, y distancia estandarizada entre la nueva derecha y la tradicional.](figuras/fig1.png){#fig-posicion fig-align="center" width="100%"}
+La última columna de @tbl-camara es la brecha entre el PRCh y la UDI. Como fracción de la distancia entre la UDI y la izquierda, va de −0,02 a 0,24 (@tbl-cuanto, más abajo). En dos años el PRCh queda un poco más a la derecha y en los otros dos la diferencia desaparece. La primera parte de H1 se cumple sin ambigüedad: la vara existe y es grande.
 
-@fig-posicion tiene dos paneles y conviene leerlos por separado. El panel A extiende la escala de la @tbl-camara a toda la década. Cada punto es la mediana del partido en ese año legislativo, y el eje va de 0, la mediana de la izquierda, hasta 3 desviaciones estándar. UDI y RN se mantienen cerca de 2 desde 2016-17. Evópoli entra en el mismo tramo cuando tiene al menos tres diputados. El PRCh aparece en 2022-23 y se ubica junto a ellos, a veces un poco más a la derecha. El panel omite los años en que un partido tiene menos de tres diputados. Por eso Evópoli está en la tabla de 2022-23 a 2025-26, donde tiene dos diputados, y no en el gráfico de esos años.
+![Posición de los partidos de derecha en la escala de la Cámara, por año legislativo (A), y distancia estandarizada entre la nueva derecha y la tradicional en un B-Call estimado solo dentro de la derecha (B).](figuras/fig1.png){#fig-posicion fig-align="center" width="100%"}
 
-El panel B cambia de pregunta. Ya no mide la distancia a la izquierda, sino la distancia entre la nueva derecha y la tradicional dentro de un B-Call calculado solo entre ellas. Esa distancia estandarizada pasa de 0,77 en 2022-23 a 2,99 en 2023-24 y 2,71 en 2024-25, y baja a 2,02 en 2025-26. El solapamiento de las dos nubes es 0,02, 0,02, 0,00 y 0,08. El tamaño del triángulo es el número de diputados de la nueva derecha, entre 7 y 9. La nota del gráfico advierte que parte de esa separación puede ser mecánica: el grupo republicano es chico y B-Call orienta cada votación para separar a los dos grupos (@sec-bcall).
+@fig-posicion extiende esa escala a toda la década. En el panel A, UDI y RN se mantienen cerca de 2 desde 2016-17, y el PRCh aparece en 2022-23 junto a ellos. El panel B cambia de pregunta: mide la distancia entre la nueva derecha y la tradicional dentro de un B-Call calculado solo entre ellas. Esa distancia pasa de 0,77 en 2022-23 a 2,99 en 2023-24 y 2,71 en 2024-25, y baja a 2,02 en 2025-26. Es más grande que la de la Cámara porque está expresada en desviaciones de un grupo muy cohesionado, y parte de ella puede venir de cómo B-Call orienta cada votación entre dos grupos (@sec-bcall).
 
-El contenido muestra en qué consiste la división de la Cámara (@tbl-si y @fig-efecto). La división es, sobre todo, valórica y de nación.
+## Cohesión dentro de cada partido y bloque {#sec-dentro}
+
+Dentro de la derecha, cada partido vota muy unido. @fig-cohesion-dentro lo muestra con dos medidas.
+
+![Cohesión dentro de los partidos y bloques de derecha. A: Rice por partido. B: $d2$ ajustado por $d1$. C: Rice por bloque.](figuras/b1_cohesion_dentro.png){#fig-cohesion-dentro fig-align="center" width="100%"}
+
+En el panel A, el Rice del PRCh está entre 0,99 y 1,00 todos los años: sus diputados votan casi siempre igual. La UDI y RN están entre 0,86 y 0,96. Su punto más bajo cae en 2020-21 y 2021-22, al final del gobierno de Piñera, con la UDI en 0,86 y RN en 0,87, y se recuperan a 0,95 en 2022-23. El panel C repite la medida por bloque. La derecha tradicional baja de 0,96 en 2016-17 a entre 0,88 y 0,91 en 2022-26; la nueva derecha queda sobre 0,97; la izquierda sube de 0,82 a 0,95, y los independientes con la derecha son el bloque menos cohesionado (0,77 en 2024-25).
+
+El panel B agrega un matiz. El $d2$ ajustado del PRCh es positivo todos los años (+0,05 a +0,13), y el de la UDI y RN es negativo. Con un Rice cercano a 1, ese $d2$ más alto no es indisciplina: el PRCh vota como un bloque compacto que se aparta, en conjunto, del eje que ordena al resto de la derecha. Con 7 a 9 diputados por año en B-Call, además, su Rice tiende a salir alto por tamaño.
+
+## Cohesión entre las derechas {#sec-entre}
+
+La división dentro de la derecha aparece cuando se juntan los partidos. @fig-cohesion-entre la muestra con el acuerdo de mayorías y con la pérdida $\Delta$.
+
+![Cohesión entre partidos. A: acuerdo de mayorías por par de partidos. B: Rice de la derecha completa frente al Rice promedio de sus partidos.](figuras/b1_cohesion_entre.png){#fig-cohesion-entre fig-align="center" width="100%"}
+
+| Par | 2022-23 | 2023-24 | 2024-25 | 2025-26 |
+|---|---:|---:|---:|---:|
+| UDI y RN | 92 | 91 | 92 | 89 |
+| PRCh y UDI | 86 | 84 | 80 | 91 |
+| PRCh y RN | 81 | 78 | 74 | 84 |
+| PRCh y PS | 23 | 19 | 19 | 15 |
+| UDI y PS | 27 | 17 | 28 | 14 |
+
+: Acuerdo de mayorías, en porcentaje de votaciones en que el voto mayoritario de los dos partidos coincide. {#tbl-acuerdo}
+
+La @tbl-acuerdo da los números del panel A para los años del PRCh. La UDI y RN coinciden en torno al 90%, como en toda la década (entre 86% y 94% desde 2016-17). El PRCh coincide más con la UDI que con RN, y ambos acuerdos bajan hasta 2024-25 y se recuperan en 2025-26. Como vara, el PRCh coincide con el PS casi tan poco como la UDI. Antes de 2022, el par más distante dentro de la derecha era UDI y Evópoli, que cae de 90% a 77% entre 2018-19 y 2021-22.
+
+El panel B es la medida más directa de H2. Con solo UDI y RN, en 2016-17, la pérdida $\Delta$ es 0,002: juntarlos no cambia la cohesión. Con Evópoli, entre 2018-19 y 2021-22, sube a entre 0,03 y 0,05. Con el PRCh pasa a 0,07 en 2022-23, 0,08 en 2023-24 y 0,12 en 2024-25, y queda en 0,09 en 2025-26, ya con el PNL. Los partidos siguen votando unidos por dentro y la derecha como un todo vota menos unida. H2 se cumple: el PRCh abre una línea de división entre partidos y no fragmenta a los partidos tradicionales por dentro.
+
+# Ordenar o desordenar {#sec-bloque2}
+
+## Las etiquetas se desordenan {#sec-etiquetas}
+
+El primer plano de H3 son las etiquetas. @fig-cambios cuenta los cambios de grupo que salen de un grupo de derecha o llegan a uno.
+
+![Cambios de grupo que tocan a la derecha. A: por año, dentro de la legislatura y entre legislaturas. B: flujos de origen a destino en 2022-26.](figuras/b2_cambios.png){#fig-cambios fig-align="center" width="100%"}
+
+Entre 2016-17 y 2021-22 hay entre cero y tres cambios por año. Desde 2022-23 hay entre 4 y 10, y casi todos ocurren dentro de una misma legislatura. El panel B muestra a dónde van. Cinco diputados dejan RN y uno la UDI para votar como independientes con la derecha. Cuatro republicanos, entre ellos Naveillan, De la Carrera y Kaiser, dejan el PRCh para votar como independientes, y en 2025-26 cinco independientes terminan en el PNL y tres vuelven al PRCh. El salto directo de un partido tradicional a la nueva derecha es raro: solo Urruticoechea, de RN al PRCh, y Labbé, de la UDI al PNL. El desorden está, sobre todo, en la propia nueva derecha, que se escinde y produce el PNL.
+
+## El voto se ordena {#sec-voto}
+
+El segundo plano de H3 es el voto, y ahí la imagen es la contraria. @fig-orden la muestra con tres medidas.
+
+![Orden dentro de la derecha. A: clasificación $\eta^2$ del grupo en $d1$ dentro de la derecha. B: dispersión interna (rango intercuartil de $P$). C: atracción del PRCh, en las votaciones en que la mayoría del partido y la del PRCh votan distinto.](figuras/b2_orden.png){#fig-orden fig-align="center" width="100%"}
+
+En el panel B, la dispersión interna de la UDI y RN llega a su máximo en 2021-22, con 0,37 y 0,44 desviaciones entre el cuarto más moderado y el más duro de cada partido. Desde 2022-23 cae a entre 0,05 y 0,10. En el panel A, la parte de la variación de $d1$ dentro de la derecha que explica el grupo sube de 15% en 2022-23 a 35% en 2023-24, 37% en 2024-25 y 63% en 2025-26: cada grupo ocupa cada vez más su propio tramo. Con solo la UDI y RN, la medida es volátil (2% en 2022-23 y 2024-25, 60% en 2025-26), lo que indica que la clasificación viene de la separación entre la nueva y la tradicional y no de una separación entre la UDI y RN. En el panel C, cuando la mayoría de su partido y la del PRCh votan distinto, solo entre 6% y 11% de los votos de la UDI siguen al PRCh, y entre 3% y 8% de los de RN.
+
+H3 se cumple en sus dos partes. La entrada del PRCh desordena las etiquetas y ordena el voto: la derecha tradicional queda más compacta, mejor separada de la nueva y casi sin fugas hacia ella.
+
+## A quiénes se llevó hacia la derecha {#sec-atraccion}
+
+@fig-atraccion pregunta quién se movió. El panel A mide el acuerdo con la derecha: en las votaciones en que la mayoría de la derecha y la de la izquierda votan distinto, el porcentaje de veces que un diputado vota con la derecha. El panel B usa la escala común $P$.
+
+![Atracción hacia la derecha. A: acuerdo con la derecha en las votaciones divisivas, mediana por grupo. B: posición en la escala anual común.](figuras/b2_atraccion.png){#fig-atraccion fig-align="center" width="100%"}
+
+Los independientes con la derecha votan con ella más del 90% de las veces desde 2022-23: son derecha aunque no tengan partido. El centro se separa en dos. Demócratas, formado por exmilitantes de la DC, vota con la derecha entre 35% y 54% de las veces, y en la escala pasa de 0,82 a 1,22 desviaciones a la derecha de la izquierda. La DC va en la dirección contraria: de 43% en 2022-23 a 8% en 2025-26, y de 1,03 a 0,16 en la escala. Las posiciones de los partidos tradicionales no se mueven: la UDI está en 2,16 en 2016-17 y en 2,15 en 2025-26, y RN se mantiene cerca de 2,0.
+
+![Diputados reelectos: acuerdo con la derecha en 2018-22 y en 2022-26. Sobre la diagonal, vota más con la derecha en 2022-26.](figuras/b2_panel.png){#fig-panel fig-align="center" width="85%"}
+
+@fig-panel sigue a los mismos diputados en las dos legislaturas. Los 12 de RN y los 10 de la UDI que siguen en su partido suben 2 puntos, desde un nivel cercano al 90%. Los cinco que dejan RN para votar como independientes no cambian su voto (93% antes, 92% después): fue un cambio de etiqueta y no de comportamiento. Los movimientos grandes están fuera de la derecha, en el centro. H4 se cumple: el PRCh no arrastró a la UDI ni a RN, y el bloque se amplió hacia los independientes y una parte del centro.
+
+# Qué movió a las derechas {#sec-bloque3}
+
+## La agenda: qué se vota {#sec-agenda}
+
+Antes de preguntar qué movió a las derechas conviene saber qué se votó. @fig-topicos cuenta las indicaciones por tópico principal y año.
+
+![Indicaciones votadas por tópico principal y año legislativo, según el diccionario (@sec-topicos).](figuras/t_topicos.png){#fig-topicos fig-align="center" width="100%"}
+
+El dato que más pesa es que el 75% de lo que se vota en indicaciones (2.007 de 2.677) son indicaciones a la Ley de Presupuestos, y que ese volumen crece desde 2022-23. Por eso educación (455 indicaciones como tópico principal), seguridad y justicia penal (281) y salud (255) dominan el conteo, con picos en 2023-24 y 2024-25. Seguridad es el cambio más claro del período 2022-26: de entre 3 y 25 indicaciones por año antes, pasa a 51 en 2022-23 y a 93 en 2023-24. Pensiones se concentra en 2019-20, el año de los retiros de fondos, y medio ambiente, pueblos indígenas y ciencia son marginales todos los años.
+
+![Indicaciones a la Ley de Presupuestos y a otros proyectos (A), y tópicos dentro y fuera del presupuesto (B).](figuras/t_presupuesto.png){#fig-presupuesto-topicos fig-align="center" width="100%"}
+
+@fig-presupuesto-topicos separa los dos mundos. De las 462 indicaciones que tocan educación, 396 son presupuestarias; de las 277 de salud, 229, y de las 300 de seguridad, 237. Pensiones es lo contrario: 51 de 58 vienen de otros proyectos. Lo que se vota en indicaciones es, sobre todo, cuánto gastar y en qué, y eso condiciona todo lo que sigue.
+
+## El contenido: cinco ejes {#sec-ejes}
+
+El libro de códigos de cinco ejes dice en qué consiste la división de la Cámara y cuánto se separan las derechas ante el mismo texto (@tbl-si y @fig-efecto).
 
 | Polo del Sí | Nueva | Tradicional | IND con la derecha | Izquierda |
 |---|---:|---:|---:|---:|
@@ -180,19 +347,13 @@ El contenido muestra en qué consiste la división de la Cámara (@tbl-si y @fig
 | Pro-mercado | +4 | +4 | +4 | −9 |
 | Provisión privada (provisional) | −7 | 0 | −3 | −6 |
 
-: Puntos porcentuales de probabilidad de votar Sí cuando el texto va hacia el polo nombrado, frente a un texto que no toca el eje. Votos: nueva 4.035; tradicional 31.899; IND con la derecha 6.493; izquierda 27.566. {#tbl-si}
+: Coeficientes $\beta_k$, en puntos porcentuales de probabilidad de votar Sí cuando el texto va hacia el polo nombrado, frente a un texto que no toca el eje. Votos: nueva 4.035; tradicional 31.899; IND con la derecha 6.493; izquierda 27.566. {#tbl-si}
 
-Cada fila de la @tbl-si es un polo del texto y cada número es el cambio, en puntos porcentuales, de la probabilidad de votar Sí cuando el texto va hacia ese polo, respecto de un texto que no toca el eje. Ante un texto conservador, la nueva derecha sube 43 puntos, la tradicional 19, los independientes que votan con la derecha 25 y la izquierda baja 31. Ante uno soberanista, la tradicional sube 28 y la nueva 16, mientras la izquierda baja 30. Ante orden y castigo, las derechas suben entre 11 y 14 puntos y la izquierda queda en cero. Ante un texto pro-mercado, las tres columnas de derecha suben 4 puntos y la izquierda baja 9. Provisión privada queda en torno a cero o ligeramente negativa, y la fila va marcada como provisional.
+Ante un texto conservador, la nueva derecha sube 43 puntos, la tradicional 19 y la izquierda baja 31. Ante uno soberanista, la tradicional sube 28 y la nueva 16, mientras la izquierda baja 30. Ante orden y castigo, las derechas suben entre 11 y 14 puntos y la izquierda queda en cero. Ante un texto pro-mercado, las tres columnas de derecha suben 4 puntos y la izquierda baja 9.
 
-![Efecto de la dirección del texto sobre la probabilidad de votar Sí, por eje y bloque. El punto lleno es el modelo lineal; el hueco, el efecto marginal del logit.](figuras/fig2.png){#fig-efecto fig-align="center" width="100%"}
+![Efecto de la dirección del texto sobre la probabilidad de votar Sí, por eje y bloque (A), y brecha entre la nueva y la tradicional en las mismas votaciones (B).](figuras/fig2.png){#fig-efecto fig-align="center" width="100%"}
 
-El panel A de @fig-efecto dibuja los coeficientes de la @tbl-si con su intervalo de confianza. El triángulo es la nueva derecha, el círculo azul la tradicional, el cuadrado los independientes y el rombo la izquierda. El punto lleno es el modelo lineal de probabilidad. El punto hueco es el efecto marginal del logit, y solo se estima en lo valórico y en nación; cae encima del punto lleno. El intervalo de provisión privada va discontinuo porque el eje es provisional. Lo que se ve de una vez es que lo valórico y nación separan a la izquierda de las derechas, y que entre las derechas el salto grande está en lo conservador.
-
-El panel B deja de comparar cada bloque con un texto neutro y mide la brecha entre la nueva y la tradicional en las mismas 531 votaciones. Solo lo conservador se aparta de cero, en unos 17 puntos, con p = 0,024 antes de corregir por los cinco ejes. Después de la corrección de Holm ese p queda en 0,118. Los otros cuatro ejes cruzan el cero y su p de Holm es 1.
-
-## ¿Cuánto se diferencian las derechas? {#sec-cuanto}
-
-Medida con esa vara, la distancia entre las derechas es chica en casi todo. La @tbl-cuanto pone las dos distancias en la misma escala. La primera columna es cuánto se separan las derechas entre sí. La segunda es cuánto se separa la derecha tradicional de la izquierda. R es el cociente de las dos. En la posición, la UDI es la referencia de la derecha tradicional y la unidad son desviaciones estándar de la @tbl-camara. En el contenido, la unidad son los puntos porcentuales de la @tbl-si.
+El panel A de @fig-efecto dibuja esos coeficientes con su intervalo. Lo valórico y nación separan a la izquierda de las derechas; entre las derechas, el salto grande está en lo conservador. El panel B mide la brecha entre la nueva y la tradicional en las mismas 531 votaciones. Solo lo conservador se aparta de cero, en unos 17 puntos, con p = 0,024 antes de corregir por los cinco ejes y p = 0,118 después de la corrección de Holm.
 
 | Medida | Nueva − tradicional | Tradicional − izquierda | R |
 |---|---:|---:|---:|
@@ -205,23 +366,47 @@ Medida con esa vara, la distancia entre las derechas es chica en casi todo. La @
 | Sí ante texto de orden | +1 | 13 | 0,08 |
 | Sí ante texto pro-mercado | 0 | 13 | 0,00 |
 
-: Distancia entre las derechas como fracción de la distancia entre la derecha tradicional y la izquierda (R). Posición: desviaciones estándar, con la UDI como derecha tradicional (@tbl-camara). Contenido: puntos porcentuales (@tbl-si). Provisión privada queda fuera: su kappa es 0,42 y la brecha entre izquierda y derecha es de 6 puntos. {#tbl-cuanto}
+: Distancia entre las derechas como fracción de la distancia entre la derecha tradicional y la izquierda ($R$). Posición: desviaciones estándar (@tbl-camara). Contenido: puntos porcentuales (@tbl-si). Provisión privada queda fuera: su kappa es 0,42 y la brecha entre izquierda y derecha es de 6 puntos. {#tbl-cuanto}
 
-En la dimensión principal, R va de −0,02 a 0,24. La brecha entre el PRCh y la UDI es, según el año, entre un 2% y un 24% de la que separa a la UDI de la izquierda. Se abre en 2022-23 (0,14) y en 2024-25 (0,24), y casi desaparece en 2023-24 y en 2025-26. Ese 2024-25 es también el año del presupuesto con mayor oposición republicana (@sec-presupuesto).
+La @tbl-cuanto lleva todo a la escala de $R$. En la dimensión principal, $R$ va de −0,02 a 0,24. En economía y orden es 0 y 0,08: el texto mueve igual a las dos derechas. En nación es negativo, porque las dos derechas votan Sí casi siempre ante un texto soberanista y ese techo comprime el coeficiente de la nueva. Lo valórico es el único eje donde las derechas se separan con claridad, con $R = 0,48$, pero entre 2022 y 2026 hay solo 10 votaciones valóricas.
 
-En economía y en orden, R es 0 ante el texto pro-mercado y 0,08 ante el de orden. La ventaja pro-mercado del PRCh en 2024-25, un índice de 0,86 frente a 0,65 de la UDI, se concentra en el presupuesto del Ejecutivo: +25 puntos ahí y +3 fuera de él. Esa ventaja es de táctica.
+## El termómetro mercado-Estado {#sec-termometro}
 
-En nación, R es negativo (−0,21). Las dos derechas votan Sí casi siempre ante un texto soberanista, y ese techo comprime el coeficiente de la nueva. La tradicional queda con el coeficiente más alto, +28 frente a +16, y las dos quedan del mismo lado de la izquierda.
+El eje económico del libro de códigos dice que, ante un texto pro-mercado, las dos derechas suben lo mismo. El termómetro permite mirar el otro lado del eje, donde está casi todo lo que se vota, y seguirlo en el tiempo. @fig-indice muestra el índice $I$ por grupo y año.
 
-Lo valórico es el único eje de contenido donde las derechas se separan con claridad: R = 0,48, cerca de la mitad de la vara. En el logit, el efecto marginal es +45 en la nueva y +16 en la tradicional. La brecha a nivel de votación es de 17 puntos (p = 0,024) y no pasa la corrección de Holm en los cinco ejes (p = 0,118). Entre 2022 y 2026 hay solo 10 votaciones valóricas.
+![Índice mercado-Estado por grupo y año. Punto: mediana del grupo; línea: rango intercuartil. Diputados con al menos 10 votos con signo en el año; grupos con al menos 3 diputados.](figuras/b3_indice.png){#fig-indice fig-align="center" width="100%"}
 
-Estos cocientes comparan estimaciones puntuales de modelos separados por bloque. Falta su intervalo de confianza, con bootstrap por votación.
+Entre 2017-18 y 2020-21, la UDI, RN y Evópoli quedan cerca de 0 y casi pegadas al PS. En 2021-22 y 2022-23 toda la Cámara baja hacia el Estado, con la UDI en −0,51 y el PRCh en −0,34 en 2022-23. Desde 2023-24 la derecha se corre hacia el mercado y el PS hacia el Estado. En 2024-25 el PRCh llega a +0,65, la UDI a +0,29, RN a +0,23, los independientes con la derecha a +0,41 y el PS a −0,85. En 2025-26 el PNL entra en +0,53, junto al PRCh (+0,50). El índice depende de la agenda: 2024-25 tiene 226 votaciones de más Estado, casi todas del presupuesto 2025, y por eso las comparaciones entre partidos dentro de un año son más firmes que las comparaciones entre años.
 
-Dentro de la derecha, el panel B de @fig-posicion da una imagen más fuerte que la escala de la Cámara. Las dos medidas conviven porque responden preguntas distintas. La distancia interna está expresada en desviaciones de un grupo muy cohesionado, de modo que una diferencia chica en la Cámara se vuelve grande ahí. Parte de ella puede venir de cómo B-Call orienta cada votación entre dos grupos (@sec-bcall), con un grupo republicano de 7 a 9 diputados. Tampoco se mueven juntas: en 2023-24, el año de mayor distancia interna (2,99), en la escala de la Cámara quedan a 0,05. La lectura prudente es una diferencia secundaria y consistente dentro de la derecha, sobre el mismo eje que ordena a la Cámara.
+![Porcentaje de Sí por dirección del texto según el termómetro, por grupo, en 2018-22 y 2022-26.](figuras/b3_respuesta.png){#fig-respuesta fig-align="center" width="100%"}
 
-## La táctica: el presupuesto {#sec-presupuesto}
+@fig-respuesta muestra de dónde sale ese movimiento. Bajo Piñera (2018-22), todas las derechas votan Sí entre 45% y 65% de las veces, sea cual sea la dirección del texto, y su pendiente es casi plana: apoyaban el gasto de su propio gobierno. Bajo Boric (2022-26) aparece una pendiente clara, y el PS la invierte. Ante textos de más mercado, todas las derechas votan Sí entre 81% y 88% de las veces: ahí no hay división. Ante textos de más Estado se separan: el PRCh vota Sí el 36% de las veces, el PNL el 35%, los independientes con la derecha el 40%, la UDI el 49% y RN el 53%. La sensibilidad $b_{gt}$ (figura A3) pasa de cerca de 0 en 2018-22 a +0,21 en la UDI y +0,19 en RN en 2024-25, y a +0,32 en el PRCh. Las mismas personas se mueven: entre los reelectos, el índice de la UDI sube 0,19 y el de RN 0,13, y los cinco que dejaron RN para votar como independientes son los que más se mueven (+0,39).
 
-ChV endurece su voto en las mismas partidas, pero el PRCh se endurece más rápido y la brecha se abre hasta el presupuesto 2025. En el de 2026 vuelven a acercarse.
+H5 se cumple con un matiz que el termómetro agrega. Las derechas convergen ante el mercado, como predice la hipótesis, y se separan ante el Estado. Esa separación no es simétrica: la derecha tradicional acepta la mitad de lo que amplía el Estado y el PRCh, un tercio.
+
+## Qué divide y qué une {#sec-divide}
+
+@fig-divide ordena las votaciones de 2022-26 según lo que predice que las mayorías de las dos derechas voten distinto.
+
+![Porcentaje de votaciones en que la mayoría de la nueva derecha y la de la tradicional votan distinto, por autoría, dirección, instrumento, mecanismo y tópico, 2022-26. El color es la brecha de % Sí.](figuras/b3_divide.png){#fig-divide fig-align="center" width="100%"}
+
+| Variable | Coeficiente | IC 95% |
+|---|---:|---|
+| Autoría del Ejecutivo (frente a parlamentaria) | +0,14 | 0,07 a 0,22 |
+| Autoría de comisión | −0,10 | −0,28 a 0,08 |
+| Texto de más Estado (frente a neutral) | −0,04 | −0,17 a 0,08 |
+| Texto de más mercado (frente a neutral) | −0,04 | −0,18 a 0,10 |
+| Ley de Presupuestos (frente a otros proyectos) | −0,04 | −0,16 a 0,08 |
+
+: Modelo lineal de probabilidad de que la mayoría de la nueva derecha y la de la tradicional voten distinto, 2022-26, con efectos fijos por año. 417 votaciones con termómetro y autoría identificable. {#tbl-divide}
+
+El corte decisivo es quién firma. La mayoría del PRCh y la de la derecha tradicional votan distinto en el 22% de las 248 indicaciones del Ejecutivo y en el 6% de las 167 de diputados. En el modelo de @tbl-divide, con la dirección del texto, el presupuesto y el año controlados, la autoría del Ejecutivo suma 14 puntos a la probabilidad de división (p < 0,001), y la dirección del texto deja de importar. Por dirección, sin controles, dividen más los textos de más Estado (16%) que los de más mercado (8%); por mecanismo, el gasto (17%) más que la regulación (8%).
+
+El caso más nítido son 35 indicaciones del Ejecutivo al presupuesto 2025 que reponen gasto recortado a servicios de salud. La derecha tradicional votó Sí cerca del 97% de las veces y el PRCh, 0%. Por eso salud es el tópico que más divide, con 53% de sus 66 votaciones. Unen la educación (5% de 101 votaciones), la cultura (5%), los textos de más mercado, la regulación y las indicaciones de diputados.
+
+## La táctica en el presupuesto {#sec-presupuesto}
+
+El presupuesto acerca el diseño a un panel, porque las mismas partidas se votan cada año. @tbl-presupuesto y @fig-presupuesto muestran el No, el acuerdo con la mayoría republicana y el apoyo a las rebajas simbólicas en las leyes 2023 a 2026.
 
 | Ley | Partido | % No | % igual al PRCh | % Sí a rebajas | Votaciones |
 |---|---|---:|---:|---:|---:|
@@ -247,71 +432,64 @@ ChV endurece su voto en las mismas partidas, pero el PRCh se endurece más rápi
 
 ![Porcentaje de No, acuerdo con la mayoría del PRCh y apoyo a rebajas simbólicas, por partido, en las leyes de Presupuestos 2023–2026.](figuras/fig3.png){#fig-presupuesto fig-align="center" width="100%"}
 
-@fig-presupuesto dibuja las tres columnas de la @tbl-presupuesto. El número bajo cada año es la cantidad de votaciones del proyecto: 290, 517, 601 y 110. Evópoli vota unas pocas menos (286, 504, 589 y 106). El Partido Nacional Libertario solo aparece en 2026.
-
-El primer panel es el porcentaje de No. El PRCh pasa de 33% en la ley 2023 a 51% en 2024 y 67% en 2025, y baja a 53% en 2026. UDI, RN y Evópoli suben también entre 2023 y 2024, y después se quedan entre 40% y 46%. Con la partida fija, el No de la UDI sube 17 puntos en 2024 y 16 en 2025 (p < 0,001). Es un endurecimiento en la misma dirección que el PRCh, y el No republicano crece más rápido.
-
-El segundo panel es el porcentaje de votos del partido que coincide con la mayoría republicana. El PRCh queda fuera del gráfico porque su acuerdo está entre 99% y 100%. El de la UDI baja de 82% a 73% entre 2023 y 2025, y vuelve a 91% en 2026. RN y Evópoli siguen la misma curva, siempre por debajo de la UDI. El acuerdo cae mientras el No del PRCh sube de 33% a 67%, porque ChV se endurece menos que el PRCh.
-
-El tercer panel es el apoyo a las rebajas simbólicas, los recortes a un monto testimonial. El PRCh pasa de 84% a 100% y la UDI de 82% a 95%. Evópoli hace el camino inverso, de 67% a 40%. En 2026 el panel queda vacío: en esa ley no hubo rebajas simbólicas. El acercamiento de ese año tiene además otras dos advertencias. Son 110 votaciones, y la partida se extrajo solo en el 73%. Falta descomponer si se moderó el PRCh, se endureció ChV o cambiaron las partidas votadas.
-
-La lectura es un endurecimiento en paralelo. ChV sigue al PRCh a medias. En la tipología de Meguid (2008), es una acomodación parcial en la táctica opositora.
+El No del PRCh pasa de 33% en la ley 2023 a 51% en 2024 y 67% en 2025, y baja a 53% en 2026. UDI, RN y Evópoli suben también entre 2023 y 2024 y después se quedan entre 40% y 46%. Con la partida fija, el No de la UDI sube 17 puntos en 2024 y 16 en 2025 (p < 0,001): un endurecimiento en la misma dirección, más lento. El acuerdo de la UDI con la mayoría republicana baja de 82% a 73% entre 2023 y 2025 y vuelve a 91% en 2026, y RN y Evópoli siguen la misma curva por debajo. En las rebajas simbólicas, el PRCh pasa de 84% a 100% y la UDI de 82% a 95%, mientras Evópoli hace el camino inverso, de 67% a 40%. Es la misma historia que el termómetro cuenta con otros datos: la división crece en el presupuesto que el gobierno de Boric presenta en 2024 y se cierra en el de 2026.
 
 # Discusión {#sec-discusion}
 
-La respuesta a la pregunta del título tiene dos partes. La izquierda y la derecha se diferencian en lo valórico, en nación y, menos, en economía, y esa división sigue ordenando la Cámara. Las derechas se diferencian mucho menos: casi nada en la dimensión principal, en economía y en orden; algo en lo valórico, y sobre todo en la táctica. Cuatro de las cinco expectativas encuentran apoyo; la valórica queda como sugerente.
+La respuesta a la pregunta del título tiene tres partes. La izquierda y la derecha se separan por completo, y esa división sigue ordenando la Cámara. Dentro de la derecha, la diferencia que trajo el PRCh es una línea entre partidos cohesionados, que desordenó las etiquetas y ordenó el voto. Y esa línea se abre en un lugar preciso: en cuánto Estado acepta cada derecha cuando lo propone un gobierno de izquierda. Cinco de las seis hipótesis encuentran apoyo; la parte valórica de H5 y la oscilación electoral de H6 quedan como sugerentes.
 
-| Expectativa | Resultado | Lectura |
+| Hipótesis | Resultado | Lectura |
 |---|---|---|
-| 1. Jerarquía de distancias | Brecha PRCh–UDI de 2% a 24% de la brecha UDI–izquierda | Se cumple |
-| 2. Convergencia en contenido | R de 0 en pro-mercado y 0,08 en orden; nación con techo en ambas | Se cumple |
-| 3. Diferenciación valórica | R = 0,48; conservador +43 frente a +19; Holm p = 0,118 | Sugerente |
-| 4. Diferenciación táctica | Presupuesto del Ejecutivo: PRCh +25 pp sobre la UDI; No del PRCh de 33% a 67% | Se cumple, solo en el presupuesto |
-| 5. Oscilación electoral | Acuerdo de la UDI con el PRCh: 82, 76, 73 y 91% | Primera evidencia; falta fechar |
+| H1. Jerarquía de distancias | Solapamiento izquierda-derecha 0 todos los años; R de −0,02 a 0,24 en la posición | Se cumple |
+| H2. División entre partidos | Rice partidario de 0,86 a 1,00; pérdida $\Delta$ de 0,002 (2016-17) a 0,07–0,12 (2022-25) | Se cumple |
+| H3. Desorden de etiquetas, orden del voto | Cambios de grupo de 0–3 a 4–10 por año; dispersión de UDI y RN de 0,37–0,44 a 0,05–0,10; $\eta^2$ de 15% a 63% | Se cumple |
+| H4. Atracción hacia la derecha | UDI de 2,16 a 2,15; independientes con la derecha sobre 90%; Demócratas de 0,82 a 1,22 | Se cumple |
+| H5. Contenido | Pro-mercado +4 en ambas, R = 0; más mercado 81–88% de Sí en todas; conservador +43 frente a +19, Holm p = 0,118 | Se cumple en economía y orden; sugerente en lo valórico |
+| H6. Táctica | Ejecutivo +14 pp de división; No del PRCh en el presupuesto de 33% a 67%; acuerdo UDI–PRCh 82, 76, 73 y 91% | Se cumple; la oscilación electoral es sugerente |
 
-: Expectativas y lectura. {#tbl-expectativas}
+: Hipótesis y lectura. {#tbl-hipotesis}
 
-La @tbl-expectativas resume esa lectura fila por fila. La jerarquía de distancias se cumple: la brecha entre el PRCh y la UDI es entre un 2% y un 24% de la que separa a la UDI de la izquierda. La convergencia en contenido también se cumple. R es 0 en lo pro-mercado y 0,08 en orden, y en nación las dos derechas topan el Sí. La diferenciación valórica queda como sugerente: R llega a 0,48 y el efecto conservador es +43 frente a +19, pero la brecha no pasa Holm (p = 0,118). La diferenciación táctica se cumple en el presupuesto. Ahí el PRCh queda 25 puntos sobre la UDI en el texto pro-mercado del Ejecutivo, y su No pasa de 33% a 67%. La oscilación electoral tiene una primera evidencia en el acuerdo de la UDI con el PRCh, que va de 82% a 76%, 73% y 91%, todavía sin fechar la tramitación contra el calendario.
+La @tbl-hipotesis resume la lectura fila por fila. El resultado calza con una división principal que sigue siendo la de los dos bloques (Tironi y Agüero, 1999; Alemán y Saiegh, 2007). El PRCh no abre una segunda división en el voto: es un polo dentro del bloque de derecha. En el contenido, el resultado es coherente con lo que anticipaban Díaz et al. (2023): la relación fluida entre ambas derechas facilita la cooperación, y ante el mismo texto de mercado votan igual.
 
-El resultado calza con una división principal que sigue siendo la de los dos bloques (Tironi y Agüero, 1999; Alemán y Saiegh, 2007). El PRCh no abre una segunda división en el voto: es una variante dentro del bloque de derecha, más dura en la táctica. En el contenido, el resultado es coherente con lo que anticipaban Díaz et al. (2023): la relación fluida entre ambas derechas facilita la cooperación.
+El aporte de separar la cohesión dentro y entre partidos es que cambia el diagnóstico de lo que le pasó a ChV. Una lectura apresurada del Rice de la derecha tradicional, que baja de 0,96 a cerca de 0,88, sugeriría que el PRCh la desordenó. Las medidas de orden dicen lo contrario. La UDI y RN quedaron más compactas que nunca, mejor separadas de la nueva derecha y casi sin fugas hacia ella. Lo que bajó es la cohesión de la derecha completa, y bajó porque ahora tiene dos polos. Esa es la forma esperable de una escisión (Heller y Mershon, 2009): los que se fueron se llevaron su diferencia, y algunos de ellos, como muestra la serie de cambios de grupo, siguieron moviéndose dentro de la propia nueva derecha.
 
-Los datos matizan la tesis de la sobreadaptación (Rovira Kaltwasser, 2019). Si ChV moderó su programa en economía, esa moderación no aparece en el voto sobre indicaciones: ante el mismo texto, ChV y el PRCh votan igual. Sí aparece, débil, en lo valórico. Hay dos lecturas posibles. Una es que la moderación de ChV fue más de programa que de voto, salvo en lo moral. La otra es que las indicaciones no capturan los temas en que ChV se moderó. Esa brecha entre lo que los partidos dicen y lo que votan es justo la que este artículo propone medir.
+Los datos matizan la tesis de la sobreadaptación (Rovira Kaltwasser, 2019). Si ChV moderó su programa en economía, esa moderación no aparece en el voto ante textos de mercado, donde ChV y el PRCh votan igual. Aparece, en cambio, ante el Estado: la derecha tradicional acepta la mitad de lo que el gobierno de Boric propone para ampliar el Estado, y el PRCh un tercio. Esa diferencia no se explica solo por el contenido, porque desaparece cuando el texto lo firma un diputado. Es contenido y táctica a la vez, y el eje mercado-Estado es justo el lugar donde el artículo puede separarlos.
 
-Que la diferencia esté en la táctica tampoco es una anomalía. La derecha chilena ya se dividió por la forma de hacer oposición: entre 2002 y 2006, la UDI aprobó cerca del 11% de los proyectos del Ejecutivo y RN cerca del 36% (Toro Maureira, 2007). En Europa, los partidos populistas hacen oposición con menos colaboración legislativa y más control del gobierno (Louwerse y Otjes, 2019). Lo nuevo en Chile es quién ocupa el polo duro: en 2002–2006 era la UDI; hoy es el PRCh, y la UDI lo sigue a medias.
+Que la diferencia esté en la oposición al Ejecutivo tampoco es una anomalía. La derecha chilena ya se dividió por la forma de hacer oposición: entre 2002 y 2006, la UDI aprobó cerca del 11% de los proyectos del Ejecutivo y RN cerca del 36% (Toro Maureira, 2007). En Europa, los partidos populistas hacen oposición con menos colaboración legislativa y más control del gobierno (Louwerse y Otjes, 2019). Lo nuevo en Chile es quién ocupa el polo duro: en 2002–2006 era la UDI; hoy es el PRCh, y la UDI lo sigue a medias.
 
-Los resultados apoyan la hipótesis general del Fondecyt en el plano parlamentario. El PRCh combina dos estrategias: vota como la derecha convencional en casi todo el contenido, lo que sirve a su legitimación institucional, y se diferencia en la táctica opositora y, débilmente, en lo valórico, lo que refuerza su núcleo doctrinario.
+Los resultados apoyan la hipótesis general del Fondecyt en el plano parlamentario. El PRCh combina dos estrategias: vota como la derecha convencional ante el mercado y en casi todo el contenido, lo que sirve a su legitimación, y se diferencia en la oposición al gasto del Ejecutivo y, débilmente, en lo valórico, lo que refuerza su núcleo. Para ChV, los datos se parecen a una acomodación parcial en la tipología de Meguid (2008): endurece su oposición sin alcanzar al PRCh, mantiene su propia cohesión y su propia posición, y no pierde votos hacia el polo radical.
 
-Para ChV, los datos se parecen más a una acomodación parcial que a la convergencia o la diferenciación puras. Endurece su oposición sin alcanzar al PRCh y mantiene su propia respuesta valórica.
-
-La H5 encuentra una primera evidencia en el presupuesto. El acuerdo con el PRCh cae hasta el presupuesto 2025, tramitado en torno a las municipales y regionales de 2024, y sube en el de 2026, tramitado durante la campaña presidencial de 2025. Es coherente con una oscilación según el calendario electoral, pero falta fechar la tramitación y contrastarlo con el seguimiento de prensa del proyecto.
-
-Evópoli es el caso que el Fondecyt anticipa como reactivación de sensibilidades moderadas: se aleja de las rebajas simbólicas y tiene el índice valórico más bajo de la derecha (0,25 a 0,40 desde 2022, aunque con 3 a 5 votos por año). En la escala de la Cámara, Evópoli queda además más cerca del centro en 2022-23 y 2024-25 (1,70, frente a cerca de 2 de UDI y RN). RN y la UDI se mueven juntas casi siempre. El índice por partido y año está en la figura A2.
+La oscilación electoral tiene una primera evidencia. El acuerdo con el PRCh cae hasta el presupuesto 2025, tramitado en torno a las municipales y regionales de 2024, y sube en el de 2026, tramitado durante la campaña presidencial de 2025. Falta fechar la tramitación y contrastarlo con el seguimiento de prensa del proyecto. Evópoli es el caso que el Fondecyt anticipa como reactivación de sensibilidades moderadas: se aleja de las rebajas simbólicas, es la más cercana al centro en la escala de la Cámara en 2022-23 y 2024-25 (1,70) y fue, antes de 2022, el socio con el que la UDI coincidía menos.
 
 ## Robustez {#sec-robustez}
 
-Estas lecturas tienen límites, y cada uno califica una figura o una tabla. Por eso los dos hallazgos tentativos siguen abiertos.
+Estas lecturas tienen límites, y cada uno califica una figura o una tabla.
 
-La táctica de @fig-presupuesto y de @tbl-presupuesto se mide casi solo con el presupuesto. El No republicano puede leerse también como contenido, por ejemplo como austeridad fiscal. La partida fija controla el tema de la glosa, y deja abierta la motivación. Falta una segunda señal: el voto ante indicaciones del Ejecutivo fuera del presupuesto, a igual contenido, y la disciplina, que es el d2 que @fig-mapa muestra en vertical y que todavía no se compara entre las derechas año a año.
+El primero es el gobierno. El PRCh entra a la Cámara justo cuando la derecha tradicional pasa de gobernar con Piñera a ser oposición a Boric. La recuperación del Rice de la UDI y RN en 2022-23, la caída de su dispersión interna y el cambio de pendiente en @fig-respuesta pueden deberse en parte a ese cambio de rol. Lo que separa los dos efectos es la comparación entre partidos dentro de cada año, y esa comparación es la que sostiene H2, H3 y H6.
 
-R, en @tbl-cuanto, es un cociente de estimaciones puntuales y todavía no tiene intervalo. El cociente tampoco se calcula donde la brecha entre izquierda y derecha es chica, como en provisión privada, cuya fila queda fuera de esa tabla.
+El segundo es la agenda. El índice $I$ y la sensibilidad $b_{gt}$ dependen de qué se votó, y 2024-25 tiene 226 votaciones de más Estado, casi todas del presupuesto 2025. El termómetro, además, solo es confiable en el signo: el kappa ponderado de la intensidad es 0,29. Hay solo 78 votaciones de más mercado en diez años, y la convergencia ante el mercado descansa en pocos textos.
 
-El salto valórico de UDI y RN en la figura A2, de 0,48 a 0,77 en 2024-25, viene de proyectos distintos. Donde la misma glosa vuelve, el voto se mantiene: con el tipo de texto fijo, el índice sería 0,52. Entre 2022 y 2026 hay solo 10 votaciones valóricas, y los efectos por año no se distinguen de cero (2024-25: +20 puntos, p = 0,64). Esa es la razón por la que el panel B de @fig-efecto, con su p de Holm de 0,118, queda como sugerente y no como hallazgo sólido.
+El tercero es B-Call dentro de la derecha. El panel B de @fig-posicion y la clasificación $\eta^2$ usan el universo de la derecha, donde el pivote republicano orienta las votaciones para separar a los grupos. Falta una prueba de permutación que diga cuánto de esa separación aparece con grupos al azar del mismo tamaño. Con 7 a 9 republicanos en B-Call, su Rice tiende a salir alto por tamaño. Evópoli tiene dos diputados en 2022-26, así que su dispersión es la de dos personas y no entra en la atracción.
 
-Bajo Boric no hubo votaciones valóricas del Ejecutivo, y la baja de los reelectos compara proyectos distintos (19 votaciones frente a 9). Con el texto fijo, 2024-25 no cierra la brecha entre bloques (+4 puntos, p = 0,34, en las mismas 531 votaciones del panel B de @fig-efecto). La guerra cultural, además, casi no pasa por las indicaciones que alimentan @tbl-si. Fuera de ellas el texto disponible es pobre, y 1.124 resoluciones no traen el cuerpo. Falta también contrastar la escala de @tbl-camara con los puntos ideales de Fábrega (2025), que cubren 2002–2026.
+El cuarto es el contenido. $R$, en @tbl-cuanto, es un cociente de estimaciones puntuales y todavía no tiene intervalo. Entre 2022 y 2026 hay solo 10 votaciones valóricas, y la brecha conservadora no pasa la corrección de Holm. La guerra cultural casi no pasa por las indicaciones, y fuera de ellas el texto disponible es pobre: 1.124 resoluciones no traen el cuerpo. La autoría se identifica con una heurística sobre el encabezado, y 9 votaciones de 2022-26 quedan sin autoría identificable. Falta también contrastar la escala de @tbl-camara con los puntos ideales de Fábrega (2025).
 
 ## Cierre
 
-La izquierda y la derecha siguen siendo los dos polos de la Cámara. Entre las derechas, la distancia es una fracción de esa división: no se separan por lo que votan, sino por cómo lo votan. En el contenido, ChV y el PRCh forman un solo bloque, con una brecha valórica que todavía es débil. En la táctica, el PRCh empuja una oposición más dura y ChV la acompaña a medias. Esa combinación calza con la estrategia dual que el Fondecyt atribuye a la derecha radical, y con una derecha convencional que se acomoda sin mimetizarse.
+La izquierda y la derecha siguen siendo los dos polos de la Cámara. Entre las derechas, la distancia es una fracción de esa división y está entre partidos, no dentro de ellos. El PRCh desordenó las etiquetas de la derecha y ordenó su voto: ChV quedó más compacta, sin moverse de lugar, y el bloque creció hacia los independientes y una parte del centro. Lo que divide a las dos derechas no es el mercado, donde votan igual, sino cuánto Estado aceptan cuando lo propone un gobierno de izquierda. Esa combinación calza con la estrategia dual que el Fondecyt atribuye a la derecha radical, y con una derecha convencional que se acomoda sin mimetizarse.
 
 # Apéndice {.unnumbered}
 
-![Figura A1. Kappa en la escala reducida (+1 / −1 / 0), código actual frente al anterior. Líneas en 0,4 y 0,6. Subsidiariedad es provisional.](figuras/figA1.png){fig-align="center" width="92%"}
+![Figura A1. Kappa del libro de códigos de cinco ejes en la escala reducida (+1 / −1 / 0), código actual frente al anterior. Líneas en 0,4 y 0,6. Subsidiariedad es provisional.](figuras/figA1.png){fig-align="center" width="92%"}
 
-La figura A1 compara el acuerdo entre los dos modelos en la escala reducida. El triángulo es el código actual y el círculo el anterior. La línea de 0,60 es el umbral práctico de este artículo y la de 0,40 marca un acuerdo débil. Nación, valórico, orden y económico quedan sobre 0,60 en los dos códigos. El código actual baja un poco el kappa en nación, valórico y orden, y deja el económico casi en el mismo lugar. Subsidiariedad queda junto a 0,40 en los dos códigos, y por eso el eje sigue como provisional.
+La figura A1 compara el acuerdo entre los dos modelos en la escala reducida. El triángulo es el código actual y el círculo el anterior. Nación, valórico, orden y económico quedan sobre 0,60 en los dos códigos. Subsidiariedad queda junto a 0,40, y por eso el eje sigue como provisional.
 
-![Figura A2. Índice LLM por partido y año, valórico y económico. No se grafican celdas con menos de 10 votos.](figuras/figA2.png){fig-align="center" width="92%"}
+![Figura A2. Índice LLM de cinco ejes por partido y año, valórico y económico. No se grafican celdas con menos de 10 votos.](figuras/figA2.png){fig-align="center" width="92%"}
 
-La figura A2 muestra el índice por partido y año en lo valórico y en lo económico. El índice va de 0 a 1 hacia el polo de la derecha, y el tamaño del punto es el número de votos de esa celda. Las celdas con menos de 10 votos quedan fuera, así que Evópoli desaparece en varios años valóricos. En lo valórico, UDI y RN se mueven juntas, y el PRCh, cuando entra con suficientes votos, queda en el mismo tramo. En lo económico la serie es más baja y más pareja, salvo el salto del PRCh en 2024-25. La nota del gráfico recuerda que el salto valórico de ese año es de composición: los boletines no se repiten respecto de 2022-23.
+La figura A2 muestra el índice del libro de códigos por partido y año, de 0 a 1 hacia el polo de la derecha. En lo valórico, UDI y RN se mueven juntas, y el PRCh, cuando entra con suficientes votos, queda en el mismo tramo. El salto valórico de 2024-25 es de composición: los boletines no se repiten respecto de 2022-23.
+
+![Figura A3. Sensibilidad al termómetro mercado-Estado por grupo y año: pendiente $b_{gt}$ del Sí sobre el signo del texto, con intervalo al 95%.](figuras/b3_sensibilidad.png){fig-align="center" width="92%"}
+
+La figura A3 muestra la pendiente $b_{gt}$ de @sec-modelos. Entre 2018-19 y 2022-23, la UDI, RN y Evópoli oscilan en torno a cero. Desde 2023-24 la pendiente de la derecha es positiva y la del PS negativa. En 2024-25, el año del presupuesto 2025, el PRCh llega a +0,32, la UDI a +0,21 y RN a +0,19.
 
 # Referencias {.unnumbered}
 
@@ -326,6 +504,8 @@ Bale, T., Green-Pedersen, C., Krouwel, A., Luther, K. R. y Sitter, N. (2010). If
 
 Bale, T. y Rovira Kaltwasser, C. (eds.) (2021). *Riding the populist wave: Europe's mainstream right in crisis*. Cambridge University Press.
 
+Carey, J. M. (2007). Competing principals, political institutions, and party unity in legislative voting. *American Journal of Political Science*, 51(1), 92–107.
+
 Díaz, C., Rovira Kaltwasser, C. y Zanotti, L. (2023). The arrival of the populist radical right in Chile: José Antonio Kast and the «Partido Republicano». *Journal of Language and Politics*, 22(3), 342–359. https://doi.org/10.1075/jlp.22131.dia
 
 Downs, W. M. (2001). Pariahs in their midst: Belgian and Norwegian parties react to extremist threats. *West European Politics*, 24(3), 23–42.
@@ -333,6 +513,10 @@ Downs, W. M. (2001). Pariahs in their midst: Belgian and Norwegian parties react
 Fábrega, J. (2025). Ideological positions in the Chilean Chamber of Deputies (2002–2026): A legislative roll-call dataset. *Data in Brief*, 63, 112163. https://doi.org/10.1016/j.dib.2025.112163
 
 Gidron, N. y Ziblatt, D. (2019). Center-right political parties in advanced democracies. *Annual Review of Political Science*, 22, 17–35.
+
+Gilardi, F., Alizadeh, M. y Kubli, M. (2023). ChatGPT outperforms crowd workers for text-annotation tasks. *Proceedings of the National Academy of Sciences*, 120(30), e2305016120.
+
+Heller, W. B. y Mershon, C. (eds.) (2009). *Political parties and legislative party switching*. Palgrave Macmillan.
 
 Hix, S. y Noury, A. (2016). Government-opposition or left-right? The institutional determinants of voting in legislatures. *Political Science Research and Methods*, 4(2), 249–273.
 
@@ -347,6 +531,8 @@ Meguid, B. M. (2008). *Party competition between unequals: Strategies and electo
 Mudde, C. (2019). *The far right today*. Polity.
 
 Pollack, M. (1999). *The new right in Chile, 1973–97*. Macmillan.
+
+Rice, S. A. (1925). The behavior of legislative groups: A method of measurement. *Political Science Quarterly*, 40(1), 60–72.
 
 Rovira Kaltwasser, C. (2019). La (sobre)adaptación programática de la derecha chilena y la irrupción de la derecha populista radical. *Colombia Internacional*, 99, 29–61. https://doi.org/10.7440/colombiaint99.2019.02
 
