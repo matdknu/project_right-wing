@@ -45,6 +45,19 @@ MARCADORES
 Antes de enviar a una revista no debe quedar ninguno.
 -->
 
+# Resultados principales {.unnumbered}
+
+- El PRCh no partió a la derecha ni arrastró a Chile Vamos: dejó un bloque con dos polos.
+- La derecha no votó más parecido a la izquierda: votó menos. Las mayorías de cada lado difieren en el 32% de las votaciones de 2016-17 y en el 59% de las de 2025-26 (en las indicaciones, en el 46% y el 86%). La Cámara se polariza.
+- Chile Vamos no se derechizó. La UDI está a 2,16 desviaciones de la izquierda en 2016-17 y a 2,15 en 2025-26. En términos brutos se aleja, pero porque toda la Cámara se estira. El PRCh queda algo más a la derecha; eso es un polo nuevo, no un corrimiento de la derecha convencional.
+- El centro se parte: Demócratas vota con la derecha entre 36% y 53% de las veces y la DC baja de 44% a 9%. En la escala de posición, Demócratas queda del lado de la derecha y la DC se acerca a la izquierda.
+- Cada partido vota cohesionado, pero la mayoría de algún partido de derecha vota contra la del bloque en hasta un cuarto de las votaciones. La mayoría republicana y la de Chile Vamos difieren tres a cuatro veces más que la UDI y RN cuando ambas eran oposición a Bachelet.
+- Ante el mismo texto, las dos derechas responden igual en lo económico, una vez que cada una puede reaccionar distinto a quién lo propone. En lo valórico la brecha es estable pero imprecisa.
+- Tampoco se oponen de manera distinta a las iniciativas del Ejecutivo.
+- Lo que distingue al PRCh es cuándo se aparta: vota No 17 puntos más que la UDI cuando su voto no decide el resultado, y cerca de 4 cuando sí lo decide.
+- El modelo de lenguaje abre lo que las posiciones ideales no registran: qué implica votar Sí ante el mismo texto. Un diccionario no alcanza, porque la misma materia cambia de signo según la operación.
+- También tiene límites. El acuerdo entre modelos es de 0,68 a 0,72 en cuatro ejes y de 0,42 en subsidiariedad, que queda fuera. El termómetro solo sirve en el signo. El enmascarado de autores falló en el 10% de los textos. Tres cuartos de las indicaciones son del presupuesto, y en 2022-26 hay 10 votaciones valóricas.
+
 # Introducción {#sec-intro}
 
 En la elección de consejeros constitucionales del 7 de mayo de 2023, el Partido Republicano (PRCh) obtuvo 35,5% de los votos y Chile Vamos (ChV), la coalición de la derecha convencional, 21%. En diciembre de 2025, José Antonio Kast, fundador del PRCh, ganó la elección presidencial, y asumió el 11 de marzo de 2026, un día después del cierre de nuestros datos.^[[ACTUALIZAR: citar los resultados oficiales del Servel.] Este artículo forma parte del proyecto Fondecyt N.º [ACTUALIZAR], «La derecha en disputa».] El ascenso fue rápido y nació dentro del propio bloque: Kast militó veinte años en la UDI antes de renunciar en 2016 y fundar el PRCh en 2019. La pregunta que deja es qué le ocurre a una derecha convencional cuando la derecha radical surge desde su interior: si el bloque se parte, si la derecha convencional es arrastrada hacia el polo radical o si ambas conviven, y en qué se diferencian cuando lo hacen.
