@@ -7,14 +7,22 @@ Todo se corre **desde esta carpeta**. Las claves van en `~/.Renviron` (`OPENAI_A
 ## Cómo repetirlo
 
 ```bash
-Rscript scripts/install.R          # una vez
-Rscript scripts/run_datos.R        # solo si falta data/origen/
-Rscript scripts/run_analisis.R     # LLM, B-Call y regresiones
-Rscript scripts/pipeline/11_figuras_paper.R
+Rscript scripts/install.R
+Rscript scripts/pipeline/00_datos.R      # solo si falta data/origen/
+Rscript scripts/pipeline/01_llm.R        # lee la caché si ya está
+Rscript scripts/pipeline/02_bcall.R
+Rscript scripts/pipeline/03_posicion.R
+Rscript scripts/pipeline/04_contenido.R
+Rscript scripts/pipeline/05_oposicion.R
+Rscript scripts/pipeline/06_validacion.R
+Rscript scripts/pipeline/07_figuras.R
+python3 scripts/pipeline/08_articulo.py
 quarto render articulo.qmd
 ```
 
-`run_analisis.R` no vuelve a pagar la codificación si `data/llm/cache/` ya tiene la versión `04fc6c14`.
+`01_llm.R` no vuelve a pagar la codificación si `data/llm/cache/` ya tiene las versiones `04fc6c14` (cinco ejes) y `59195313` (termómetro).
+
+Un paso suelto: `SOLO=24,34 Rscript scripts/pipeline/03_posicion.R`.
 
 ## Dónde está cada cosa
 
@@ -25,44 +33,37 @@ figuras/              figuras 1, 2, 3 y el apéndice
 data/raw/             descarga de la Cámara, sin editar
 data/origen/          votos e indicaciones ya limpios
 data/llm/             lo que el modelo escribió sobre cada texto
-data/analisis/        B-Call, regresiones, chequeos y difusión
+data/analisis/        B-Call, regresiones, chequeos y la versión de revista
 
-scripts/pipeline/     00 a 11, en orden
-scripts/auxiliares/   planillas y reanudación del batch; no hacen falta para el paper
-presentation/         la presentación de B-Call
-archive/              lo que ya no corre
+scripts/pipeline/     00 a 08, en orden
+scripts/pipeline/pasos/  cada estimación, numerada como antes
+scripts/auxiliares/   planillas y reanudación del batch
 ```
 
 | Carpeta | Qué es | Lo produce |
 |---|---|---|
-| `data/raw/` | XML y parquet de la API | `0_query.R` |
-| `data/origen/` | `votos_analiticos.parquet`, `indicaciones_analiticas.parquet` | `0_clean.R` |
-| `data/llm/resultados/` | `indicaciones_codificadas.csv` | `03` |
-| `data/llm/cache/` | respuestas ya pagadas; no se borran | `03` |
-| `data/analisis/bcall/` | posiciones e índice LLM | `04` |
-| `data/analisis/regresiones/` | qué mueve el Sí | `05` |
-| `data/analisis/estrategias/` | repertorio y brecha, ventana 2016–2026 | `06` y `07` |
-| `data/analisis/chequeos/` | los cinco chequeos | `08` |
-| `data/analisis/difusion/` | presupuesto y texto fijo | `09` |
-| `data/analisis/bcall_anio/` | escala de la Cámara por año | `10` |
-| `figuras/` | las del paper | `11` |
+| `data/raw/` | XML y parquet de la API | `00_datos` (paso `0_query`) |
+| `data/origen/` | `votos_analiticos.parquet`, `indicaciones_analiticas.parquet` | `00_datos` (paso `0_clean`) |
+| `data/llm/resultados/` | `indicaciones_codificadas.csv` | `01_llm` (paso `03`) |
+| `data/llm/cache/` | respuestas ya pagadas; no se borran | `01_llm` |
+| `data/analisis/bcall/` | posiciones e índice LLM | `02_bcall` (paso `04`) |
+| `data/analisis/revista/` | universo, iniciativa, pivotalidad, W-NOMINATE | `02` a `06` |
+| `figuras/` | las del paper | `07_figuras` |
 
 ## Scripts, en orden
 
 | Script | Hace |
 |---|---|
-| `scripts/pipeline/0_query.R` | Descarga la Cámara a `data/raw/` |
-| `scripts/pipeline/0_clean.R` | Deja los parquet en `data/origen/` |
-| `scripts/pipeline/03_indicaciones_llm.R` | Codifica el texto. Lee la caché si ya existe |
-| `scripts/pipeline/04_indicaciones_bcall.R` | B-Call de la Cámara y de la derecha |
-| `scripts/pipeline/05_regresiones_votos.R` | Modelo lineal del Sí |
-| `scripts/pipeline/06_estrategias_voto.R` | Configuraciones de voto |
-| `scripts/pipeline/07_derechas_estrategias.R` | Repertorio, brecha y difusión, marzo 2016 a marzo 2026 |
-| `scripts/pipeline/08_chequeos_hallazgos.R` | Chequeos antes de interpretar |
-| `scripts/pipeline/09_difusion.R` | Presupuesto y brecha con el texto fijo |
-| `scripts/pipeline/10_bcall_anio.R` | Posición anual en desviaciones de la Cámara |
-| `scripts/pipeline/11_figuras_paper.R` | Escribe `figuras/` |
+| `00_datos.R` | Descarga y limpia la Cámara |
+| `01_llm.R` | Codifica el texto (cinco ejes y termómetro). Lee la caché si ya existe |
+| `02_bcall.R` | B-Call de indicaciones y de todas las votaciones, izquierda corregida |
+| `03_posicion.R` | Cohesión, W-NOMINATE, Fábrega, Rice, DiD, umbral 10 % |
+| `04_contenido.R` | LPM, tópicos, termómetro, modelo conjunto, techo en nación |
+| `05_oposicion.R` | Iniciativa, pivotalidad, presupuesto, salud 2025 |
+| `06_validacion.R` | Permutación, planillas humanas, apéndice E |
+| `07_figuras.R` | Escribe `figuras/` |
+| `08_articulo.py` | Rellena `articulo.qmd` con las cifras |
 
-`1_indications.R` y `1_subset.R` son exploraciones. No entran en la cadena del paper.
+Los 44 archivos de `pasos/` son las estimaciones. Los 9 de arriba son lo que se corre. `1_indications.R` y `1_subset.R` son exploraciones y no entran.
 
 Paquetes: `tidyverse`, `arrow`, `ellmer`, `bcall`, `fixest`, `here`, `pacman`. Los declara `R/dependencies.R`.

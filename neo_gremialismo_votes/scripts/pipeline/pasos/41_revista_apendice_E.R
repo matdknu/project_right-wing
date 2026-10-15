@@ -18,7 +18,7 @@ escribir <- function(x, nombre) write_csv(x, file.path(out_dir, nombre), na = ""
 
 # ---- Definiciones de los scripts -------------------------------------------------
 extraer <- function(archivo, desde, hasta) {
-  l <- readLines(here("scripts", "pipeline", archivo), encoding = "UTF-8")
+  l <- readLines(here("scripts", "pipeline", "pasos", archivo), encoding = "UTF-8")
   i <- grep(desde, l)[1]; j <- grep(hasta, l)[1] - 1
   stopifnot(!is.na(i), !is.na(j), j > i)
   e <- new.env(parent = globalenv())

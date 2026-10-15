@@ -10,7 +10,15 @@ Salida: articulo.qmd.
 import csv
 import pathlib
 
-RAIZ = pathlib.Path(__file__).resolve().parents[2]
+def _raiz():
+    p = pathlib.Path(__file__).resolve()
+    for d in [p.parent, *p.parents]:
+        if (d / "articulo.qmd").exists() or (d / "neo_gremialismo_votes.Rproj").exists():
+            return d
+    raise SystemExit("No se encontró la raíz del proyecto (articulo.qmd).")
+
+
+RAIZ = _raiz()
 C = RAIZ / "data" / "analisis" / "revista" / "c_paper"
 base = (C / "42_articulo_base_usuario.qmd").read_text(encoding="utf-8")
 M = "\u2212"

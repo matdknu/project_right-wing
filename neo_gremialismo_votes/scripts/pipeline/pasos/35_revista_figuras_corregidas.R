@@ -17,7 +17,7 @@
 pacman::p_load(tidyverse, here)
 
 espejo <- here("data", "analisis", "revista", "a1_izquierda", "espejo")
-original <- here("scripts", "pipeline", "11_figuras_paper.R")
+original <- here("scripts", "pipeline", "pasos", "11_figuras_paper.R")
 destino_script <- file.path(espejo, "scripts", "pipeline", "11_figuras_paper.R")
 salida <- here("data", "analisis", "revista", "figuras_izquierda_corregida")
 dir.create(salida, recursive = TRUE, showWarnings = FALSE)

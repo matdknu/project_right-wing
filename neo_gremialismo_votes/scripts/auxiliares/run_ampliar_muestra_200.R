@@ -4,7 +4,7 @@
 source("R/dependencies.R", local = TRUE)
 check_dependencies(install_missing = FALSE)
 
-lines <- readLines("scripts/pipeline/03_indicaciones_llm.R", warn = FALSE)
+lines <- readLines("scripts/pipeline/pasos/03_indicaciones_llm.R", warn = FALSE)
 mark <- function(prefix) which(startsWith(lines, prefix))[1]
 hasta_datos <- mark("# ---- 4. Muestras") - 1L
 seccion5 <- mark("# ---- 5. Codificación")

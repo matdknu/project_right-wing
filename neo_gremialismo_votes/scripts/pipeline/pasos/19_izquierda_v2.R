@@ -14,8 +14,9 @@
 # Todo se escribe en data/analisis/izquierda_v2/. No se sobrescriben salidas existentes
 # ni se hacen llamadas a APIs.
 #
-# Uso: Rscript scripts/pipeline/19_izquierda_v2.R            (paso 1)
-#      PASO=2 Rscript scripts/pipeline/19_izquierda_v2.R     (paso 2)
+# Uso: PASO=1 Rscript scripts/pipeline/02_bcall.R
+#      PASO=2 Rscript scripts/pipeline/02_bcall.R
+#      o el paso suelto: Rscript scripts/pipeline/pasos/19_izquierda_v2.R
 
 suppressPackageStartupMessages({
   library(tidyverse)
@@ -297,7 +298,8 @@ construir_espejo <- function(dir, parches) {
   }
   writeLines("Raíz de la copia aislada de 19_izquierda_v2.R", file.path(dir, ".here"))
   for (s in scripts_cadena) {
-    original <- list.files("scripts/pipeline", pattern = paste0("^", s, "_.*\\.R$"), full.names = TRUE)
+    original <- list.files("scripts/pipeline/pasos", pattern = paste0("^", s, "_.*\\.R$"), full.names = TRUE)
+    if (!length(original)) original <- list.files("scripts/pipeline", pattern = paste0("^", s, "_.*\\.R$"), full.names = TRUE)
     exigir(length(original) == 1, paste("No hay un único script", s))
     texto <- read_file(original)
     for (p in parches[[s]]) texto <- parchar(texto, p[1], p[2], basename(original))

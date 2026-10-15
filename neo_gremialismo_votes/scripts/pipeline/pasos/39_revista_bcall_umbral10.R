@@ -9,7 +9,8 @@
 #   - correlación de d1 entre los dos umbrales, en los que están en ambos;
 #   - posición P por partido y año, y brecha PRCh − UDI y R de la posición;
 #   - separación izquierda-derecha y % de mayorías distintas (medidas de 20).
-# Uso: REPLICAS=200 Rscript scripts/pipeline/39_revista_bcall_umbral10.R
+# Uso: SOLO=39 Rscript scripts/pipeline/03_posicion.R
+#      o el paso suelto: REPLICAS=200 Rscript scripts/pipeline/pasos/39_revista_bcall_umbral10.R
 # Salidas: data/analisis/revista/a4_universo/umbral_10/ y data/analisis/revista/c_paper/39_*.csv
 # ==============================================================================
 
@@ -23,7 +24,7 @@ dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 escribir <- function(x, nombre) write_csv(x, file.path(out_dir, nombre), na = "")
 
 if (!file.exists(file.path(dir10, "05_bcall_unidades.csv"))) {
-  src <- readLines(here("scripts", "pipeline", "20_revista_universo.R"))
+  src <- readLines(here("scripts", "pipeline", "pasos", "20_revista_universo.R"))
   stopifnot(sum(grepl("^threshold_bcall <- 0.15$", src)) == 1,
             sum(grepl('^output_dir <- here\\("data", "analisis", "revista", "a4_universo"\\)$', src)) == 1)
   src <- sub("^threshold_bcall <- 0.15$", "threshold_bcall <- 0.10", src)

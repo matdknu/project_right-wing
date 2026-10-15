@@ -1,7 +1,7 @@
 # Retoma el batch de la versión 04fc6c14 sin volver a enviarlo.
 # Si el sondeo se corta por timeout, reintenta: el json sigue en stage "waiting".
 
-lines <- readLines("scripts/pipeline/03_indicaciones_llm.R", warn = FALSE)
+lines <- readLines("scripts/pipeline/pasos/03_indicaciones_llm.R", warn = FALSE)
 mark <- function(prefix) which(startsWith(lines, prefix))[1]
 hasta_datos <- mark("# ---- 4. Muestras") - 1L
 seccion6 <- mark("# ---- 6. Corrida completa")

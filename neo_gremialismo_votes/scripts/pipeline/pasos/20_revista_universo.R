@@ -21,7 +21,8 @@
 # Entradas: data/origen/votos_analiticos.parquet, data/llm/resultados/indicaciones_codificadas.csv,
 #           data/analisis/revista/a1_izquierda/02_tabla_aplicada.csv.
 # Salidas:  data/analisis/revista/a4_universo/.
-# Uso: REPLICAS=500 Rscript scripts/pipeline/20_revista_universo.R
+# Uso: REPLICAS=500 Rscript scripts/pipeline/02_bcall.R
+#      o el paso suelto: REPLICAS=500 Rscript scripts/pipeline/pasos/20_revista_universo.R
 # ==============================================================================
 
 pacman::p_load(tidyverse, arrow, bcall, scales, here)
